@@ -1,11 +1,61 @@
 
-  # Enterprise Style Website Design
+ 
 
-  This is a code bundle for Enterprise Style Website Design. The original project is available at https://www.figma.com/design/EvHOLsyJRb4x5VUD5Vnm5P/Enterprise-Style-Website-Design.
+ # Exceptional Solutions Website
 
-  ## Running the code
+## Overview
 
-  Run `npm i` to install the dependencies.
+Exceptional Solutions corporate website focused on EDI & B2B Integration, AI Solutions, Data & Analytics, Cloud Services, and Digital Engineering.
 
-  Run `npm run dev` to start the development server.
+## Technology Stack
+
+* React
+* Vite
+* TypeScript
+* Tailwind CSS
+* Material UI
+* Radix UI
+
+## Installation
+
+```bash
+npm install
+```
+
+## Development
+
+```bash
+npm run dev
+```
+
+## Production Build
+
+```bash
+npm run build
+```
+
+## Deployment
+
+The application can be deployed to:
+
+* Vercel
+* Netlify
+* AWS S3 + CloudFront
+* Azure Static Web Apps
+* Nginx
+
+Build artifacts are generated in the `dist` directory.
+
+## Project Structure
+
+* src/
+* public/
+* assets/
+* components/
+* pages/
+
+## Contact
+
+Exceptional Solutions
+
   

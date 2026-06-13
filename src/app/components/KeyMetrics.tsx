@@ -11,11 +11,12 @@ interface Metric {
 }
 
 const metrics: Metric[] = [
-  { value: 320, suffix: "+", label: "Integration Projects Delivered" },
-  { value: 85, suffix: "+", label: "Enterprise Clients" },
-  { value: 4.2, suffix: "B", prefix: "$", label: "Revenue Processed Annually", decimals: 1 },
-  { value: 99.97, suffix: "%", label: "Uptime SLA Achieved", decimals: 2 },
-  { value: 18, suffix: " yrs", label: "Industry Experience" },
+  { value: 18,    suffix: "+ yrs", label: "Avg. team experience"           },
+  { value: 85,    suffix: "+",     label: "Enterprise Clients"             },
+  { value: 320,   suffix: "+",     label: "Integration Projects"           },
+  { value: 4.2,   suffix: "B",  prefix:"$", label: "Revenue Processed Annually", decimals:1 },
+  { value: 99.97, suffix: "%",     label: "Uptime SLA Achieved", decimals:2 },
+  { value: 99.4,  suffix: "%",     label: "C-SAT Score",         decimals:2 },
 ];
 
 function useCountUp(target: number, duration: number, active: boolean, decimals = 0) {
@@ -37,18 +38,18 @@ function useCountUp(target: number, duration: number, active: boolean, decimals 
 
 function MetricCard({ metric, active }: { metric: Metric; active: boolean }) {
   const count = useCountUp(metric.value, 1500, active, metric.decimals);
+  const display = metric.decimals ? count.toFixed(metric.decimals) : Math.floor(count);
+
   return (
     <motion.div
       variants={staggerItem}
-      className="flex flex-col gap-2 py-8 px-6 border-r border-black/10 last:border-r-0 group"
-      whileHover={{ y: -3, transition: { duration: 0.2, ease: EASE } }}
-    >
-      <div className="text-4xl md:text-5xl font-light text-black tracking-tight tabular-nums transition-all duration-200 group-hover:text-black/80">
-        {metric.prefix ?? ""}
-        {metric.decimals ? count.toFixed(metric.decimals) : Math.floor(count)}
-        {metric.suffix}
+      className="flex flex-col justify-center gap-1.5 py-5 px-5 border-r border-black/10 last:border-r-0 group"
+      whileHover={{ y:-2, transition:{ duration:0.18, ease:EASE } }}>
+      {/* value — all on one line, no wrap */}
+      <div className="text-[28px] md:text-[32px] font-light text-black tracking-tight tabular-nums leading-none whitespace-nowrap">
+        {metric.prefix ?? ""}{display}{metric.suffix}
       </div>
-      <p className="text-sm text-black/40 leading-snug">{metric.label}</p>
+      <p className="text-[11px] text-black/40 leading-snug">{metric.label}</p>
     </motion.div>
   );
 }
@@ -73,13 +74,10 @@ export function KeyMetrics() {
       variants={staggerContainer}
       initial="hidden"
       whileInView="visible"
-      viewport={VIEWPORT}
-    >
+      viewport={VIEWPORT}>
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-5">
-          {metrics.map((m) => (
-            <MetricCard key={m.label} metric={m} active={active} />
-          ))}
+        <div className="grid grid-cols-3 md:grid-cols-6">
+          {metrics.map(m => <MetricCard key={m.label} metric={m} active={active} />)}
         </div>
       </div>
     </motion.section>

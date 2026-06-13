@@ -48,23 +48,90 @@ function useShimmer(delay=2400, hold=2600) {
   return useTransform(x,v=>`${v}%`);
 }
 
-function MetricCard({val,label,sub,live=false}:{val:React.ReactNode;label:string;sub:string;live?:boolean}) {
+// ── Static metric card ────────────────────────────────────────────────────────
+function MetricCard({val,label,sub,live=false}:{val:React.ReactNode;label:string;sub?:string;live?:boolean}) {
   return (
     <div className="bg-white p-4 flex flex-col gap-1">
-      <div className="text-2xl font-light text-black tracking-tight tabular-nums leading-none">{val}</div>
-      <div className="text-[9.5px] text-black/38 uppercase tracking-wide">{label}</div>
-      <div className="flex items-center gap-1.5 mt-1">
-        {live&&<motion.span className="w-[5px] h-[5px] rounded-full bg-green-500 flex-shrink-0" animate={{boxShadow:["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"]}} transition={{duration:1.8,repeat:Infinity}} />}
-        <span className="text-[9px] text-black/30">{sub}</span>
+      <div className="text-2xl font-light text-black tracking-tight tabular-nums leading-none flex items-center gap-1.5">
+        {val}
+        {live && (
+          <motion.span className="w-[5px] h-[5px] rounded-full bg-green-500 flex-shrink-0"
+            animate={{boxShadow:["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"]}}
+            transition={{duration:1.8,repeat:Infinity}} />
+        )}
       </div>
+      <div className="text-[9.5px] text-black/38 uppercase tracking-wide">{label}</div>
+      {sub && <div className="text-[9px] text-black/30 mt-1">{sub}</div>}
     </div>
   );
 }
 
-// ─── Pure display tag — no click, rich hover animation ────────────────────────
+// ── 4 cards cycling between 2 sets every 3.5s ────────────────────────────────
+const metricSets = [
+  [
+    { val: <LiveTx />, label:"Transactions today",  sub:"Live",            live:true  },
+    { val: "99.1%",    label:"Transaction success", sub:"YTD average",     live:true  },
+    { val: "45 days",  label:"Sterling upgrade",    sub:"Norm: 90–120d",   live:false },
+    { val: "90+",      label:"Client NPS",          sub:"Active since 2019",live:false },
+  ],
+  [
+    { val: "24×7",    label:"Support Coverage",    sub:"Always on",        live:false },
+    { val: "99.80%",  label:"Processing Accuracy", sub:"Validated daily",  live:false },
+    { val: "99.97%",  label:"Uptime SLA Achieved", sub:"Enterprise grade", live:false },
+    { val: "5+ yrs",  label:"Longest engagement",  sub:"Active since 2019",live:false },
+  ],
+];
+
+function CyclingMetrics() {
+  const [setIdx, setSetIdx] = useState(0);
+  const [flipping, setFlipping] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setFlipping(true);
+      setTimeout(() => {
+        setSetIdx(s => (s + 1) % metricSets.length);
+        setFlipping(false);
+      }, 320);
+    }, 3500);
+    return () => clearInterval(id);
+  }, []);
+
+  const current = metricSets[setIdx];
+
+  return (
+    <motion.div className="max-w-4xl mx-auto rounded-xl overflow-hidden border border-black/[0.08] mb-6"
+      style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"1px", background:"rgba(0,0,0,0.08)" }}
+      initial={{ opacity:0, y:18 }} animate={{ opacity:1, y:0 }}
+      transition={{ duration:.7, ease:EASE, delay:1.2 }}>
+      {current.map((m, i) => (
+        <div key={i} className="bg-white p-4 flex flex-col gap-1">
+          <motion.div
+            key={`${setIdx}-${i}`}
+            initial={{ opacity:0, y:5 }}
+            animate={{ opacity:1, y:0 }}
+            exit={{ opacity:0, y:-5 }}
+            transition={{ duration:.4, ease:[.16,1,.3,1], delay: i * 0.05 }}>
+            <div className="text-2xl font-light text-black tracking-tight tabular-nums leading-none flex items-center gap-1.5">
+              {m.val}
+              {m.live && (
+                <motion.span className="w-[5px] h-[5px] rounded-full bg-green-500 flex-shrink-0"
+                  animate={{boxShadow:["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"]}}
+                  transition={{duration:1.8,repeat:Infinity}} />
+              )}
+            </div>
+            <div className="text-[9.5px] text-black/38 uppercase tracking-wide mt-1">{m.label}</div>
+            {m.sub && <div className="text-[9px] text-black/30 mt-1">{m.sub}</div>}
+          </motion.div>
+        </div>
+      ))}
+    </motion.div>
+  );
+}
+
+// ─── Pure display tag ─────────────────────────────────────────────────────────
 function DisplayTag({ item, delay=0 }: { item:string; delay?:number }) {
   const [hov, setHov] = useState(false);
-
   return (
     <motion.div
       className="relative overflow-hidden rounded-full cursor-default select-none"
@@ -75,46 +142,20 @@ function DisplayTag({ item, delay=0 }: { item:string; delay?:number }) {
       onMouseEnter={()=>setHov(true)}
       onMouseLeave={()=>setHov(false)}
       whileHover={{ y:-3, boxShadow:"0 8px 24px rgba(0,0,0,0.12)", borderColor:"rgba(0,0,0,0.35)", transition:{duration:.2,ease:EASE} }}>
-
-      {/* black fill sweeps in from left on hover */}
-      <motion.span
-        className="absolute inset-0 rounded-full"
-        style={{ background:"#111827", originX:0 }}
-        animate={{ scaleX: hov ? 1 : 0 }}
-        transition={{ duration:0.26, ease:[0.16,1,0.3,1] }}
-      />
-
-      {/* shimmer sweeps on hover enter */}
-      <motion.span
-        className="absolute top-0 left-0 pointer-events-none"
-        style={{
-          width:"45%", height:"100%",
-          background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)",
-          x: useTransform(useMotionValue(hov ? 0 : -100), v=>`${v}%`),
-        }}
-      />
-
-      {/* arrow that slides in from left */}
-      <motion.span
-        className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 text-xs"
-        initial={{ x:-8, opacity:0 }}
-        animate={{ x: hov ? 0 : -8, opacity: hov ? 1 : 0 }}
-        transition={{ duration:0.2, ease:EASE }}>
+      <motion.span className="absolute inset-0 rounded-full" style={{background:"#111827",originX:0}}
+        animate={{scaleX:hov?1:0}} transition={{duration:0.26,ease:[0.16,1,0.3,1]}} />
+      <motion.span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 text-xs"
+        initial={{x:-8,opacity:0}} animate={{x:hov?0:-8,opacity:hov?1:0}} transition={{duration:0.2,ease:EASE}}>
         →
       </motion.span>
-
-      {/* text shifts right to make room for arrow */}
-      <motion.span
-        className="relative z-10 text-sm block"
-        animate={{ color: hov ? "#fff" : "#374151", x: hov ? 14 : 0 }}
-        transition={{ duration:0.22, ease:[0.16,1,0.3,1] }}>
+      <motion.span className="relative z-10 text-sm block"
+        animate={{color:hov?"#fff":"#374151",x:hov?14:0}} transition={{duration:0.22,ease:[0.16,1,0.3,1]}}>
         {item}
       </motion.span>
     </motion.div>
   );
 }
 
-// ─── Responsibility / Industry tag — also pure display, different style ────────
 function PillTag({ item, delay=0 }: { item:string; delay?:number }) {
   const [hov, setHov] = useState(false);
   return (
@@ -139,9 +180,9 @@ function PillTag({ item, delay=0 }: { item:string; delay?:number }) {
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 export function Hero() {
-  const whatBrings  = ["Assess our integration estate","Modernise our EDI platform","Onboard partners faster","Managed EDI operations","Apply AI to integration data"];
-  const responsible = ["CIO / CTO","Supply chain","Integration","Procurement"];
-  const industries  = ["Logistics","Retail & CPG","Manufacturing","Healthcare","Others"];
+  const whatBrings  = ["Modernize EDI","Improve supply chain","Faster Onboarding","Reduce Errors","Automate Processes","Managed Services","Lower Costs","Enable AI"];
+  const responsible = ["Enterprise Integration","Supply Chain Operations","Procurement","Data & Analytics","Digital Transformation","CIO / CTO"];
+  const industries  = ["Logistics & Transportation","Retail & Consumer Goods","Manufacturing","Distribution & Wholesale","Healthcare","Others"];
 
   const glowX=useMotionValue(50),glowY=useMotionValue(50),glowOp=useMotionValue(0);
   const glowBg=useTransform([glowX,glowY],([x,y])=>`radial-gradient(ellipse at ${x}% ${y}%, rgba(0,0,0,0.035) 0%, transparent 60%)`);
@@ -174,7 +215,7 @@ export function Hero() {
             initial={{scaleX:0}} animate={{scaleX:1}} transition={{duration:.6,ease:[.16,1,.3,1],delay:1.4}} />
           <motion.p className="text-[17px] text-black/52 max-w-[520px] mx-auto leading-relaxed mb-9"
             initial={{opacity:0,y:14}} animate={{opacity:1,y:0}} transition={{duration:.5,ease:EASE,delay:.88}}>
-            From EDI and B2B integration to AI, data and cloud — Exceptional Solutions connects the systems, data and people that modern business depends on.
+            From EDI and B2B integration to AI, digital and data — Exceptional Solutions connects what matters most - systems, data and people.
           </motion.p>
           <motion.div className="flex flex-col sm:flex-row gap-3 justify-center mb-3"
             initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:.45,ease:EASE,delay:1.02}}>
@@ -198,15 +239,8 @@ export function Hero() {
           </motion.p>
         </div>
 
-        {/* ── Metrics ── */}
-        <motion.div className="max-w-4xl mx-auto rounded-xl overflow-hidden border border-black/[0.08] mb-6"
-          style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1px",background:"rgba(0,0,0,0.08)"}}
-          initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:.7,ease:EASE,delay:1.2}}>
-          <MetricCard val={<LiveTx />}  label="Transactions today"  sub="Live"            live />
-          <MetricCard val="99.1%"       label="Transaction success" sub="YTD average"     live />
-          <MetricCard val="45 days"     label="Sterling upgrade"    sub="Norm: 90–120d"       />
-          <MetricCard val="5+ years"    label="Longest engagement"  sub="Active since 2019"   />
-        </motion.div>
+        {/* ── Metrics grid — 4 cards cycling between 2 sets ── */}
+        <CyclingMetrics />
 
         {/* ── Selector card ── */}
         <motion.div className="max-w-4xl mx-auto"
@@ -215,43 +249,29 @@ export function Hero() {
             style={{boxShadow:"0 1px 3px rgba(0,0,0,.04),0 8px 32px rgba(0,0,0,.04)"}}
             onMouseMove={onMove} onMouseLeave={onLeave}>
 
-            {/* cursor glow */}
             <motion.div className="absolute inset-0 pointer-events-none rounded-xl" style={{opacity:glowOp,background:glowBg}} />
-            {/* top edge shimmer */}
             <motion.div className="absolute top-0 left-0 pointer-events-none"
               style={{width:"40%",height:1,background:"linear-gradient(90deg,transparent,rgba(17,24,39,.3),transparent)",x:shimmerX}} />
 
             <div className="space-y-7 relative">
-
-              {/* ── What brings you here — DisplayTags with rich hover ── */}
               <div>
-                <p className="text-[9px] uppercase tracking-[.16em] text-black/35 mb-4">What brings you here?</p>
+                <p className="text-[9px] uppercase tracking-[.16em] text-black/35 mb-4">What brings you here-I want to...</p>
                 <div className="flex flex-wrap gap-2.5">
-                  {whatBrings.map((item,i)=>(
-                    <DisplayTag key={item} item={item} delay={1.45 + i*0.07} />
-                  ))}
+                  {whatBrings.map((item,i)=><DisplayTag key={item} item={item} delay={1.45+i*0.07} />)}
                 </div>
               </div>
-
               <div className="h-px bg-black/[0.05]" />
-
               <div className="grid md:grid-cols-2 gap-8">
-                {/* Responsible for */}
                 <div>
                   <p className="text-[9px] uppercase tracking-[.16em] text-black/35 mb-4">I'm responsible for</p>
                   <div className="flex flex-wrap gap-2">
-                    {responsible.map((item,i)=>(
-                      <PillTag key={item} item={item} delay={1.6 + i*0.06} />
-                    ))}
+                    {responsible.map((item,i)=><PillTag key={item} item={item} delay={1.6+i*0.06} />)}
                   </div>
                 </div>
-                {/* Industry */}
                 <div>
                   <p className="text-[9px] uppercase tracking-[.16em] text-black/35 mb-4">Industry</p>
                   <div className="flex flex-wrap gap-2">
-                    {industries.map((item,i)=>(
-                      <PillTag key={item} item={item} delay={1.65 + i*0.06} />
-                    ))}
+                    {industries.map((item,i)=><PillTag key={item} item={item} delay={1.65+i*0.06} />)}
                   </div>
                 </div>
               </div>

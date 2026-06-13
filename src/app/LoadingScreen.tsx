@@ -36,7 +36,7 @@ export function LoadingScreen({ onComplete, duration = 1800 }: LoadingScreenProp
         <motion.img
           src={logoSrc}
           alt="Exceptional Solutions"
-          style={{ width:"clamp(220px,32vw,380px)", height:"auto", display:"block" }}
+          style={{ width:"clamp(160px,22vw,280px)", height:"auto", display:"block", maxWidth:"70vw" }}
           initial={{ opacity:0, scale:0.92, y:16 }}
           animate={{ opacity:1, scale:1, y:0 }}
           transition={{ duration:0.65, ease:[0.16,1,0.3,1], delay:0.08 }}

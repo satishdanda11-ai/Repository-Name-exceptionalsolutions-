@@ -144,7 +144,7 @@ function EDIHub() {
         ))}
       <div className="relative z-10 bg-black text-white px-3 py-2 rounded-md text-center">
         <div className="text-xs font-medium">EDI Hub</div>
-        <div className="text-[10px] text-white/60 mt-0.5">B2Bi</div>
+        <div className="text-[10px] text-white/60 mt-0.5">B2B</div>
       </div>
     </div>
   );

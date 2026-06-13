@@ -81,9 +81,7 @@ export function Footer() {
             <p className="text-xs text-black/40 max-w-xl mx-auto">
               Connecting the systems, data, and people that modern enterprises run on.
             </p>
-            <p className="text-[10px] text-black/30 pt-3">
-              [INSERT registered company name and address] · [INSERT business email] · [INSERT business phone] · © 2026 Exceptional Solutions. All rights reserved.
-            </p>
+           
           </div>
         </motion.div>
       </div>

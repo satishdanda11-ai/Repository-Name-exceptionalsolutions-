@@ -1,75 +1,131 @@
 import { motion } from "motion/react";
+import { useState } from "react";
+import { Target, UserCheck, Zap } from "lucide-react";
 import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
 
 const reasons = [
   {
-    title: "Focused, not Generalist",
-    description: "We specialize in enterprise integration and the technologies that surround it. Deep expertise, not shallow breadth.",
-    stats: "100% of our work is in integration, data, and cloud",
+    icon: Target,
+    number: "01",
+    title: "Depth Over Breadth",
+    description: "We do one thing exceptionally well: enterprise integration. Deep specialists, proven at scale.",
+    stat: "100%",
+    statLabel: "of our work is in integration, data, and cloud",
   },
   {
-    title: "Senior-Led, No Lock-In",
-    description: "Every engagement is led by senior architects and engineers. We transfer knowledge, not create dependency.",
-    stats: "Average 12+ years experience per team member",
+    icon: UserCheck,
+    number: "02",
+    title: "Built for Partnership, Not Dependency",
+    description: "Seasoned practitioners design solutions that your team can own. Expert-led from day one.",
+    stat: "18+ yrs",
+    statLabel: "avg. team experience",
   },
   {
-    title: "Challenger Speed, Enterprise Rigour",
-    description: "We move fast without cutting corners. Enterprise quality at startup velocity.",
-    stats: "50% faster delivery than traditional consultancies",
+    icon: Zap,
+    number: "03",
+    title: "Startup Agility. Enterprise Reliability.",
+    description: "Faster delivery and stronger governance backed by enterprise-grade discipline.",
+    stat: "50%",
+    statLabel: "faster delivery than traditional consultancies",
   },
 ];
+
+function ReasonCard({ icon: Icon, number, title, description, stat, statLabel }: typeof reasons[0]) {
+  const [hov, setHov] = useState(false);
+
+  return (
+    <motion.div
+      variants={staggerItem}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        background: hov ? "#191919" : "#fff",
+        border: `1px solid ${hov ? "#191919" : "rgba(0,0,0,0.1)"}`,
+        borderRadius: 10,
+        padding: "32px 28px",
+        display: "flex",
+        flexDirection: "column",
+        gap: 0,
+        cursor: "default",
+        position: "relative",
+        overflow: "hidden",
+        transition: "background .28s ease, border-color .28s ease, box-shadow .28s ease",
+        boxShadow: hov ? "0 16px 40px rgba(0,0,0,0.18)" : "none",
+      }}
+      whileHover={{ y: -5, transition: { duration: 0.2, ease: EASE } }}>
+
+      {/* top accent */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: 2,
+        background: "#111827", opacity: hov ? 1 : 0,
+        transition: "opacity .28s", borderRadius: "10px 10px 0 0",
+      }} />
+
+      {/* number + icon row */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+        <span style={{
+          fontSize: 11, fontWeight: 600, color: hov ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.2)",
+          letterSpacing: ".12em", transition: "color .22s",
+        }}>{number}</span>
+        <div style={{
+          width: 40, height: 40, borderRadius: 10,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          background: hov ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)",
+          border: `1px solid ${hov ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.08)"}`,
+          transition: "background .25s, border-color .25s",
+        }}>
+          <Icon size={18} strokeWidth={1.75} color={hov ? "#fff" : "#111827"} />
+        </div>
+      </div>
+
+      {/* text */}
+      <div style={{ flex: 1, marginBottom: 24 }}>
+        <h3 style={{ fontSize: 17, fontWeight: 500, color: hov ? "#fff" : "#111827", marginBottom: 10, lineHeight: 1.3, transition: "color .22s" }}>
+          {title}
+        </h3>
+        <p style={{ fontSize: 13, lineHeight: 1.7, color: hov ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.55)", margin: 0, transition: "color .22s" }}>
+          {description}
+        </p>
+      </div>
+
+      {/* stat */}
+      <div style={{ borderTop: `1px solid ${hov ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)"}`, paddingTop: 20, transition: "border-color .22s" }}>
+        <div style={{ fontSize: 24, fontWeight: 300, color: hov ? "#fff" : "#111827", lineHeight: 1, marginBottom: 4, transition: "color .22s", fontVariantNumeric: "tabular-nums" }}>
+          {stat}
+        </div>
+        <div style={{ fontSize: 11, color: hov ? "rgba(255,255,255,0.38)" : "rgba(0,0,0,0.38)", lineHeight: 1.5, transition: "color .22s" }}>
+          {statLabel}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export function WhyExceptional() {
   return (
     <section className="py-24 px-4 bg-black/[0.02]">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <motion.h2
-            className="text-4xl md:text-5xl font-normal text-black mb-4 tracking-tight"
-            variants={fadeUp}
-            custom={0}
-            initial="hidden"
-            whileInView="visible"
-            viewport={VIEWPORT}
-          >
-            Why Enterprises Choose Exceptional Solutions
+
+        {/* header */}
+        <div className="mb-16 max-w-2xl">
+          <motion.p className="text-xs text-black/40 uppercase tracking-widest mb-4"
+            variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+            Why Choose Us
+          </motion.p>
+          <motion.h2 className="text-4xl md:text-5xl font-normal text-black mb-4 tracking-tight"
+            variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+            Why enterprises choose Exceptional Solutions.
           </motion.h2>
-          <motion.p
-            className="text-base text-black/60"
-            variants={fadeUpLarge}
-            custom={0.1}
-            initial="hidden"
-            whileInView="visible"
-            viewport={VIEWPORT}
-          >
+          <motion.p className="text-base text-black/55"
+            variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             We're built differently. No offshore teams, no junior consultants, no vendor lock-in.
           </motion.p>
         </div>
 
-        <motion.div
-          className="grid md:grid-cols-3 gap-12"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT}
-        >
-          {reasons.map(({ title, description, stats }) => (
-            <motion.div
-              key={title}
-              variants={staggerItem}
-              className="text-center space-y-4 group"
-            >
-              <div>
-                <h3 className="text-xl font-medium text-black mb-3 group-hover:text-black/80 transition-colors duration-200">
-                  {title}
-                </h3>
-                <p className="text-sm text-black/60 leading-relaxed">{description}</p>
-              </div>
-              <div className="pt-4 border-t border-black/10">
-                <p className="text-xs text-black/40">{stats}</p>
-              </div>
-            </motion.div>
-          ))}
+        {/* cards */}
+        <motion.div className="grid md:grid-cols-3 gap-6"
+          variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+          {reasons.map(r => <ReasonCard key={r.title} {...r} />)}
         </motion.div>
       </div>
     </section>
