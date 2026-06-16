@@ -3,6 +3,19 @@ import { Link } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
 
+// ── Brand tokens ──────────────────────────────────────────────────────────────
+const B = {
+  primary50:  "#E8F3FE",
+  primary100: "#D6E7FD",
+  primary200: "#A1CFFB",
+  primary400: "#439FF7",
+  primary500: "#1A73E8",
+  primary600: "#155CC8",
+  navy500:    "#0B1F3A",
+  slate400:   "#94A3B8",
+  success:    "#10B981",
+};
+
 const bullets = [
   { title: "Modernization",      desc: "Transform legacy EDI into cloud-native architecture" },
   { title: "Partner Onboarding", desc: "Reduce onboarding time from weeks to days" },
@@ -17,10 +30,12 @@ function StatusPill() {
     return () => clearInterval(id);
   }, []);
   return (
-    <div className="inline-flex items-center gap-1.5 bg-black/5 rounded-full px-3 py-1 text-[10px] text-black/60 mb-3">
+    <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] mb-3"
+      style={{ background: B.primary50, color: B.navy500, border: `1px solid ${B.primary100}` }}>
       <motion.span
-        className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"
-        animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,0.5)", "0 0 0 4px rgba(34,197,94,0)", "0 0 0 0px rgba(34,197,94,0.5)"] }}
+        className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+        style={{ background: B.success }}
+        animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,0.5)", "0 0 0 4px rgba(16,185,129,0)", "0 0 0 0px rgba(16,185,129,0.5)"] }}
         transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
       />
       Live — {count.toLocaleString()} transactions today
@@ -28,7 +43,7 @@ function StatusPill() {
   );
 }
 
-// ─── Horizontal packet that slides along connector with a floating label ──────
+// ─── Horizontal packet ────────────────────────────────────────────────────────
 function HorizPacket({ connRef, delay, loopMs, label }: {
   connRef: React.RefObject<HTMLDivElement>;
   delay: number; loopMs: number; label: string;
@@ -55,46 +70,47 @@ function HorizPacket({ connRef, delay, loopMs, label }: {
 
   return (
     <>
-      {/* floating label */}
+      {/* floating label — brand navy */}
       <div
         ref={badgeRef}
-        className="absolute -top-5 pointer-events-none bg-black text-white text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap"
-        style={{ opacity: 0 }}
+        className="absolute -top-5 pointer-events-none text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap"
+        style={{ opacity: 0, background: B.navy500, color: "#fff" }}
       >
         {label}
       </div>
-      {/* moving dot */}
+      {/* moving dot — brand blue */}
       <div
         ref={pktRef}
-        className="absolute top-1/2 -translate-y-1/2 w-[7px] h-[7px] rounded-full bg-black"
-        style={{ opacity: 0, boxShadow: "0 0 6px rgba(0,0,0,0.3)" }}
+        className="absolute top-1/2 -translate-y-1/2 w-[7px] h-[7px] rounded-full"
+        style={{ opacity: 0, background: B.primary500, boxShadow: `0 0 8px ${B.primary400}` }}
       />
     </>
   );
 }
 
-// ─── Connector line with scan shimmer + packet ────────────────────────────────
+// ─── Connector ────────────────────────────────────────────────────────────────
 function Connector({ pktDelay, pktLoop, label, shimmerDelay = 0 }: {
   pktDelay: number; pktLoop: number; label: string; shimmerDelay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null!);
   return (
-    <div ref={ref} className="flex-1 mx-3 relative" style={{ height: 2, background: "rgba(0,0,0,0.08)" }}>
-      {/* animated shimmer sweep */}
+    <div ref={ref} className="flex-1 mx-3 relative" style={{ height: 2, background: B.primary100 }}>
+      {/* shimmer — brand blue */}
       <motion.div
         className="absolute inset-0"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.28),transparent)" }}
+        style={{ background: `linear-gradient(90deg,transparent,${B.primary400},transparent)` }}
         animate={{ x: ["-100%", "200%"] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: "linear", delay: shimmerDelay }}
       />
       {/* midpoint dot */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-black rounded-full" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
+        style={{ background: B.primary300 }} />
       <HorizPacket connRef={ref} delay={pktDelay} loopMs={pktLoop} label={label} />
     </div>
   );
 }
 
-// ─── Vertical drop line with falling packet ───────────────────────────────────
+// ─── Vertical drop ────────────────────────────────────────────────────────────
 function VerticalDrop() {
   const lineRef = useRef<HTMLDivElement>(null);
   const pktRef  = useRef<HTMLDivElement>(null);
@@ -111,15 +127,14 @@ function VerticalDrop() {
 
   return (
     <div className="flex flex-col items-center mb-3.5">
-      {/* vertical */}
-      <div ref={lineRef} className="relative overflow-hidden" style={{ width: 1.5, height: 28, background: "rgba(0,0,0,0.1)" }}>
-        <div ref={pktRef} className="absolute left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-black" style={{ boxShadow: "0 0 5px rgba(0,0,0,0.25)" }} />
+      <div ref={lineRef} className="relative overflow-hidden" style={{ width: 1.5, height: 28, background: B.primary100 }}>
+        <div ref={pktRef} className="absolute left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+          style={{ background: B.primary500, boxShadow: `0 0 5px ${B.primary400}` }} />
       </div>
-      {/* horizontal branch */}
-      <div className="relative overflow-hidden" style={{ width: "80%", height: 1.5, background: "rgba(0,0,0,0.08)" }}>
+      <div className="relative overflow-hidden" style={{ width: "80%", height: 1.5, background: B.primary100 }}>
         <motion.div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.28),transparent)" }}
+          style={{ background: `linear-gradient(90deg,transparent,${B.primary400},transparent)` }}
           animate={{ x: ["-100%", "200%"] }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 0.4 }}
         />
@@ -128,36 +143,38 @@ function VerticalDrop() {
   );
 }
 
-// ─── EDI Hub with triple breathing rings ─────────────────────────────────────
+// ─── EDI Hub ──────────────────────────────────────────────────────────────────
 function EDIHub() {
   return (
     <div className="relative flex items-center justify-center flex-shrink-0">
-      {[{ inset: -8, delay: 0, opacity: 0.12 }, { inset: -15, delay: 0.5, opacity: 0.07 }, { inset: -22, delay: 1, opacity: 0.04 }]
+      {[{ inset: -8, delay: 0, opacity: 0.18 }, { inset: -15, delay: 0.5, opacity: 0.1 }, { inset: -22, delay: 1, opacity: 0.05 }]
         .map((r, i) => (
           <motion.div
             key={i}
-            className="absolute rounded-lg border border-black"
-            style={{ inset: r.inset, borderColor: `rgba(0,0,0,${r.opacity})` }}
+            className="absolute rounded-lg border"
+            style={{ inset: r.inset, borderColor: `rgba(26,115,232,${r.opacity})` }}
             animate={{ scale: [1, 1.06, 1], opacity: [0.9, 0.2, 0.9] }}
             transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: r.delay }}
           />
         ))}
-      <div className="relative z-10 bg-black text-white px-3 py-2 rounded-md text-center">
+      {/* hub body — brand navy */}
+      <div className="relative z-10 text-white px-3 py-2 rounded-md text-center"
+        style={{ background: B.primary500 }}>
         <div className="text-xs font-medium">EDI Hub</div>
-        <div className="text-[10px] text-white/60 mt-0.5">B2B</div>
+        <div className="text-[10px] mt-0.5" style={{ color: "rgba(255,255,255,0.6)" }}>B2B</div>
       </div>
     </div>
   );
 }
 
-// ─── Endpoint node with arrival flash ────────────────────────────────────────
+// ─── Endpoint node ────────────────────────────────────────────────────────────
 function EndpointNode({ label, sub, flashDelay }: { label: string; sub: string; flashDelay: number }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const flash = () => {
       if (!ref.current) return;
       ref.current.style.transition = "box-shadow 0.15s";
-      ref.current.style.boxShadow = "0 0 0 3px rgba(0,0,0,0.12)";
+      ref.current.style.boxShadow = `0 0 0 3px ${B.primary200}`;
       setTimeout(() => { if (ref.current) ref.current.style.boxShadow = "none"; }, 320);
     };
     const id = setInterval(flash, 2000);
@@ -166,21 +183,22 @@ function EndpointNode({ label, sub, flashDelay }: { label: string; sub: string; 
   }, [flashDelay]);
 
   return (
-    <div ref={ref} className="bg-black/5 border border-black/10 px-3 py-2 rounded-md text-center flex-shrink-0">
-      <div className="text-xs font-medium text-black">{label}</div>
-      <div className="text-[10px] text-black/40 mt-0.5">{sub}</div>
+    <div ref={ref} className="border px-3 py-2 rounded-md text-center flex-shrink-0"
+      style={{ background: B.primary50, borderColor: B.primary200 }}>
+      <div className="text-xs font-medium" style={{ color: B.navy500 }}>{label}</div>
+      <div className="text-[10px] mt-0.5" style={{ color: B.slate400 }}>{sub}</div>
     </div>
   );
 }
 
-// ─── Partner card with green activity dot + black hover fill ──────────────────
+// ─── Partner card ─────────────────────────────────────────────────────────────
 function PartnerCard({ label, dotDelay, flashDelay }: { label: string; dotDelay: number; flashDelay: number }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const flash = () => {
       if (!ref.current) return;
       ref.current.style.transition = "box-shadow 0.15s";
-      ref.current.style.boxShadow = "0 0 0 2px rgba(0,0,0,0.1)";
+      ref.current.style.boxShadow = `0 0 0 2px ${B.primary200}`;
       setTimeout(() => { if (ref.current) ref.current.style.boxShadow = "none"; }, 300);
     };
     const id = setInterval(flash, 1400);
@@ -191,31 +209,33 @@ function PartnerCard({ label, dotDelay, flashDelay }: { label: string; dotDelay:
   return (
     <motion.div
       ref={ref}
-      className="relative overflow-hidden bg-black/[0.03] border border-black/[0.08] rounded-md p-2.5 text-center cursor-pointer"
+      className="relative overflow-hidden border rounded-md p-2.5 text-center cursor-pointer"
+      style={{ background: B.primary50, borderColor: B.primary100 }}
       variants={staggerItem}
       whileHover="hovered"
     >
-      {/* green activity dot */}
+      {/* activity dot — brand success green */}
       <motion.div
-        className="w-1.5 h-1.5 rounded-full bg-green-500 mx-auto mb-1.5"
-        animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,.5)", "0 0 0 4px rgba(34,197,94,0)", "0 0 0 0px rgba(34,197,94,.5)"] }}
+        className="w-1.5 h-1.5 rounded-full mx-auto mb-1.5"
+        style={{ background: B.success }}
+        animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,.5)", "0 0 0 4px rgba(16,185,129,0)", "0 0 0 0px rgba(16,185,129,.5)"] }}
         transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: dotDelay }}
       />
-      {/* black slide fill */}
+      {/* hover fill — brand navy */}
       <motion.span
-        className="absolute inset-0 bg-black rounded-md"
-        style={{ originX: 0 }}
+        className="absolute inset-0 rounded-md"
+        style={{ originX: 0, background: B.navy500 }}
         variants={{ initial: { scaleX: 0 }, hovered: { scaleX: 1 } }}
         initial="initial"
         transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
       />
       <motion.div className="text-[10px] relative z-10"
-        variants={{ initial: { color: "rgba(0,0,0,0.4)" }, hovered: { color: "#fff" } }}
+        variants={{ initial: { color: B.slate400 }, hovered: { color: "#fff" } }}
         initial="initial" transition={{ duration: 0.2 }}>
         {label}
       </motion.div>
       <motion.div className="text-sm relative z-10 mt-0.5"
-        variants={{ initial: { color: "#111" }, hovered: { color: "#fff" } }}
+        variants={{ initial: { color: B.navy500 }, hovered: { color: "#fff" } }}
         initial="initial" transition={{ duration: 0.2 }}>
         ✓
       </motion.div>
@@ -223,7 +243,7 @@ function PartnerCard({ label, dotDelay, flashDelay }: { label: string; dotDelay:
   );
 }
 
-// ─── Live stat counter ────────────────────────────────────────────────────────
+// ─── Live stats ───────────────────────────────────────────────────────────────
 function LiveStats() {
   const [txn, setTxn]     = useState(847);
   const [latency, setLat] = useState(58);
@@ -233,15 +253,15 @@ function LiveStats() {
     return () => { clearInterval(t1); clearInterval(t2); };
   }, []);
   return (
-    <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-black/[0.06]">
+    <div className="grid grid-cols-3 gap-2 mt-4 pt-4" style={{ borderTop: `1px solid ${B.primary100}` }}>
       {[
         { val: txn.toLocaleString(), lbl: "Transactions" },
         { val: "99.9%",              lbl: "Uptime" },
         { val: `${latency}ms`,       lbl: "Avg Latency" },
       ].map(({ val, lbl }) => (
         <div key={lbl} className="text-center">
-          <div className="text-base font-medium text-black tabular-nums">{val}</div>
-          <div className="text-[9px] text-black/38 uppercase tracking-wide mt-0.5">{lbl}</div>
+          <div className="text-base font-medium tabular-nums" style={{ color: B.navy500 }}>{val}</div>
+          <div className="text-[9px] uppercase tracking-wide mt-0.5" style={{ color: B.slate400 }}>{lbl}</div>
         </div>
       ))}
     </div>
@@ -257,7 +277,9 @@ export function FlagshipCapability() {
         <motion.div className="text-center mb-12"
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={VIEWPORT}
           transition={{ duration: 0.4, ease: EASE }}>
-          <span className="text-xs text-black/40 uppercase tracking-wide">OUR FLAGSHIP CAPABILITY</span>
+          <span className="text-xs uppercase tracking-wide" style={{ color: B.primary500 }}>
+            OUR FLAGSHIP CAPABILITY
+          </span>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-16 items-center">
@@ -265,9 +287,11 @@ export function FlagshipCapability() {
           {/* ── Left copy ── */}
           <div className="space-y-6">
             <motion.h2
-              className="text-4xl md:text-5xl font-normal text-black leading-tight tracking-tight"
+              className="text-4xl md:text-5xl font-normal leading-tight tracking-tight"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              EDI and B2B integration, engineered for enterprises that can't afford downtime.
+              <span style={{ color: B.navy500 }}>EDI and B2B integration,</span>
+              <br />
+              <span style={{ color: B.primary500 }}>engineered for enterprises that can't afford downtime.</span>
             </motion.h2>
 
             <motion.p className="text-base text-black/60 leading-relaxed"
@@ -280,13 +304,13 @@ export function FlagshipCapability() {
               variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               {bullets.map(({ title, desc }) => (
                 <motion.div key={title} variants={staggerItem} className="flex items-start gap-3">
-                  <motion.span className="text-black/20 mt-1"
+                  <motion.span style={{ color: B.primary500, marginTop: 4 }}
                     animate={{ x: [0, 3, 0] }}
                     transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: Math.random() }}>
                     →
                   </motion.span>
                   <div>
-                    <div className="text-sm font-medium text-black">{title}</div>
+                    <div className="text-sm font-medium" style={{ color: B.navy500 }}>{title}</div>
                     <div className="text-sm text-black/60">{desc}</div>
                   </div>
                 </motion.div>
@@ -297,9 +321,16 @@ export function FlagshipCapability() {
               variants={fadeUp} custom={0.35} initial="hidden" whileInView="visible" viewport={VIEWPORT}
               whileHover={{ y: -3 }} transition={{ duration: 0.18, ease: EASE }} className="inline-block mt-6">
               <Link to="/services/edi-b2b-integration"
-                className="bg-black text-white px-6 py-2.5 text-sm rounded-md hover:bg-black/90 transition-colors"
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.15)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
+                className="text-white px-6 py-2.5 text-sm rounded-md transition-colors"
+                style={{ background: B.primary500 }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.background = B.primary600;
+                  (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 24px rgba(26,115,232,0.25)`;
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.background = B.primary500;
+                  (e.currentTarget as HTMLElement).style.boxShadow = "none";
+                }}>
                 Explore EDI & B2B Integration
               </Link>
             </motion.div>
@@ -307,18 +338,19 @@ export function FlagshipCapability() {
 
           {/* ── Right — animated diagram ── */}
           <motion.div
-            className="bg-white border border-black/10 rounded-lg p-8"
+            className="bg-white rounded-lg p-8"
+            style={{ border: `1px solid ${B.primary100}`, boxShadow: `0 4px 24px rgba(26,115,232,0.08)` }}
             variants={fadeUp} custom={0.2} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             <div className="space-y-6">
 
-              {/* Header */}
-              <div className="text-center pb-5 border-b border-black/[0.08]">
+              <div className="text-center pb-5" style={{ borderBottom: `1px solid ${B.primary100}` }}>
                 <StatusPill />
-                <h3 className="text-sm font-medium text-black mb-1">Enterprise Integration Architecture</h3>
-                <p className="text-xs text-black/40">Real-time data flow visualization</p>
+                <h3 className="text-sm font-medium mb-1" style={{ color: B.navy500 }}>
+                  Enterprise Integration Architecture
+                </h3>
+                <p className="text-xs" style={{ color: B.slate400 }}>Real-time data flow visualization</p>
               </div>
 
-              {/* ERP → Hub → WMS flow */}
               <div className="flex items-center">
                 <EndpointNode label="ERP" sub="SAP"    flashDelay={100} />
                 <Connector pktDelay={200}  pktLoop={2000} label="856 Order"  shimmerDelay={0} />
@@ -327,10 +359,8 @@ export function FlagshipCapability() {
                 <EndpointNode label="WMS" sub="Oracle" flashDelay={1100} />
               </div>
 
-              {/* Vertical drop to partners */}
               <VerticalDrop />
 
-              {/* Partners */}
               <motion.div className="grid grid-cols-3 gap-2.5"
                 variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
                 <PartnerCard label="Partner A" dotDelay={0}   flashDelay={1200} />
@@ -338,7 +368,6 @@ export function FlagshipCapability() {
                 <PartnerCard label="Partner C" dotDelay={1.0} flashDelay={1700} />
               </motion.div>
 
-              {/* Live stats */}
               <LiveStats />
             </div>
           </motion.div>

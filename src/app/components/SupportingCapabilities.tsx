@@ -4,6 +4,17 @@ import { useState } from "react";
 import { BrainCircuit, BarChart3, Cloud, Code2 } from "lucide-react";
 import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
 
+// ── Brand tokens ──────────────────────────────────────────────────────────────
+const B = {
+  primary50:  "#E8F3FE",
+  primary100: "#D6E7FD",
+  primary200: "#A1CFFB",
+  primary500: "#1A73E8",
+  primary600: "#155CC8",
+  navy500:    "#0B1F3A",
+  navy600:    "#091929",
+};
+
 const capabilities = [
   {
     icon: BrainCircuit,
@@ -44,8 +55,8 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        background: hov ? "#191919" : "#fff",
-        border: `1px solid ${hov ? "#111827" : "rgba(0,0,0,0.1)"}`,
+        background: hov ? B.navy500 : "#fff",
+        border: `1px solid ${hov ? B.navy600 : B.primary100}`,
         borderRadius: 10,
         padding: "24px",
         display: "flex",
@@ -54,14 +65,14 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
         position: "relative",
         overflow: "hidden",
         transition: "background .28s ease, border-color .28s ease, box-shadow .28s ease",
-        boxShadow: hov ? "0 16px 40px rgba(0,0,0,0.18)" : "none",
+        boxShadow: hov ? `0 16px 40px rgba(26,115,232,0.18)` : "none",
       }}
       whileHover={{ y: -5, transition: { duration: 0.2, ease: EASE } }}>
 
-      {/* top accent line */}
+      {/* top accent line — primary blue */}
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: 2,
-        background: "#111827",
+        background: `linear-gradient(90deg, ${B.primary500}, ${B.primary200})`,
         opacity: hov ? 1 : 0,
         transition: "opacity .28s ease",
         borderRadius: "10px 10px 0 0",
@@ -71,17 +82,17 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
       <div style={{
         width: 44, height: 44, borderRadius: 10, marginBottom: 18,
         display: "flex", alignItems: "center", justifyContent: "center",
-        background: hov ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)",
-        border: `1px solid ${hov ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.08)"}`,
+        background: hov ? "rgba(255,255,255,0.1)" : B.primary50,
+        border: `1px solid ${hov ? "rgba(255,255,255,0.15)" : B.primary100}`,
         transition: "background .25s ease, border-color .25s ease",
         flexShrink: 0,
       }}>
-        <Icon size={20} strokeWidth={1.75} color={hov ? "#fff" : "#111827"} style={{ transition: "color .2s" }} />
+        <Icon size={20} strokeWidth={1.75} color={hov ? "#fff" : B.primary500} style={{ transition: "color .2s" }} />
       </div>
 
       {/* content */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
-        <h3 style={{ fontSize: 15, fontWeight: 500, color: hov ? "#fff" : "#111827", margin: 0, transition: "color .22s" }}>
+        <h3 style={{ fontSize: 15, fontWeight: 500, color: hov ? "#fff" : B.navy500, margin: 0, transition: "color .22s" }}>
           {title}
         </h3>
         <p style={{ fontSize: 13, color: hov ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.55)", margin: 0, lineHeight: 1.55, transition: "color .22s" }}>
@@ -95,12 +106,12 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
       {/* learn more */}
       <div style={{ paddingTop: 20, marginTop: "auto" }}>
         <Link to={path} style={{
-          fontSize: 12, color: hov ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.5)",
+          fontSize: 12, color: hov ? "rgba(255,255,255,0.6)" : B.primary500,
           textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4,
           transition: "color .2s",
         }}
-          onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = hov ? "#fff" : "#111"}
-          onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = hov ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.5)"}>
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = hov ? "#fff" : B.primary600}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = hov ? "rgba(255,255,255,0.6)" : B.primary500}>
           Learn more
           <motion.span animate={{ x: hov ? 4 : 0 }} transition={{ duration: .18 }}>→</motion.span>
         </Link>
@@ -116,13 +127,16 @@ export function SupportingCapabilities() {
 
         {/* header */}
         <div className="text-center mb-6 max-w-3xl mx-auto">
-          <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+          <motion.p className="text-xs uppercase tracking-wide mb-4"
+            style={{ color: B.primary500 }}
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Supporting Capabilities
           </motion.p>
-          <motion.h2 className="text-4xl md:text-5xl font-normal text-black mb-4 tracking-tight"
+          <motion.h2 className="text-4xl md:text-5xl font-normal mb-4 tracking-tight"
             variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Connected data is only the beginning.
+            <span style={{ color: B.navy500 }}>Connected data is</span>
+            <br />
+            <span style={{ color: B.primary500 }}>only the beginning.</span>
           </motion.h2>
           <motion.p className="text-base text-black/60"
             variants={fadeUpLarge} custom={0.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>

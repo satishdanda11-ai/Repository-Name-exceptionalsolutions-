@@ -69,7 +69,7 @@ export function CredibilityStrip() {
                 maxWidth: 120,
                 objectFit: "contain",
                 display: "block",
-                filter: "grayscale(100%) opacity(0.90)",
+                // filter: "grayscale(100%) opacity(0.90)",
               }}
             />
           </div>

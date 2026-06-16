@@ -3,6 +3,17 @@ import { useState } from "react";
 import { Target, UserCheck, Zap } from "lucide-react";
 import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
 
+// ── Brand tokens ──────────────────────────────────────────────────────────────
+const B = {
+  primary50:  "#E8F3FE",
+  primary100: "#D6E7FD",
+  primary200: "#A1CFFB",
+  primary500: "#1A73E8",
+  primary600: "#155CC8",
+  navy500:    "#0B1F3A",
+  navy600:    "#091929",
+};
+
 const reasons = [
   {
     icon: Target,
@@ -39,8 +50,8 @@ function ReasonCard({ icon: Icon, number, title, description, stat, statLabel }:
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        background: hov ? "#191919" : "#fff",
-        border: `1px solid ${hov ? "#191919" : "rgba(0,0,0,0.1)"}`,
+        background: hov ? B.navy500 : "#fff",
+        border: `1px solid ${hov ? B.navy600 : B.primary100}`,
         borderRadius: 10,
         padding: "32px 28px",
         display: "flex",
@@ -50,37 +61,39 @@ function ReasonCard({ icon: Icon, number, title, description, stat, statLabel }:
         position: "relative",
         overflow: "hidden",
         transition: "background .28s ease, border-color .28s ease, box-shadow .28s ease",
-        boxShadow: hov ? "0 16px 40px rgba(0,0,0,0.18)" : "none",
+        boxShadow: hov ? `0 16px 40px rgba(26,115,232,0.18)` : "none",
       }}
       whileHover={{ y: -5, transition: { duration: 0.2, ease: EASE } }}>
 
-      {/* top accent */}
+      {/* top accent — primary gradient */}
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: 2,
-        background: "#111827", opacity: hov ? 1 : 0,
+        background: `linear-gradient(90deg, ${B.primary500}, ${B.primary200})`,
+        opacity: hov ? 1 : 0,
         transition: "opacity .28s", borderRadius: "10px 10px 0 0",
       }} />
 
       {/* number + icon row */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
         <span style={{
-          fontSize: 11, fontWeight: 600, color: hov ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.2)",
+          fontSize: 11, fontWeight: 600,
+          color: hov ? "rgba(255,255,255,0.3)" : B.primary200,
           letterSpacing: ".12em", transition: "color .22s",
         }}>{number}</span>
         <div style={{
           width: 40, height: 40, borderRadius: 10,
           display: "flex", alignItems: "center", justifyContent: "center",
-          background: hov ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)",
-          border: `1px solid ${hov ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.08)"}`,
+          background: hov ? "rgba(255,255,255,0.1)" : B.primary50,
+          border: `1px solid ${hov ? "rgba(255,255,255,0.15)" : B.primary100}`,
           transition: "background .25s, border-color .25s",
         }}>
-          <Icon size={18} strokeWidth={1.75} color={hov ? "#fff" : "#111827"} />
+          <Icon size={18} strokeWidth={1.75} color={hov ? "#fff" : B.primary500} />
         </div>
       </div>
 
       {/* text */}
       <div style={{ flex: 1, marginBottom: 24 }}>
-        <h3 style={{ fontSize: 17, fontWeight: 500, color: hov ? "#fff" : "#111827", marginBottom: 10, lineHeight: 1.3, transition: "color .22s" }}>
+        <h3 style={{ fontSize: 17, fontWeight: 500, color: hov ? "#fff" : B.navy500, marginBottom: 10, lineHeight: 1.3, transition: "color .22s" }}>
           {title}
         </h3>
         <p style={{ fontSize: 13, lineHeight: 1.7, color: hov ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.55)", margin: 0, transition: "color .22s" }}>
@@ -89,8 +102,8 @@ function ReasonCard({ icon: Icon, number, title, description, stat, statLabel }:
       </div>
 
       {/* stat */}
-      <div style={{ borderTop: `1px solid ${hov ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)"}`, paddingTop: 20, transition: "border-color .22s" }}>
-        <div style={{ fontSize: 24, fontWeight: 300, color: hov ? "#fff" : "#111827", lineHeight: 1, marginBottom: 4, transition: "color .22s", fontVariantNumeric: "tabular-nums" }}>
+      <div style={{ borderTop: `1px solid ${hov ? "rgba(255,255,255,0.1)" : B.primary100}`, paddingTop: 20, transition: "border-color .22s" }}>
+        <div style={{ fontSize: 24, fontWeight: 300, color: hov ? "#fff" : B.primary500, lineHeight: 1, marginBottom: 4, transition: "color .22s", fontVariantNumeric: "tabular-nums" }}>
           {stat}
         </div>
         <div style={{ fontSize: 11, color: hov ? "rgba(255,255,255,0.38)" : "rgba(0,0,0,0.38)", lineHeight: 1.5, transition: "color .22s" }}>
@@ -108,13 +121,16 @@ export function WhyExceptional() {
 
         {/* header */}
         <div className="mb-16 max-w-2xl">
-          <motion.p className="text-xs text-black/40 uppercase tracking-widest mb-4"
+          <motion.p className="text-xs uppercase tracking-widest mb-4"
+            style={{ color: B.primary500 }}
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Why Choose Us
           </motion.p>
-          <motion.h2 className="text-4xl md:text-5xl font-normal text-black mb-4 tracking-tight"
+          <motion.h2 className="text-4xl md:text-5xl font-normal mb-4 tracking-tight"
             variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Why enterprises choose Exceptional Solutions.
+            <span style={{ color: B.navy500 }}>Why enterprises choose</span>
+            <br />
+            <span style={{ color: B.primary500 }}>Exceptional Solutions.</span>
           </motion.h2>
           <motion.p className="text-base text-black/55"
             variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>

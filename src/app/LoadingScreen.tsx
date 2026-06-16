@@ -1,7 +1,6 @@
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
-import logoSrc from "../imports/Group_6417.png";
-
+import logoSrc from "../imports/logocolor.png";
 interface LoadingScreenProps {
   onComplete?: () => void;
   duration?: number;

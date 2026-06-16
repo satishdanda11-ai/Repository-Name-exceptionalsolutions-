@@ -1,6 +1,17 @@
 import { motion } from "motion/react";
 import { EASE, VIEWPORT, fadeUp, staggerContainer, staggerItem } from "../lib/animations";
 
+// ── Brand tokens ──────────────────────────────────────────────────────────────
+const B = {
+  primary50:  "#E8F3FE",
+  primary100: "#D6E7FD",
+  primary500: "#1A73E8",
+  navy500:    "#0B1F3A",
+  slate400:   "#94A3B8",
+  error:      "#EF4444",
+  warning:    "#F59E0B",
+};
+
 const issues = [
   "Failed transactions",
   "Delayed shipments",
@@ -19,14 +30,16 @@ export function ProblemStatement() {
           {/* Left — text */}
           <div className="space-y-6">
             <motion.h2
-              className="text-4xl md:text-5xl font-normal text-black leading-tight tracking-tight"
+              className="text-4xl md:text-5xl font-normal leading-tight tracking-tight"
+              style={{ color: B.navy500 }}
               variants={fadeUp}
               custom={0}
               initial="hidden"
               whileInView="visible"
               viewport={VIEWPORT}
             >
-              When integration breaks, the business feels it first.
+              When integration breaks,{" "}
+              <span style={{ color: B.primary500 }}>the business feels it first.</span>
             </motion.h2>
 
             <motion.div
@@ -42,7 +55,7 @@ export function ProblemStatement() {
                   variants={staggerItem}
                   className="flex items-start gap-2"
                 >
-                  <span className="text-black/20 mt-1">•</span>
+                  <span style={{ color: B.primary500, marginTop: 4 }}>•</span>
                   <span className="text-base text-black/60">{issue}</span>
                 </motion.div>
               ))}
@@ -63,7 +76,11 @@ export function ProblemStatement() {
 
           {/* Right — dashboard card */}
           <motion.div
-            className="bg-white border border-black/10 rounded-lg p-6"
+            className="bg-white rounded-lg p-6"
+            style={{
+              border: `1px solid ${B.primary100}`,
+              boxShadow: `0 4px 24px rgba(26,115,232,0.08)`,
+            }}
             variants={fadeUp}
             custom={0.15}
             initial="hidden"
@@ -71,34 +88,46 @@ export function ProblemStatement() {
             viewport={VIEWPORT}
           >
             <div className="space-y-5">
-              <div className="flex items-center justify-between pb-4 border-b border-black/10">
-                <h3 className="text-sm font-medium text-black">Integration Health</h3>
-                <span className="text-xs text-black/40">3 Critical Issues</span>
+              <div
+                className="flex items-center justify-between pb-4"
+                style={{ borderBottom: `1px solid ${B.primary100}` }}
+              >
+                <h3 className="text-sm font-medium" style={{ color: B.navy500 }}>
+                  Integration Health
+                </h3>
+                <span className="text-xs" style={{ color: B.error }}>3 Critical Issues</span>
               </div>
+
               <div className="space-y-3">
                 {[
-                  { title: "Failed Transactions", sub: "Partner ABC - EDI 850", value: "47" },
-                  { title: "Delayed Orders", sub: "Average delay: 2.3 hours", value: "12" },
-                  { title: "Partner Onboarding", sub: "Overdue by 5 days", value: "3" },
+                  { title: "Failed Transactions", sub: "Partner ABC - EDI 850",   value: "47", accent: B.error },
+                  { title: "Delayed Orders",      sub: "Average delay: 2.3 hours", value: "12", accent: B.warning },
+                  { title: "Partner Onboarding",  sub: "Overdue by 5 days",        value: "3",  accent: B.primary500 },
                 ].map((row, i) => (
                   <motion.div
                     key={row.title}
-                    className="flex items-center justify-between p-4 bg-black/[0.02] border border-black/10 rounded-md"
+                    className="flex items-center justify-between p-4 rounded-md"
+                    style={{
+                      background: B.primary50,
+                      border: `1px solid ${B.primary100}`,
+                      borderLeft: `3px solid ${row.accent}`,
+                    }}
                     initial={{ opacity: 0, x: 12 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={VIEWPORT}
                     transition={{ duration: 0.4, ease: EASE, delay: 0.25 + i * 0.1 }}
                   >
                     <div>
-                      <div className="text-sm font-medium text-black">{row.title}</div>
-                      <div className="text-xs text-black/40 mt-0.5">{row.sub}</div>
+                      <div className="text-sm font-medium" style={{ color: B.navy500 }}>{row.title}</div>
+                      <div className="text-xs mt-0.5" style={{ color: B.slate400 }}>{row.sub}</div>
                     </div>
-                    <div className="text-xl font-normal text-black">{row.value}</div>
+                    <div className="text-xl font-normal" style={{ color: row.accent }}>{row.value}</div>
                   </motion.div>
                 ))}
               </div>
             </div>
           </motion.div>
+
         </div>
       </div>
     </section>
