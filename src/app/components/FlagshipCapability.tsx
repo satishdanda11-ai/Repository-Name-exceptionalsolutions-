@@ -5,15 +5,16 @@ import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } fr
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E0EFF9",
-  primary100: "#C9EBFC",
-  primary200: "#8DD4F8",
-  primary400: "#6BC3F5",
-  primary500: "#43B0F1",
-  primary600: "#2A9DE0",
-  navy500:    "#0B1F3A",
-  slate400:   "#94A3B8",
-  success:    "#10B981",
+  grad:      "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",
+  primary:   "#057DCD",
+  accent:    "#057DCD",
+  navy:      "#0B1F3A",
+  slate400:  "#94A3B8",
+  slate500:  "#64748B",
+  success:   "#10B981",
+  error:     "#EF4444",
+  warning:   "#F59E0B",
+  white:     "#ffffff",
 };
 
 const bullets = [
@@ -31,7 +32,7 @@ function StatusPill() {
   }, []);
   return (
     <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] mb-3"
-      style={{ background: B.primary50, color: B.navy500, border: `1px solid ${B.primary100}` }}>
+      style={{ background: B.primary50, color: B.navy500, border: "1px solid rgba(67,176,241,0.2)" }}>
       <motion.span
         className="w-1.5 h-1.5 rounded-full flex-shrink-0"
         style={{ background: B.success }}
@@ -74,7 +75,7 @@ function HorizPacket({ connRef, delay, loopMs, label }: {
       <div
         ref={badgeRef}
         className="absolute -top-5 pointer-events-none text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap"
-        style={{ opacity: 0, background: B.navy500, color: "#fff" }}
+        style={{ opacity: 0, background: B.navy500, color: "#0B1F3A" }}
       >
         {label}
       </div>
@@ -82,7 +83,7 @@ function HorizPacket({ connRef, delay, loopMs, label }: {
       <div
         ref={pktRef}
         className="absolute top-1/2 -translate-y-1/2 w-[7px] h-[7px] rounded-full"
-        style={{ opacity: 0, background: B.primary500, boxShadow: `0 0 8px ${B.primary400}` }}
+        style={{ opacity: 0, background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)", boxShadow: `0 0 8px ${B.primary400}` }}
       />
     </>
   );
@@ -129,7 +130,7 @@ function VerticalDrop() {
     <div className="flex flex-col items-center mb-3.5">
       <div ref={lineRef} className="relative overflow-hidden" style={{ width: 1.5, height: 28, background: B.primary100 }}>
         <div ref={pktRef} className="absolute left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
-          style={{ background: B.primary500, boxShadow: `0 0 5px ${B.primary400}` }} />
+          style={{ background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)", boxShadow: `0 0 5px ${B.primary400}` }} />
       </div>
       <div className="relative overflow-hidden" style={{ width: "80%", height: 1.5, background: B.primary100 }}>
         <motion.div
@@ -152,16 +153,16 @@ function EDIHub() {
           <motion.div
             key={i}
             className="absolute rounded-lg border"
-            style={{ inset: r.inset, borderColor: `rgba(26,115,232,${r.opacity})` }}
+            style={{ inset: r.inset, borderColor: `rgba(5,125,205,${r.opacity})` }}
             animate={{ scale: [1, 1.06, 1], opacity: [0.9, 0.2, 0.9] }}
             transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: r.delay }}
           />
         ))}
       {/* hub body — brand navy */}
       <div className="relative z-10 text-white px-3 py-2 rounded-md text-center"
-        style={{ background: B.primary500 }}>
+        style={{ background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)" }}>
         <div className="text-xs font-medium">EDI Hub</div>
-        <div className="text-[10px] mt-0.5" style={{ color: "rgba(255,255,255,0.6)" }}>B2B</div>
+        <div className="text-[10px] mt-0.5" style={{ color: "#4A6380" }}>B2B</div>
       </div>
     </div>
   );
@@ -184,8 +185,8 @@ function EndpointNode({ label, sub, flashDelay }: { label: string; sub: string; 
 
   return (
     <div ref={ref} className="border px-3 py-2 rounded-md text-center flex-shrink-0"
-      style={{ background: B.primary50, borderColor: B.primary200 }}>
-      <div className="text-xs font-medium" style={{ color: B.navy500 }}>{label}</div>
+      style={{ background: "rgba(67,176,241,0.06)", borderColor: "rgba(5,125,205,0.3)" }}>
+      <div className="text-xs font-medium" style={{ color: B.navy }}>{label}</div>
       <div className="text-[10px] mt-0.5" style={{ color: B.slate400 }}>{sub}</div>
     </div>
   );
@@ -210,7 +211,7 @@ function PartnerCard({ label, dotDelay, flashDelay }: { label: string; dotDelay:
     <motion.div
       ref={ref}
       className="relative overflow-hidden border rounded-md p-2.5 text-center cursor-pointer"
-      style={{ background: B.primary50, borderColor: B.primary100 }}
+      style={{ background: "rgba(67,176,241,0.06)", borderColor: "rgba(5,125,205,0.2)" }}
       variants={staggerItem}
       whileHover="hovered"
     >
@@ -230,12 +231,12 @@ function PartnerCard({ label, dotDelay, flashDelay }: { label: string; dotDelay:
         transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
       />
       <motion.div className="text-[10px] relative z-10"
-        variants={{ initial: { color: B.slate400 }, hovered: { color: "#fff" } }}
+        variants={{ initial: { color: "#4A6380" }, hovered: { color: "#0B1F3A" } }}
         initial="initial" transition={{ duration: 0.2 }}>
         {label}
       </motion.div>
       <motion.div className="text-sm relative z-10 mt-0.5"
-        variants={{ initial: { color: B.navy500 }, hovered: { color: "#fff" } }}
+        variants={{ initial: { color: "rgba(255,255,255,0.85)" }, hovered: { color: "#0B1F3A" } }}
         initial="initial" transition={{ duration: 0.2 }}>
         ✓
       </motion.div>
@@ -253,15 +254,15 @@ function LiveStats() {
     return () => { clearInterval(t1); clearInterval(t2); };
   }, []);
   return (
-    <div className="grid grid-cols-3 gap-2 mt-4 pt-4" style={{ borderTop: `1px solid ${B.primary100}` }}>
+    <div className="grid grid-cols-3 gap-2 mt-4 pt-4" style={{ borderTop: "1px solid rgba(67,176,241,0.15)" }}>
       {[
         { val: txn.toLocaleString(), lbl: "Transactions" },
         { val: "99.9%",              lbl: "Uptime" },
         { val: `${latency}ms`,       lbl: "Avg Latency" },
       ].map(({ val, lbl }) => (
         <div key={lbl} className="text-center">
-          <div className="text-base font-medium tabular-nums" style={{ color: B.navy500 }}>{val}</div>
-          <div className="text-[9px] uppercase tracking-wide mt-0.5" style={{ color: B.slate400 }}>{lbl}</div>
+          <div className="text-base font-medium tabular-nums" style={{ color: "#0B1F3A" }}>{val}</div>
+          <div className="text-[9px] uppercase tracking-wide mt-0.5" style={{ color: "#4A6380" }}>{lbl}</div>
         </div>
       ))}
     </div>
@@ -271,13 +272,13 @@ function LiveStats() {
 // ─── Section ──────────────────────────────────────────────────────────────────
 export function FlagshipCapability() {
   return (
-    <section className="py-24 px-4 bg-black/[0.02]">
+    <section className="py-24 px-4" style={{background:"#FFFFFF"}}>
       <div className="max-w-6xl mx-auto">
 
         <motion.div className="text-center mb-12"
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={VIEWPORT}
           transition={{ duration: 0.4, ease: EASE }}>
-          <span className="text-xs uppercase tracking-wide" style={{ color: B.primary500 }}>
+          <span className="text-xs uppercase tracking-wide" style={{ color: "#057DCD" }}>
             OUR FLAGSHIP CAPABILITY
           </span>
         </motion.div>
@@ -288,13 +289,14 @@ export function FlagshipCapability() {
           <div className="space-y-6">
             <motion.h2
               className="text-4xl md:text-5xl font-normal leading-tight tracking-tight"
-              variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              <span style={{ color: B.navy500 }}>EDI and B2B integration,</span>
+              style={{background:"linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}
+            variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+              <span style={{ background:"linear-gradient(135deg,#0B1F3A,#43B0F1)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>EDI and B2B integration,</span>
               <br />
-              <span style={{ color: B.primary500 }}>engineered for enterprises that can't afford downtime.</span>
+              <span style={{ color: "#057DCD" }}>engineered for enterprises that can't afford downtime.</span>
             </motion.h2>
 
-            <motion.p className="text-base text-black/60 leading-relaxed"
+            <motion.p style={{color:"#4A6380",fontSize:16,lineHeight:1.7}}
               variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               We modernize legacy EDI systems, accelerate partner onboarding, and build resilient
               integration architectures that scale with your business.
@@ -310,8 +312,8 @@ export function FlagshipCapability() {
                     →
                   </motion.span>
                   <div>
-                    <div className="text-sm font-medium" style={{ color: B.navy500 }}>{title}</div>
-                    <div className="text-sm text-black/60">{desc}</div>
+                    <div className="text-sm font-medium" style={{ color: "#0B1F3A" }}>{title}</div>
+                    <div style={{fontSize:13,color:"#4A6380"}}>{desc}</div>
                   </div>
                 </motion.div>
               ))}
@@ -322,13 +324,13 @@ export function FlagshipCapability() {
               whileHover={{ y: -3 }} transition={{ duration: 0.18, ease: EASE }} className="inline-block mt-6">
               <Link to="/services/edi-b2b-integration"
                 className="text-white px-6 py-2.5 text-sm rounded-md transition-colors"
-                style={{ background: B.primary500 }}
+                style={{ background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)" }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.background = B.primary600;
-                  (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 24px rgba(26,115,232,0.25)`;
+                  (e.currentTarget as HTMLElement).style.background = "#046AAD";
+                  (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 24px rgba(5,125,205,0.25)`;
                 }}
                 onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.background = B.primary500;
+                  (e.currentTarget as HTMLElement).style.background = "rgba(5,125,205,0.04)";
                   (e.currentTarget as HTMLElement).style.boxShadow = "none";
                 }}>
                 Explore EDI & B2B Integration
@@ -338,17 +340,17 @@ export function FlagshipCapability() {
 
           {/* ── Right — animated diagram ── */}
           <motion.div
-            className="bg-white rounded-lg p-8"
-            style={{ border: `1px solid ${B.primary100}`, boxShadow: `0 4px 24px rgba(26,115,232,0.08)` }}
+            className="rounded-lg p-8"
+            style={{ background:"#ffffff", border:"1px solid rgba(67,176,241,0.22)", boxShadow:"0 4px 24px rgba(67,176,241,0.1)" }}
             variants={fadeUp} custom={0.2} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             <div className="space-y-6">
 
-              <div className="text-center pb-5" style={{ borderBottom: `1px solid ${B.primary100}` }}>
+              <div className="text-center pb-5" style={{ borderBottom: "1px solid rgba(67,176,241,0.15)" }}>
                 <StatusPill />
-                <h3 className="text-sm font-medium mb-1" style={{ color: B.navy500 }}>
+                <h3 className="text-sm font-medium mb-1" style={{ color: "#0B1F3A" }}>
                   Enterprise Integration Architecture
                 </h3>
-                <p className="text-xs" style={{ color: B.slate400 }}>Real-time data flow visualization</p>
+                <p className="text-xs" style={{ color: "#4A6380" }}>Real-time data flow visualization</p>
               </div>
 
               <div className="flex items-center">

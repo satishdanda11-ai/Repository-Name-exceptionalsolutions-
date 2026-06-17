@@ -6,13 +6,16 @@ import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } fr
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E0EFF9",
-  primary100: "#C9EBFC",
-  primary200: "#8DD4F8",
-  primary500: "#43B0F1",
-  primary600: "#2A9DE0",
-  navy500:    "#0B1F3A",
-  navy600:    "#091929",
+  grad:      "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",
+  primary:   "#057DCD",
+  accent:    "#057DCD",
+  navy:      "#0B1F3A",
+  slate400:  "#94A3B8",
+  slate500:  "#64748B",
+  success:   "#10B981",
+  error:     "#EF4444",
+  warning:   "#F59E0B",
+  white:     "#ffffff",
 };
 
 const capabilities = [
@@ -55,8 +58,8 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        background: hov ? B.navy500 : "#fff",
-        border: `1px solid ${hov ? B.navy600 : B.primary100}`,
+        background: hov ? "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)" : "#ffffff",
+        border: `1px solid ${hov ? "rgba(5,125,205,0.5)" : "rgba(5,125,205,0.18)"}`,
         borderRadius: 10,
         padding: "24px",
         display: "flex",
@@ -65,14 +68,14 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
         position: "relative",
         overflow: "hidden",
         transition: "background .28s ease, border-color .28s ease, box-shadow .28s ease",
-        boxShadow: hov ? `0 16px 40px rgba(26,115,232,0.18)` : "none",
+        boxShadow: hov ? "0 16px 40px rgba(5,125,205,0.1)" : "none",
       }}
       whileHover={{ y: -5, transition: { duration: 0.2, ease: EASE } }}>
 
       {/* top accent line — primary blue */}
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: 2,
-        background: `linear-gradient(90deg, ${B.primary500}, ${B.primary200})`,
+        background: "linear-gradient(90deg, #43B0F1, #0B1F3A)",
         opacity: hov ? 1 : 0,
         transition: "opacity .28s ease",
         borderRadius: "10px 10px 0 0",
@@ -82,8 +85,8 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
       <div style={{
         width: 44, height: 44, borderRadius: 10, marginBottom: 18,
         display: "flex", alignItems: "center", justifyContent: "center",
-        background: hov ? "rgba(255,255,255,0.1)" : B.primary50,
-        border: `1px solid ${hov ? "rgba(255,255,255,0.15)" : B.primary100}`,
+        background: hov ? "#0B1F3A" : "rgba(67,176,241,0.08)",
+        border: `1px solid ${hov ? "#0B1F3A" : "rgba(67,176,241,0.2)"}`,
         transition: "background .25s ease, border-color .25s ease",
         flexShrink: 0,
       }}>
@@ -92,13 +95,13 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
 
       {/* content */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
-        <h3 style={{ fontSize: 15, fontWeight: 500, color: hov ? "#fff" : B.navy500, margin: 0, transition: "color .22s" }}>
+        <h3 style={{ fontSize: 15, fontWeight: 500, color: hov ? "#fff" : "#0B1F3A", margin: 0, transition: "color .22s" }}>
           {title}
         </h3>
-        <p style={{ fontSize: 13, color: hov ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.55)", margin: 0, lineHeight: 1.55, transition: "color .22s" }}>
+        <p style={{ fontSize: 13, color: hov ? "#fff" : "#5A6478", margin: 0, lineHeight: 1.55, transition: "color .22s" }}>
           {description}
         </p>
-        <p style={{ fontSize: 12, color: hov ? "rgba(255,255,255,0.38)" : "rgba(0,0,0,0.38)", margin: 0, lineHeight: 1.65, transition: "color .22s" }}>
+        <p style={{ fontSize: 12, color: hov ? "rgba(255,255,255,0.6)" : "#5A6478", margin: 0, lineHeight: 1.65, transition: "color .22s" }}>
           {details}
         </p>
       </div>
@@ -106,7 +109,7 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
       {/* learn more */}
       <div style={{ paddingTop: 20, marginTop: "auto" }}>
         <Link to={path} style={{
-          fontSize: 12, color: hov ? "rgba(255,255,255,0.6)" : B.primary500,
+          fontSize: 12, color: hov ? "#fff" : B.primary500,
           textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4,
           transition: "color .2s",
         }}
@@ -122,23 +125,24 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
 
 export function SupportingCapabilities() {
   return (
-    <section className="py-24 px-4">
+    <section className="py-24 px-4" style={{background:"#FFFFFF"}}>
       <div className="max-w-6xl mx-auto">
 
         {/* header */}
         <div className="text-center mb-6 max-w-3xl mx-auto">
           <motion.p className="text-xs uppercase tracking-wide mb-4"
-            style={{ color: B.primary500 }}
+            style={{ color: "#057DCD" }}
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Supporting Capabilities
           </motion.p>
           <motion.h2 className="text-4xl md:text-5xl font-normal mb-4 tracking-tight"
+            style={{background:"linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}
             variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            <span style={{ color: B.navy500 }}>Connected data is</span>
+            <span style={{ background:"linear-gradient(135deg,#0B1F3A,#43B0F1)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>Connected data is</span>
             <br />
-            <span style={{ color: B.primary500 }}>only the beginning.</span>
+            <span style={{ color: "#057DCD" }}>only the beginning.</span>
           </motion.h2>
-          <motion.p className="text-base text-black/60"
+          <motion.p style={{color:"#4A6380",fontSize:16}}
             variants={fadeUpLarge} custom={0.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Here's what we help you do with it.
           </motion.p>

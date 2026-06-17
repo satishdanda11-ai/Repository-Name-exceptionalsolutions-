@@ -5,13 +5,16 @@ import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } fr
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E0EFF9",
-  primary100: "#C9EBFC",
-  primary200: "#8DD4F8",
-  primary500: "#43B0F1",
-  primary600: "#2A9DE0",
-  navy500:    "#0B1F3A",
-  navy600:    "#091929",
+  grad:      "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",
+  primary:   "#057DCD",
+  accent:    "#057DCD",
+  navy:      "#0B1F3A",
+  slate400:  "#94A3B8",
+  slate500:  "#64748B",
+  success:   "#10B981",
+  error:     "#EF4444",
+  warning:   "#F59E0B",
+  white:     "#ffffff",
 };
 
 const reasons = [
@@ -50,8 +53,8 @@ function ReasonCard({ icon: Icon, number, title, description, stat, statLabel }:
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        background: hov ? B.navy500 : "#fff",
-        border: `1px solid ${hov ? B.navy600 : B.primary100}`,
+        background: hov ? "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)" : "#ffffff",
+        border: `1px solid ${hov ? "rgba(5,125,205,0.45)" : "rgba(5,125,205,0.18)"}`,
         borderRadius: 10,
         padding: "32px 28px",
         display: "flex",
@@ -61,14 +64,14 @@ function ReasonCard({ icon: Icon, number, title, description, stat, statLabel }:
         position: "relative",
         overflow: "hidden",
         transition: "background .28s ease, border-color .28s ease, box-shadow .28s ease",
-        boxShadow: hov ? `0 16px 40px rgba(26,115,232,0.18)` : "none",
+        boxShadow: hov ? "0 16px 40px rgba(5,125,205,0.1)" : "none",
       }}
       whileHover={{ y: -5, transition: { duration: 0.2, ease: EASE } }}>
 
       {/* top accent — primary gradient */}
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: 2,
-        background: `linear-gradient(90deg, ${B.primary500}, ${B.primary200})`,
+        background: "linear-gradient(90deg, #43B0F1, #0B1F3A)",
         opacity: hov ? 1 : 0,
         transition: "opacity .28s", borderRadius: "10px 10px 0 0",
       }} />
@@ -77,14 +80,14 @@ function ReasonCard({ icon: Icon, number, title, description, stat, statLabel }:
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
         <span style={{
           fontSize: 11, fontWeight: 600,
-          color: hov ? "rgba(255,255,255,0.3)" : B.primary200,
+          color: hov ? "rgba(255,255,255,0.35)" : "rgba(5,125,205,0.5)",
           letterSpacing: ".12em", transition: "color .22s",
         }}>{number}</span>
         <div style={{
           width: 40, height: 40, borderRadius: 10,
           display: "flex", alignItems: "center", justifyContent: "center",
-          background: hov ? "rgba(255,255,255,0.1)" : B.primary50,
-          border: `1px solid ${hov ? "rgba(255,255,255,0.15)" : B.primary100}`,
+          background: hov ? "#0B1F3A" : "rgba(67,176,241,0.08)",
+          border: `1px solid ${hov ? "#0B1F3A" : "rgba(67,176,241,0.2)"}`,
           transition: "background .25s, border-color .25s",
         }}>
           <Icon size={18} strokeWidth={1.75} color={hov ? "#fff" : B.primary500} />
@@ -93,20 +96,20 @@ function ReasonCard({ icon: Icon, number, title, description, stat, statLabel }:
 
       {/* text */}
       <div style={{ flex: 1, marginBottom: 24 }}>
-        <h3 style={{ fontSize: 17, fontWeight: 500, color: hov ? "#fff" : B.navy500, marginBottom: 10, lineHeight: 1.3, transition: "color .22s" }}>
+        <h3 style={{ fontSize: 17, fontWeight: 500, color: hov ? "#fff" : "#0B1F3A", marginBottom: 10, lineHeight: 1.3, transition: "color .22s" }}>
           {title}
         </h3>
-        <p style={{ fontSize: 13, lineHeight: 1.7, color: hov ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.55)", margin: 0, transition: "color .22s" }}>
+        <p style={{ fontSize: 13, lineHeight: 1.7, color: hov ? "rgba(255,255,255,0.7)" : "#5A6478", margin: 0, transition: "color .22s" }}>
           {description}
         </p>
       </div>
 
       {/* stat */}
-      <div style={{ borderTop: `1px solid ${hov ? "rgba(255,255,255,0.1)" : B.primary100}`, paddingTop: 20, transition: "border-color .22s" }}>
+      <div style={{ borderTop: "1px solid " + (hov ? "rgba(255,255,255,0.15)" : "rgba(67,176,241,0.15)"), paddingTop: 20, transition: "border-color .22s" }}>
         <div style={{ fontSize: 24, fontWeight: 300, color: hov ? "#fff" : B.primary500, lineHeight: 1, marginBottom: 4, transition: "color .22s", fontVariantNumeric: "tabular-nums" }}>
           {stat}
         </div>
-        <div style={{ fontSize: 11, color: hov ? "rgba(255,255,255,0.38)" : "rgba(0,0,0,0.38)", lineHeight: 1.5, transition: "color .22s" }}>
+        <div style={{ fontSize: 11, color: hov ? "rgba(255,255,255,0.6)" : "#8AA0B4", lineHeight: 1.5, transition: "color .22s" }}>
           {statLabel}
         </div>
       </div>
@@ -116,23 +119,24 @@ function ReasonCard({ icon: Icon, number, title, description, stat, statLabel }:
 
 export function WhyExceptional() {
   return (
-    <section className="py-24 px-4 bg-black/[0.02]">
+    <section className="py-24 px-4" style={{background:"#FFFFFF"}}>
       <div className="max-w-6xl mx-auto">
 
         {/* header */}
         <div className="mb-16 max-w-2xl">
           <motion.p className="text-xs uppercase tracking-widest mb-4"
-            style={{ color: B.primary500 }}
+            style={{ color: "#057DCD" }}
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Why Choose Us
           </motion.p>
           <motion.h2 className="text-4xl md:text-5xl font-normal mb-4 tracking-tight"
+            style={{background:"linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}
             variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            <span style={{ color: B.navy500 }}>Why enterprises choose</span>
+            <span style={{ background:"linear-gradient(135deg,#0B1F3A,#43B0F1)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>Why enterprises choose</span>
             <br />
-            <span style={{ color: B.primary500 }}>Exceptional Solutions.</span>
+            <span style={{ color: "#057DCD" }}>Exceptional Solutions.</span>
           </motion.h2>
-          <motion.p className="text-base text-black/55"
+          <motion.p style={{color:"#4A6380",fontSize:16}}
             variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             We're built differently. No offshore teams, no junior consultants, no vendor lock-in.
           </motion.p>

@@ -4,13 +4,16 @@ import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } fr
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E0EFF9",
-  primary100: "#C9EBFC",
-  primary200: "#8DD4F8",
-  primary400: "#6BC3F5",
-  primary500: "#43B0F1",
-  navy500:    "#0B1F3A",
-  success:    "#10B981",
+  grad:      "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",
+  primary:   "#057DCD",
+  accent:    "#057DCD",
+  navy:      "#0B1F3A",
+  slate400:  "#94A3B8",
+  slate500:  "#64748B",
+  success:   "#10B981",
+  error:     "#EF4444",
+  warning:   "#F59E0B",
+  white:     "#ffffff",
 };
 
 const phases = [
@@ -43,7 +46,7 @@ function LinePacket({ trackRef }: { trackRef: React.RefObject<HTMLDivElement> })
   return (
     <div ref={pktRef} style={{
       position:"absolute", top:"50%", transform:"translateY(-50%)",
-      width:7, height:7, borderRadius:"50%", background: B.primary500,
+      width:7, height:7, borderRadius:"50%", background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",
       opacity:0, boxShadow:`0 0 8px ${B.primary400}`,
     }} />
   );
@@ -63,9 +66,9 @@ function ProgressBar({ active, done }: { active: boolean; done: boolean }) {
   }, [active, done]);
 
   return (
-    <div style={{ width:"100%", height:2, borderRadius:99, background: B.primary100, marginTop:10 }}>
+    <div style={{ width:"100%", height:2, borderRadius:99, background: "rgba(67,176,241,0.06)", marginTop:10 }}>
       <div style={{
-        height:"100%", borderRadius:99, background: B.primary500,
+        height:"100%", borderRadius:99, background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",
         width:`${w}%`, transition:"width 1.8s cubic-bezier(.16,1,.3,1)",
       }} />
     </div>
@@ -76,8 +79,8 @@ function ProgressBar({ active, done }: { active: boolean; done: boolean }) {
 function StatusBadge({ state }: { state: "done"|"active"|"pending" }) {
   const cfg = {
     done:    { label:"Complete",    bg:"#f0fdf4",  color: B.success,            dot: B.success,            pulse:false },
-    active:  { label:"In progress", bg: B.primary50, color: B.primary500,       dot: B.primary500,         pulse:true  },
-    pending: { label:"Upcoming",    bg:"#fafafa",  color:"rgba(0,0,0,0.38)",    dot:"rgba(0,0,0,0.2)",     pulse:false },
+    active:  { label:"In progress", bg: "rgba(67,176,241,0.1)", color: "#057DCD",       dot: B.primary500,         pulse:true  },
+    pending: { label:"Upcoming",    bg:"rgba(255,255,255,0.06)",  color:"#4A6380",    dot:"rgba(5,125,205,0.2)",     pulse:false },
   }[state];
 
   return (
@@ -106,14 +109,14 @@ function PhaseCircle({ number, state }: { number:string; state:"done"|"active"|"
       )}
       <motion.div style={{
         position:"relative", zIndex:1, width:44, height:44, borderRadius:"50%",
-        border:`1px solid ${state==="done" ? B.primary500 : state==="active" ? B.primary500 : "rgba(0,0,0,0.18)"}`,
-        background: state==="done" ? B.primary500 : state==="active" ? B.primary50 : "#fff",
-        color: state==="done" ? "#fff" : state==="active" ? B.primary500 : "#111",
+        border:`1px solid ${state==="done" ? "#0B1F3A" : state==="active" ? "#057DCD" : "rgba(0,0,0,0.15)"}`,
+        background: state==="done" ? "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)" : state==="active" ? "rgba(67,176,241,0.12)" : "#fff",
+        color: state==="done" ? "#fff" : state==="active" ? "#057DCD" : "#0B1F3A",
         display:"flex", alignItems:"center", justifyContent:"center",
-        boxShadow: state==="active" ? `0 0 0 4px ${B.primary100}` : "none",
+        boxShadow: state==="active" ? "0 0 0 4px rgba(5,125,205,0.18)" : "none",
         fontSize:12, fontWeight:500,
       }}
-        whileHover={{ scale:1.1, boxShadow:`0 0 0 6px ${B.primary100}` }}
+        whileHover={{ scale:1.1, boxShadow:"0 0 0 6px rgba(5,125,205,0.18)" }}
         transition={{ duration:.18, ease:EASE }}>
         {state === "done" ? "✓" : number}
       </motion.div>
@@ -147,17 +150,18 @@ export function DeliveryApproach() {
   };
 
   return (
-    <section className="py-24 px-4 bg-black/[0.02]">
+    <section className="py-24 px-4" style={{background:"#FFFFFF"}}>
       <div className="max-w-6xl mx-auto">
 
         {/* heading */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <motion.h2 className="text-4xl md:text-5xl font-normal mb-4 tracking-tight leading-[1.35]"
+            style={{background:"linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            <span style={{ color: B.navy500 }}>A Delivery Approach Built for{" "}</span>
-            <span className="whitespace-nowrap" style={{ color: B.primary500 }}>'0' Surprises</span>
+            <span style={{ background:"linear-gradient(135deg,#0B1F3A,#43B0F1)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>A Delivery Approach Built for{" "}</span>
+            <span className="whitespace-nowrap" style={{ color: "#057DCD" }}>'0' Surprises</span>
           </motion.h2>
-          <motion.p className="text-base text-black/60"
+          <motion.p style={{color:"#4A6380",fontSize:16}}
             variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Predictable, transparent, collaborative. No black boxes, no last-minute shocks.
           </motion.p>
@@ -167,10 +171,10 @@ export function DeliveryApproach() {
 
           {/* connector line */}
           <div ref={trackRef} className="hidden md:block absolute top-5 left-[10%] right-[10%] h-px"
-            style={{ background: B.primary100 }}>
+            style={{ background: "rgba(67,176,241,0.25)" }}>
             {/* fill — primary blue */}
             <div style={{
-              position:"absolute", inset:0, background: B.primary500, transformOrigin:"left",
+              position:"absolute", inset:0, background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)", transformOrigin:"left",
               width:`${lineW}%`, transition:`width ${STEP_DURATION * 0.9}ms cubic-bezier(.16,1,.3,1)`,
             }} />
             {/* junction dots */}
@@ -194,8 +198,8 @@ export function DeliveryApproach() {
               <motion.div key={number} variants={staggerItem} className="cursor-default">
                 <PhaseCircle number={number} state={stateOf(i)} />
                 <div style={{ textAlign:"center" }}>
-                  <h3 style={{ fontSize:13, fontWeight:500, color: B.navy500, marginBottom:6, lineHeight:1.3 }}>{title}</h3>
-                  <p style={{ fontSize:11, color:"rgba(0,0,0,0.55)", lineHeight:1.65, margin:0 }}>{description}</p>
+                  <h3 style={{ fontSize:13, fontWeight:500, color: "#0B1F3A", marginBottom:6, lineHeight:1.3 }}>{title}</h3>
+                  <p style={{ fontSize:11, color:"#4A6380", lineHeight:1.65, margin:0 }}>{description}</p>
                   <ProgressBar active={stateOf(i)==="active"} done={stateOf(i)==="done"} />
                   <StatusBadge state={stateOf(i)} />
                 </div>

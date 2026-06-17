@@ -3,13 +3,16 @@ import { EASE, VIEWPORT, fadeUp, staggerContainer, staggerItem } from "../lib/an
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E0EFF9",
-  primary100: "#C9EBFC",
-  primary500: "#43B0F1",
-  navy500:    "#0B1F3A",
-  slate400:   "#94A3B8",
-  error:      "#EF4444",
-  warning:    "#F59E0B",
+  grad:      "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",
+  primary:   "#057DCD",
+  accent:    "#057DCD",
+  navy:      "#0B1F3A",
+  slate400:  "#94A3B8",
+  slate500:  "#64748B",
+  success:   "#10B981",
+  error:     "#EF4444",
+  warning:   "#F59E0B",
+  white:     "#ffffff",
 };
 
 const issues = [
@@ -23,7 +26,7 @@ const issues = [
 
 export function ProblemStatement() {
   return (
-    <section className="py-24 px-4">
+    <section className="py-24 px-4" style={{background:"#FFFFFF"}}>
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-2 gap-16 items-center">
 
@@ -31,15 +34,15 @@ export function ProblemStatement() {
           <div className="space-y-6">
             <motion.h2
               className="text-4xl md:text-5xl font-normal leading-tight tracking-tight"
-              style={{ color: B.navy500 }}
-              variants={fadeUp}
+              style={{background:"linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}
+            variants={fadeUp}
               custom={0}
               initial="hidden"
               whileInView="visible"
               viewport={VIEWPORT}
             >
               When integration breaks,{" "}
-              <span style={{ color: B.primary500 }}>the business feels it first.</span>
+              <span style={{ color: "#057DCD" }}>the business feels it first.</span>
             </motion.h2>
 
             <motion.div
@@ -56,7 +59,7 @@ export function ProblemStatement() {
                   className="flex items-start gap-2"
                 >
                   <span style={{ color: B.primary500, marginTop: 4 }}>•</span>
-                  <span className="text-base text-black/60">{issue}</span>
+                  <span style={{color:"#4A6380"}}>{issue}</span>
                 </motion.div>
               ))}
             </motion.div>
@@ -76,10 +79,10 @@ export function ProblemStatement() {
 
           {/* Right — dashboard card */}
           <motion.div
-            className="bg-white rounded-lg p-6"
+            className=" rounded-lg p-6"
             style={{
-              border: `1px solid ${B.primary100}`,
-              boxShadow: `0 4px 24px rgba(26,115,232,0.08)`,
+              border: "1px solid rgba(67,176,241,0.2)",
+              boxShadow: `0 4px 24px rgba(5,125,205,0.08)`,
             }}
             variants={fadeUp}
             custom={0.15}
@@ -90,9 +93,9 @@ export function ProblemStatement() {
             <div className="space-y-5">
               <div
                 className="flex items-center justify-between pb-4"
-                style={{ borderBottom: `1px solid ${B.primary100}` }}
+                style={{ borderBottom: "1px solid rgba(67,176,241,0.15)" }}
               >
-                <h3 className="text-sm font-medium" style={{ color: B.navy500 }}>
+                <h3 className="text-sm font-medium" style={{ color: "#0A0F1E" }}>
                   Integration Health
                 </h3>
                 <span className="text-xs" style={{ color: B.error }}>3 Critical Issues</span>
@@ -109,7 +112,7 @@ export function ProblemStatement() {
                     className="flex items-center justify-between p-4 rounded-md"
                     style={{
                       background: B.primary50,
-                      border: `1px solid ${B.primary100}`,
+                      border: "1px solid rgba(67,176,241,0.2)",
                       borderLeft: `3px solid ${row.accent}`,
                     }}
                     initial={{ opacity: 0, x: 12 }}
@@ -118,7 +121,7 @@ export function ProblemStatement() {
                     transition={{ duration: 0.4, ease: EASE, delay: 0.25 + i * 0.1 }}
                   >
                     <div>
-                      <div className="text-sm font-medium" style={{ color: B.navy500 }}>{row.title}</div>
+                      <div className="text-sm font-medium" style={{ color: "#0A0F1E" }}>{row.title}</div>
                       <div className="text-xs mt-0.5" style={{ color: B.slate400 }}>{row.sub}</div>
                     </div>
                     <div className="text-xl font-normal" style={{ color: row.accent }}>{row.value}</div>

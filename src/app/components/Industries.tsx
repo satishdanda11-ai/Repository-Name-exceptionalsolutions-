@@ -5,14 +5,16 @@ import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } fr
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E0EFF9",
-  primary100: "#C9EBFC",
-  primary200: "#8DD4F8",
-  primary400: "#6BC3F5",
-  primary500: "#43B0F1",
-  primary600: "#2A9DE0",
-  navy500:    "#0B1F3A",
-  success:    "#10B981",
+  grad:      "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",
+  primary:   "#057DCD",
+  accent:    "#057DCD",
+  navy:      "#0B1F3A",
+  slate400:  "#94A3B8",
+  slate500:  "#64748B",
+  success:   "#10B981",
+  error:     "#EF4444",
+  warning:   "#F59E0B",
+  white:     "#ffffff",
 };
 
 const industries = [
@@ -68,7 +70,7 @@ function LiveDot({ label }: { label: string }) {
         animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,0.5)", "0 0 0 4px rgba(16,185,129,0)", "0 0 0 0px rgba(16,185,129,0.5)"] }}
         transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
       />
-      <span className="text-[9px] uppercase tracking-wide" style={{ color: "rgba(0,0,0,0.35)" }}>{label}</span>
+      <span className="text-[9px] uppercase tracking-wide" style={{ color: "#4A6380" }}>{label}</span>
     </div>
   );
 }
@@ -82,7 +84,7 @@ function TxCounter({ seed }: { seed: number }) {
   }, [seed]);
   return (
     <div className="text-[9px] tabular-nums px-1.5 py-0.5 rounded"
-      style={{ background: B.primary50, color: B.primary500 }}>
+      style={{ background: "rgba(67,176,241,0.06)", color: "#057DCD" }}>
       {count.toLocaleString()} tx
     </div>
   );
@@ -112,7 +114,7 @@ function Sparkline({ seed }: { seed: number }) {
     ctx.beginPath(); ctx.moveTo(0, H);
     pts.forEach((p, i) => ctx.lineTo(i * step, H - p));
     ctx.lineTo(W, H); ctx.closePath();
-    ctx.fillStyle = "rgba(26,115,232,0.06)"; ctx.fill();
+    ctx.fillStyle = "rgba(5,125,205,0.06)"; ctx.fill();
 
     // line — primary-400
     ctx.beginPath();
@@ -128,7 +130,7 @@ function Sparkline({ seed }: { seed: number }) {
   return (
     <div className="relative mb-3" style={{ height: 32 }}>
       <canvas ref={canvasRef} className="w-full" style={{ height: 32, display: "block" }} />
-      <span className="absolute right-0 top-0 text-[9px]" style={{ color: "rgba(0,0,0,0.35)" }}>7d activity</span>
+      <span className="absolute right-0 top-0 text-[9px]" style={{ color: "#4A6380" }}>7d activity</span>
     </div>
   );
 }
@@ -148,10 +150,10 @@ function MessageTicker({ messages, offset }: { messages: string[]; offset: numbe
 
   return (
     <div className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 mb-3.5 text-[10px]"
-      style={{ background: B.primary50, color: "rgba(0,0,0,0.42)" }}>
+      style={{ background: "rgba(67,176,241,0.06)", color: "#4A6380" }}>
       <motion.span
         className="w-1 h-1 rounded-full flex-shrink-0"
-        style={{ background: B.primary500 }}
+        style={{ background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)" }}
         animate={{ opacity: [1, 0.3, 1] }}
         transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -165,9 +167,9 @@ function MessageTicker({ messages, offset }: { messages: string[]; offset: numbe
 // ─── Stat pill — primary tint ─────────────────────────────────────────────────
 function StatPill({ val, lbl }: { val: string; lbl: string }) {
   return (
-    <div className="flex-1 rounded-md px-2.5 py-1.5" style={{ background: B.primary50, border: `1px solid ${B.primary100}` }}>
-      <div className="text-sm font-medium tabular-nums" style={{ color: B.primary500 }}>{val}</div>
-      <div className="text-[9px] uppercase tracking-wide mt-0.5" style={{ color: "rgba(0,0,0,0.38)" }}>{lbl}</div>
+    <div className="flex-1 rounded-md px-2.5 py-1.5" style={{ background: "rgba(67,176,241,0.06)", border: "1px solid rgba(67,176,241,0.22)" }}>
+      <div className="text-sm font-medium tabular-nums" style={{ color: "#057DCD" }}>{val}</div>
+      <div className="text-[9px] uppercase tracking-wide mt-0.5" style={{ color: "#4A6380" }}>{lbl}</div>
     </div>
   );
 }
@@ -193,7 +195,7 @@ function IndustryCard({ title, challenge, path, link, dot, stats, tickers, spark
   const glowOpacity = useMotionValue(0);
   const glowBg = useTransform(
     [glowX, glowY],
-    ([x, y]) => `radial-gradient(ellipse at ${x}% ${y}%, rgba(26,115,232,0.06) 0%, transparent 65%)`
+    ([x, y]) => `radial-gradient(ellipse at ${x}% ${y}%, rgba(5,125,205,0.06) 0%, transparent 65%)`
   );
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -218,9 +220,9 @@ function IndustryCard({ title, challenge, path, link, dot, stats, tickers, spark
   return (
     <motion.div
       variants={staggerItem}
-      className="bg-white rounded-xl p-6 relative overflow-hidden cursor-pointer"
-      style={{ border: `1px solid ${B.primary100}` }}
-      whileHover={{ y: -6, borderColor: B.primary300, boxShadow: `0 14px 44px rgba(26,115,232,0.12)`, transition: { duration: 0.2, ease: EASE } }}
+      className="rounded-xl p-6 relative overflow-hidden cursor-pointer"
+      style={{ background:"#ffffff", border:"1px solid rgba(67,176,241,0.22)" }}
+      whileHover={{ y: -6, borderColor: "rgba(5,125,205,0.5)", boxShadow: "0 14px 44px rgba(5,125,205,0.08)", transition: { duration: 0.2, ease: EASE } }}
       onMouseEnter={onMouseEnter}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
@@ -256,15 +258,15 @@ function IndustryCard({ title, challenge, path, link, dot, stats, tickers, spark
 
         <motion.h3
           className="text-[17px] font-medium mb-2"
-          style={{ color: B.navy500 }}
+          style={{ color: "#0A0F1E" }}
           animate={{ color: hovered ? B.navy500 : B.navy500 }}
         >
           {title}
         </motion.h3>
-        <p className="text-xs text-black/55 leading-relaxed mb-4">{challenge}</p>
+        <p className="text-xs leading-relaxed mb-4" style={{color:"#4A6380"}}>{challenge}</p>
 
         <Link to={path} className="text-[11px] inline-flex items-center gap-1"
-          style={{ color: B.primary500 }}
+          style={{ color: "#057DCD" }}
           onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = B.primary600}
           onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = B.primary500}>
           {link}
@@ -278,22 +280,23 @@ function IndustryCard({ title, challenge, path, link, dot, stats, tickers, spark
 // ─── Section ──────────────────────────────────────────────────────────────────
 export function Industries() {
   return (
-    <section className="py-24 px-4 bg-black/[0.02]" id="industries">
+    <section className="py-24 px-4" id="industries" style={{background:"#FFFFFF"}}>
       <div className="max-w-6xl mx-auto">
 
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <motion.p className="text-xs uppercase tracking-wide mb-4"
-            style={{ color: B.primary500 }}
+            style={{ color: "#057DCD" }}
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Industries
           </motion.p>
           <motion.h2 className="text-4xl md:text-5xl font-normal mb-4 tracking-tight"
+            style={{background:"linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}
             variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            <span style={{ color: B.navy500 }}>Built for industries where</span>
+            <span style={{ background:"linear-gradient(135deg,#0B1F3A,#43B0F1)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>Built for industries where</span>
             <br />
-            <span style={{ color: B.primary500 }}>integration failure isn't an option.</span>
+            <span style={{ color: "#057DCD" }}>integration failure isn't an option.</span>
           </motion.h2>
-          <motion.p className="text-base text-black/60"
+          <motion.p style={{color:"#4A6380",fontSize:16}}
             variants={fadeUpLarge} custom={0.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Deep experience in the sectors where EDI and B2B integration matter most.
           </motion.p>

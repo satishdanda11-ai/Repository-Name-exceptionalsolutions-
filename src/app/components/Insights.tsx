@@ -3,12 +3,16 @@ import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } fr
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E0EFF9",
-  primary100: "#C9EBFC",
-  primary400: "#6BC3F5",
-  primary500: "#43B0F1",
-  primary600: "#2A9DE0",
-  navy500:    "#0B1F3A",
+  grad:      "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",
+  primary:   "#057DCD",
+  accent:    "#057DCD",
+  navy:      "#0B1F3A",
+  slate400:  "#94A3B8",
+  slate500:  "#64748B",
+  success:   "#10B981",
+  error:     "#EF4444",
+  warning:   "#F59E0B",
+  white:     "#ffffff",
 };
 
 const insights = [
@@ -20,18 +24,19 @@ const insights = [
 
 export function Insights() {
   return (
-    <section className="py-24 px-4" id="insights">
+    <section className="py-24 px-4" id="insights" style={{background:"#FFFFFF"}}>
       <div className="max-w-6xl mx-auto">
 
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <motion.h2
             className="text-4xl md:text-5xl font-normal mb-4 tracking-tight"
+            style={{background:"linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            <span style={{ color: B.navy500 }}>Insights & </span>
-            <span style={{ color: B.primary500 }}>Resources</span>
+            <span style={{ background:"linear-gradient(135deg,#0B1F3A,#43B0F1)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>Insights & </span>
+            <span style={{ color: "#057DCD" }}>Resources</span>
           </motion.h2>
           <motion.p
-            className="text-base text-black/60"
+            style={{color:"#4A6380",fontSize:16}}
             variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Learn from our experience building enterprise integrations.
           </motion.p>
@@ -44,24 +49,24 @@ export function Insights() {
             <motion.div
               key={title}
               variants={staggerItem}
-              className="bg-white rounded-lg p-6 cursor-pointer overflow-hidden group"
-              style={{ border: `1px solid ${B.primary100}` }}
-              whileHover={{ y: -5, borderColor: B.primary300, boxShadow: `0 8px 28px rgba(26,115,232,0.10)`, transition: { duration: 0.2, ease: EASE } }}>
+              className="rounded-lg p-6 cursor-pointer overflow-hidden group"
+              style={{ background:"#ffffff", border:"1px solid rgba(67,176,241,0.22)" }}
+              whileHover={{ y: -5, borderColor: "rgba(5,125,205,0.45)", boxShadow: "0 8px 24px rgba(5,125,205,0.08)", transition: { duration: 0.2, ease: EASE } }}>
 
               <div className="flex items-center justify-between mb-3">
-                <span className="text-[10px] uppercase tracking-wider" style={{ color: B.primary500 }}>
+                <span className="text-[10px] uppercase tracking-wider" style={{ color: "#057DCD" }}>
                   {category}
                 </span>
               </div>
 
               <h3 className="text-base font-medium mb-2 transition-colors duration-200"
-                style={{ color: B.navy500 }}>
+                style={{ color: "#0B1F3A" }}>
                 {title}
               </h3>
-              <p className="text-xs text-black/60 mb-4 leading-relaxed">{description}</p>
+              <p className="text-xs mb-4 leading-relaxed" style={{color:"#4A6380"}}>{description}</p>
 
               <div className="text-xs flex items-center gap-1 transition-colors duration-200"
-                style={{ color: B.primary500 }}
+                style={{ color: "#057DCD" }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = B.primary600}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = B.primary500}>
                 Read More
