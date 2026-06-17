@@ -3,9 +3,9 @@ import { EASE, VIEWPORT, fadeUp, staggerContainer, staggerItem } from "../lib/an
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E8F3FE",
-  primary100: "#D6E7FD",
-  primary500: "#1A73E8",
+  primary50:  "#E0EFF9",
+  primary100: "#C9EBFC",
+  primary500: "#43B0F1",
   navy500:    "#0B1F3A",
   slate400:   "#94A3B8",
   error:      "#EF4444",

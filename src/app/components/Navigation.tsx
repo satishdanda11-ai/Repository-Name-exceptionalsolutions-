@@ -8,16 +8,16 @@ import {
   Building2, UserCheck, Briefcase,
   ChevronDown,
 } from "lucide-react";
-import logoSrc from "../../imports/logocolor.png";
+import logo from "../../imports/logocolor.png";
 import { EASE } from "../lib/animations";
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E8F3FE",
-  primary100: "#D6E7FD",
-  primary200: "#A1CFFB",
-  primary500: "#1A73E8",
-  primary600: "#155CC8",
+  primary50:  "#E0EFF9",
+  primary100: "#C9EBFC",
+  primary200: "#8DD4F8",
+  primary500: "#43B0F1",
+  primary600: "#2A9DE0",
   navy500:    "#0B1F3A",
 };
 
@@ -177,7 +177,7 @@ export function Navigation() {
 
         {/* Logo */}
         <Link to="/" className="flex items-center flex-shrink-0" onClick={() => setOpenMenu(null)}>
-          <motion.img src={logoSrc} alt="Exceptional Solutions" className="h-8"
+          <motion.img src={logo} alt="Exceptional Solutions" className="h-8"
             whileHover={{ scale: 1.02 }} transition={{ duration: 0.2, ease: EASE }} />
         </Link>
 

@@ -4,8 +4,8 @@ import { EASE, VIEWPORT, fadeUp, fadeUpLarge } from "../lib/animations";
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary400: "#439FF7",
-  primary500: "#1A73E8",
+  primary400: "#6BC3F5",
+  primary500: "#43B0F1",
   navy500:    "#0B1F3A",
   navy700:    "#071323",
   navy800:    "#040C17",

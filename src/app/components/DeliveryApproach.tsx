@@ -4,11 +4,11 @@ import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } fr
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E8F3FE",
-  primary100: "#D6E7FD",
-  primary200: "#A1CFFB",
-  primary400: "#439FF7",
-  primary500: "#1A73E8",
+  primary50:  "#E0EFF9",
+  primary100: "#C9EBFC",
+  primary200: "#8DD4F8",
+  primary400: "#6BC3F5",
+  primary500: "#43B0F1",
   navy500:    "#0B1F3A",
   success:    "#10B981",
 };

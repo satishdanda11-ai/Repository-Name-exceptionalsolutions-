@@ -5,13 +5,13 @@ import { EASE } from "../lib/animations";
 
 // ── Brand color tokens ────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E8F3FE",
-  primary100: "#D6E7FD",
-  primary200: "#A1CFFB",
-  primary300: "#72B7F9",
-  primary400: "#439FF7",
-  primary500: "#1A73E8",   // Brand
-  primary600: "#155CC8",
+  primary50:  "#E0EFF9",
+  primary100: "#C9EBFC",
+  primary200: "#8DD4F8",
+  primary300: "#6BC3F5",
+  primary400: "#6BC3F5",
+  primary500: "#43B0F1",   // Brand
+  primary600: "#2A9DE0",
   primary700: "#104598",
   primary800: "#0B2E70",
   primary900: "#061748",
