@@ -51,23 +51,23 @@ export function ProofSection() {
               variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
 
               <motion.div variants={staggerItem}
-                className="bg-[#0B1F3A] rounded-lg p-6 group relative overflow-hidden"
+                className="bg-[#1A73E8] rounded-lg p-6 group relative overflow-hidden"
                 whileHover={{ y:-3, boxShadow:"0 12px 32px rgba(11,31,58,0.3)", transition:{ duration:0.18, ease:EASE } }}>
                 <div className="absolute inset-0 pointer-events-none"
                   style={{ backgroundImage:"radial-gradient(circle at 80% 50%, rgba(26,115,232,0.18) 0%, transparent 60%)" }} />
                 <div className="flex items-center justify-between relative z-10">
                   <div>
-                    <div className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Flagship Engagement</div>
+                    <div className="text-[10px] uppercase tracking-widest text-white/80 mb-2">Flagship Engagement</div>
                     <div className="text-5xl font-light text-white tabular-nums mb-1">5+ Years</div>
-                    <div className="text-sm text-white/50">Continuous Partnership</div>
+                    <div className="text-sm text-white/80">Continuous Partnership</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-[10px] uppercase tracking-widest text-white/30 mb-2">Since</div>
-                    <div className="text-2xl font-light text-white/60">2019</div>
+                    <div className="text-[10px] uppercase tracking-widest text-white/80 mb-2">Since</div>
+                    <div className="text-2xl font-light text-white/80">2019</div>
                     <div className="flex items-center gap-1.5 justify-end mt-2">
                       <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
                         animate={{ opacity:[1,.3,1] }} transition={{ duration:1.5, repeat:Infinity }} />
-                      <span className="text-[10px] text-white/30">Active</span>
+                      <span className="text-[10px] text-white/80">Active</span>
                     </div>
                   </div>
                 </div>

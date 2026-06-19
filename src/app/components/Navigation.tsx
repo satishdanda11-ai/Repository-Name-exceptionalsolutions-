@@ -5,7 +5,7 @@ import {
   ArrowLeftRight, Sparkles, BarChart2, Cloud, Code2, Users,
   ShoppingBag, Truck, Factory, Heart,
   Map, ShieldCheck, FileText, Link2,
-  Building2, UserCheck, Briefcase,
+  Building2, Briefcase,
   ChevronDown,
 } from "lucide-react";
 import logo from "../../imports/logocolor.png";
@@ -13,11 +13,11 @@ import { EASE } from "../lib/animations";
 
 // ── Brand tokens ──────────────────────────────────────────────────────────────
 const B = {
-  primary50:  "#E0EFF9",
-  primary100: "#C9EBFC",
-  primary200: "#8DD4F8",
-  primary500: "#43B0F1",
-  primary600: "#2A9DE0",
+  primary50:  "#EAF2FE",
+  primary100: "#D2E3FC",
+  primary200: "#A1CFFB",
+  primary500: "#1A73E8",
+  primary600: "#155CC0",
   navy500:    "#0B1F3A",
 };
 
@@ -58,17 +58,12 @@ const navItems: NavItem[] = [
       { icon: <ShieldCheck className={ICON_CLS} style={iconStyle} />, label: "Trust & Security", desc: "Built to clear enterprise due diligence",             path: "/why/trust-security" },
       { icon: <FileText   className={ICON_CLS} style={iconStyle} />, label: "Case Studies",    desc: "Real engagements, measured results",                   path: "/why/case-studies" },
       { icon: <Link2      className={ICON_CLS} style={iconStyle} />, label: "Partnerships",    desc: "Certified expertise across six enterprise platforms",   path: "/why/partnerships" },
+      { icon: <Map        className={ICON_CLS} style={iconStyle} />, label: "Our Journey",     desc: "How we've evolved with intent since 2019",              path: "/company/our-journey" },
+      { icon: <Building2  className={ICON_CLS} style={iconStyle} />, label: "About Us",        desc: "Integration specialists, evolving with intent since 2019", path: "/company/about" },
+      { icon: <Briefcase  className={ICON_CLS} style={iconStyle} />, label: "Careers",         desc: "Do specialist work with people who take it seriously",  path: "/company/careers" },
     ],
   },
   { label: "Insights", path: "/insights" },
-  {
-    label: "Company", category: "COMPANY",
-    items: [
-      { icon: <Building2  className={ICON_CLS} style={iconStyle} />, label: "About Us",    desc: "Integration specialists, evolving with intent since 2019", path: "/company/about" },
-      // { icon: <UserCheck  className={ICON_CLS} style={iconStyle} />, label: "Leadership",  desc: "Senior people accountable for your success",               path: "/company/leadership" },
-      { icon: <Briefcase  className={ICON_CLS} style={iconStyle} />, label: "Careers",     desc: "Do specialist work with people who take it seriously",      path: "/company/careers" },
-    ],
-  },
 ];
 
 // ── Mega dropdown ─────────────────────────────────────────────────────────────
@@ -131,7 +126,7 @@ function DropdownRow({ item, onClose }: { item: DropdownItem; onClose: () => voi
             <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 inline-block text-xs"
               style={{ color: B.primary500 }}>→</span>
           </div>
-          <div className="text-xs text-black/40 leading-snug">{item.desc}</div>
+          <div className="text-xs text-[#475569] leading-snug">{item.desc}</div>
         </div>
       </Link>
     </motion.div>
@@ -188,13 +183,13 @@ export function Navigation() {
               {item.path ? (
                 <Link to={item.path} onClick={() => setOpenMenu(null)}
                   className="px-3 py-2 text-sm rounded-lg flex items-center transition-colors"
-                  style={{ color: "rgba(0,0,0,0.6)" }}
+                  style={{ color: "rgba(11,31,58,0.6)" }}
                   onMouseEnter={e => {
                     (e.currentTarget as HTMLElement).style.color = B.navy500;
                     (e.currentTarget as HTMLElement).style.background = B.primary50;
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.color = "rgba(0,0,0,0.6)";
+                    (e.currentTarget as HTMLElement).style.color = "rgba(11,31,58,0.6)";
                     (e.currentTarget as HTMLElement).style.background = "transparent";
                   }}>
                   {item.label}
@@ -204,7 +199,7 @@ export function Navigation() {
                   onClick={() => setOpenMenu(openMenu === item.label ? null : item.label)}
                   className="px-3 py-2 text-sm rounded-lg flex items-center gap-1 transition-colors"
                   style={{
-                    color: openMenu === item.label ? B.primary500 : "rgba(0,0,0,0.6)",
+                    color: openMenu === item.label ? B.primary500 : "rgba(11,31,58,0.6)",
                     background: openMenu === item.label ? B.primary50 : "transparent",
                   }}
                   onMouseEnter={e => {
@@ -215,7 +210,7 @@ export function Navigation() {
                   }}
                   onMouseLeave={e => {
                     if (openMenu !== item.label) {
-                      (e.currentTarget as HTMLElement).style.color = "rgba(0,0,0,0.6)";
+                      (e.currentTarget as HTMLElement).style.color = "rgba(11,31,58,0.6)";
                       (e.currentTarget as HTMLElement).style.background = "transparent";
                     }
                   }}>
@@ -240,9 +235,9 @@ export function Navigation() {
         <div className="flex items-center gap-3">
           <Link to="/contact" onClick={() => setOpenMenu(null)}
             className="hidden md:block text-sm transition-colors"
-            style={{ color: "rgba(0,0,0,0.5)" }}
+            style={{ color: "rgba(11,31,58,0.5)" }}
             onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = B.primary500}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(0,0,0,0.5)"}>
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(11,31,58,0.5)"}>
             Contact
           </Link>
 
@@ -260,7 +255,7 @@ export function Navigation() {
 
           {/* Mobile toggle */}
           <button className="md:hidden p-1 transition-colors"
-            style={{ color: "rgba(0,0,0,0.6)" }}
+            style={{ color: "rgba(11,31,58,0.6)" }}
             onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
             {mobileOpen ? (
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -290,7 +285,7 @@ export function Navigation() {
                 {item.path ? (
                   <Link to={item.path} onClick={() => setMobileOpen(false)}
                     className="flex items-center px-4 py-3 text-sm transition-colors"
-                    style={{ color: "rgba(0,0,0,0.7)", borderBottom: `1px solid ${B.primary50}` }}
+                    style={{ color: "rgba(11,31,58,0.7)", borderBottom: `1px solid ${B.primary50}` }}
                     onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = B.primary50}
                     onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}>
                     {item.label}
@@ -310,7 +305,7 @@ export function Navigation() {
                         {sub.icon}
                         <div>
                           <div className="text-sm" style={{ color: B.navy500 }}>{sub.label}</div>
-                          <div className="text-xs text-black/40">{sub.desc}</div>
+                          <div className="text-xs text-[#475569]">{sub.desc}</div>
                         </div>
                       </Link>
                     ))}
@@ -320,7 +315,7 @@ export function Navigation() {
             ))}
             <Link to="/contact" onClick={() => setMobileOpen(false)}
               className="flex items-center px-4 py-3 text-sm transition-colors"
-              style={{ color: "rgba(0,0,0,0.7)" }}
+              style={{ color: "rgba(11,31,58,0.7)" }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = B.primary50}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}>
               Contact

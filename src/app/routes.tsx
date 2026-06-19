@@ -16,6 +16,7 @@ import { TrustSecurityPage } from "./pages/TrustSecurityPage";
 import { CaseStudiesPage } from "./pages/CaseStudiesPage";
 import { PartnershipsPage } from "./pages/PartnershipsPage";
 import { AboutPage } from "./pages/AboutPage";
+import { OurJourneyPage } from "./pages/OurJourney";
 // import { LeadershipPage } from "./pages/LeadershipPage";
 import { CareersPage } from "./pages/CareersPage";
 import { InsightsPage } from "./pages/InsightsPage";
@@ -50,6 +51,7 @@ export const router = createBrowserRouter([
       { path: "why/trust-security", Component: TrustSecurityPage },
       { path: "why/case-studies", Component: CaseStudiesPage },
       { path: "why/partnerships", Component: PartnershipsPage },
+      { path: "company/our-journey", Component: OurJourneyPage },
       { path: "company/about", Component: AboutPage },
       // { path: "company/leadership", Component: LeadershipPage },
       { path: "company/careers", Component: CareersPage },

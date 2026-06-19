@@ -112,7 +112,7 @@ function CyclingMetrics() {
             animate={{ opacity:1, y:0 }}
             exit={{ opacity:0, y:-5 }}
             transition={{ duration:.4, ease:[.16,1,.3,1], delay: i * 0.05 }}>
-            <div className="text-2xl font-light text-[#0B1F3A] tracking-tight tabular-nums leading-none flex items-center gap-1.5">
+            <div className="text-2xl font-medium text-[#0B1F3A] tracking-tight tabular-nums leading-none flex items-center gap-1.5">
               {m.val}
               {m.live && (
                 <motion.span className="w-[5px] h-[5px] rounded-full bg-[#10B981] flex-shrink-0"
@@ -120,8 +120,8 @@ function CyclingMetrics() {
                   transition={{duration:1.8,repeat:Infinity}} />
               )}
             </div>
-            <div className="text-[9.5px] text-[#0B1F3A]/38 uppercase tracking-wide mt-1">{m.label}</div>
-            {m.sub && <div className="text-[9px] text-[#0B1F3A]/30 mt-1">{m.sub}</div>}
+            <div className="text-[9.5px] text-[#0B1F3A]/80 uppercase tracking-wide mt-1">{m.label}</div>
+            {m.sub && <div className="text-[9px] text-[#0B1F3A]/60 mt-1">{m.sub}</div>}
           </motion.div>
         </div>
       ))}
@@ -233,7 +233,7 @@ export function Hero() {
               </Link>
             </motion.div>
           </motion.div>
-          <motion.p className="text-[11px] text-[#0B1F3A]/30"
+          <motion.p className="text-[11px] text-[#0B1F3A]/80"
             initial={{opacity:0}} animate={{opacity:1}} transition={{duration:.4,delay:1.15}}>
             No obligation — a senior architect reviews your estate and shares what they find.
           </motion.p>
