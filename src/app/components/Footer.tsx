@@ -70,11 +70,11 @@ export function Footer() {
           whileInView="visible"
           viewport={VIEWPORT}
         >
-          <div className="flex flex-wrap items-center justify-center gap-6 mb-6 text-xs text-[#475569]">
+          {/* <div className="flex flex-wrap items-center justify-center gap-6 mb-6 text-xs text-[#475569]">
             {["ISO 27001 / SOC 2-class Certified", "54 Specialists", "Operating Since 2019", "6 Enterprise Platforms"].map((item) => (
               <span key={item}>{item}</span>
             ))}
-          </div>
+          </div> */}
 
           <div className="text-center space-y-3">
             <div className="text-sm font-medium text-[#0B1F3A]">Exceptional Solutions</div>

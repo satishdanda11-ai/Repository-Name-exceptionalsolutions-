@@ -1,6 +1,6 @@
 import { Hero } from "../components/Hero";
 import { KeyMetrics } from "../components/KeyMetrics";
-import { CredibilityStrip } from "../components/CredibilityStrip";
+// import { CredibilityStrip } from "../components/CredibilityStrip";
 import { ProblemStatement } from "../components/ProblemStatement";
 import { FlagshipCapability } from "../components/FlagshipCapability";
 import { SupportingCapabilities } from "../components/SupportingCapabilities";
@@ -17,7 +17,7 @@ export function HomePage() {
     <>
       <Hero />
       <KeyMetrics />
-      <CredibilityStrip />
+      {/* <CredibilityStrip /> */}
       <ProblemStatement />
       <FlagshipCapability />
       <SupportingCapabilities />

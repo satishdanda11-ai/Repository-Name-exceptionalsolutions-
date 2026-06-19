@@ -244,7 +244,11 @@ function DataOfferings() {
                   className="w-full flex items-center gap-3 px-4 py-3 text-left relative transition-all duration-200"
                   style={{background:isActive?"#0B1F3A":"transparent"}}>
                   <NavIcon size={15} strokeWidth={1.75} color={isActive?"#fff":"rgba(26,115,232,0.55)"} style={{flexShrink:0,transition:"color .18s"}} />
-                  <span style={{fontSize:13,fontWeight:isActive?500:400,color:isActive?"#fff":"rgba(11,31,58,0.6)",transition:"color .18s",lineHeight:1.3}}>{o.label}</span>
+                  <span style={{fontSize:13,fontWeight:isActive?500:400,color:isActive?"#fff":"rgba(11,31,58,0.6)",transition:"color .18s",lineHeight:1.3,flex:1}}>{o.label}</span>
+                  {isActive && (
+                    <motion.span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background:"#439FF7" }}
+                      initial={{ scale:0, opacity:0 }} animate={{ scale:1, opacity:1 }} transition={{ duration:0.25, ease:EASE }} />
+                  )}
                 </button>
               );
             })}
@@ -255,8 +259,11 @@ function DataOfferings() {
             <motion.div key={active} initial={{opacity:0,x:12}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-12}}
               transition={{duration:.25,ease:EASE}} className="p-8 md:p-10">
 
-              {/* badge — solid brand blue */}
-              <div style={{display:"inline-block",fontSize:10,fontWeight:600,letterSpacing:".12em",textTransform:"uppercase",padding:"4px 12px",borderRadius:999,background:"#1A73E8",color:"#fff",marginBottom:20}}>
+              {/* badge — solid brand blue with green live dot */}
+              <div style={{display:"inline-flex",alignItems:"center",gap:7,fontSize:10,fontWeight:600,letterSpacing:".12em",textTransform:"uppercase",padding:"4px 12px 4px 10px",borderRadius:999,background:"#1A73E8",color:"#fff",marginBottom:20}}>
+                <motion.span className="rounded-full flex-shrink-0" style={{ width:6, height:6, background:"#10B981" }}
+                  animate={{ boxShadow:["0 0 0 0px rgba(16,185,129,.6)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.6)"] }}
+                  transition={{ duration:1.8, repeat:Infinity }} />
                 {current.badge}
               </div>
 

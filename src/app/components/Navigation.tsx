@@ -54,13 +54,15 @@ const navItems: NavItem[] = [
   {
     label: "Why Exceptional", category: "WHY EXCEPTIONAL",
     items: [
-      { icon: <Map        className={ICON_CLS} style={iconStyle} />, label: "Our Approach",    desc: "A delivery approach built for zero surprises",         path: "/why/our-approach" },
-      { icon: <ShieldCheck className={ICON_CLS} style={iconStyle} />, label: "Trust & Security", desc: "Built to clear enterprise due diligence",             path: "/why/trust-security" },
-      { icon: <FileText   className={ICON_CLS} style={iconStyle} />, label: "Case Studies",    desc: "Real engagements, measured results",                   path: "/why/case-studies" },
-      { icon: <Link2      className={ICON_CLS} style={iconStyle} />, label: "Partnerships",    desc: "Certified expertise across six enterprise platforms",   path: "/why/partnerships" },
-      { icon: <Map        className={ICON_CLS} style={iconStyle} />, label: "Our Journey",     desc: "How we've evolved with intent since 2019",              path: "/company/our-journey" },
       { icon: <Building2  className={ICON_CLS} style={iconStyle} />, label: "About Us",        desc: "Integration specialists, evolving with intent since 2019", path: "/company/about" },
+      { icon: <Map        className={ICON_CLS} style={iconStyle} />, label: "Our Journey",     desc: "How we've evolved with intent since 2019",              path: "/company/our-journey" },
+      { icon: <Map        className={ICON_CLS} style={iconStyle} />, label: "Our Approach",    desc: "A delivery approach built for zero surprises",         path: "/why/our-approach" },
+     
+      { icon: <FileText   className={ICON_CLS} style={iconStyle} />, label: "Case Studies",    desc: "Real engagements, measured results",                   path: "/why/case-studies" },
+      { icon: <ShieldCheck className={ICON_CLS} style={iconStyle} />, label: "Trust & Security", desc: "Built to clear enterprise due diligence",             path: "/why/trust-security" },
       { icon: <Briefcase  className={ICON_CLS} style={iconStyle} />, label: "Careers",         desc: "Do specialist work with people who take it seriously",  path: "/company/careers" },
+
+      { icon: <Link2      className={ICON_CLS} style={iconStyle} />, label: "Partnerships",    desc: "Certified expertise across six enterprise platforms",   path: "/why/partnerships" },
     ],
   },
   { label: "Insights", path: "/insights" },
@@ -173,7 +175,7 @@ export function Navigation() {
         {/* Logo */}
         <Link to="/" className="flex items-center flex-shrink-0" onClick={() => setOpenMenu(null)}>
           <motion.img src={logo} alt="Exceptional Solutions" className="h-8"
-            whileHover={{ scale: 1.02 }} transition={{ duration: 0.2, ease: EASE }} />
+            whileHover={{ scale: 1.0 }} transition={{ duration: 0.2, ease: EASE }} />
         </Link>
 
         {/* Desktop nav */}
@@ -234,24 +236,20 @@ export function Navigation() {
         {/* Right actions */}
         <div className="flex items-center gap-3">
           <Link to="/contact" onClick={() => setOpenMenu(null)}
-            className="hidden md:block text-sm transition-colors"
-            style={{ color: "rgba(11,31,58,0.5)" }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = B.primary500}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(11,31,58,0.5)"}>
-            Contact
+            className="hidden md:block text-sm rounded-lg px-4 py-2 transition-colors"
+            style={{ color: "#fff", background: B.primary500 }}
+            onMouseEnter={e => {
+              const t = e.currentTarget as HTMLElement;
+              t.style.background = B.primary600;
+              t.style.boxShadow = "0 8px 24px rgba(26,115,232,0.28)";
+            }}
+            onMouseLeave={e => {
+              const t = e.currentTarget as HTMLElement;
+              t.style.background = B.primary500;
+              t.style.boxShadow = "none";
+            }}>
+            Contact Us
           </Link>
-
-          {/* Book Assessment — primary blue */}
-          <motion.button
-            onClick={() => { setOpenMenu(null); navigate("/contact"); }}
-            className="text-white px-4 py-1.5 text-sm rounded-lg transition-colors"
-            style={{ background: B.primary500 }}
-            whileHover={{ y: -2 }}
-            transition={{ duration: 0.18, ease: EASE }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = B.primary600}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = B.primary500}>
-            Book Assessment
-          </motion.button>
 
           {/* Mobile toggle */}
           <button className="md:hidden p-1 transition-colors"
@@ -313,13 +311,16 @@ export function Navigation() {
                 )}
               </div>
             ))}
-            <Link to="/contact" onClick={() => setMobileOpen(false)}
-              className="flex items-center px-4 py-3 text-sm transition-colors"
-              style={{ color: "rgba(11,31,58,0.7)" }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = B.primary50}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}>
-              Contact
-            </Link>
+            {/* Contact — button style on mobile too */}
+            <div className="px-4 py-3">
+              <Link to="/contact" onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center text-sm rounded-lg px-4 py-2.5 transition-colors"
+                style={{ color: "#fff", background: B.primary500 }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = B.primary600}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = B.primary500}>
+                Contact Us
+              </Link>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -79,9 +79,9 @@ export function CaseStudiesPage() {
               </div>
             </div>
           </motion.div>
-          <motion.p className="text-sm text-[#475569] mt-8 max-w-2xl"
+          <motion.p className="text-sm text-[#475569] mt-8 max-w-1xl"
             variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            We are publishing more case studies as clients approve them. To discuss relevant references for your industry, get in touch.
+            We are publishing more case studies as clients approve them. To discuss relevant references for your industry,get in touch.
           </motion.p>
         </div>
       </section>

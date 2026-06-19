@@ -239,7 +239,6 @@ function OfferingCard({ icon: Icon, title, items, index }: typeof offerings[0] &
 function EDIOfferings() {
   const [active, setActive] = useState(0);
   const current = offerings[active];
-  const Icon = current.icon;
   return (
     <section className="py-24 px-4">
       <div className="max-w-6xl mx-auto">
@@ -272,17 +271,30 @@ function EDIOfferings() {
                     color: isActive ? "#fff" : "rgba(11,31,58,0.6)",
                     transition: "color .18s",
                     lineHeight: 1.3,
+                    flex: 1,
                   }}>
                     {o.label}
                   </span>
+                  {/* active dot on the selected tab */}
+                  {isActive && (
+                    <motion.span
+                      className="w-2 h-2 rounded-full flex-shrink-0"
+                      style={{ background:"#439FF7" }}
+                      initial={{ scale:0, opacity:0 }}
+                      animate={{ scale:1, opacity:1 }}
+                      transition={{ duration:0.25, ease:EASE }} />
+                  )}
                 </button>
               );
             })}
           </div>
           <AnimatePresence mode="wait">
             <motion.div key={active} initial={{opacity:0,x:12}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-12}} transition={{duration:.25,ease:EASE}} className="p-8 md:p-10">
-              {/* badge — solid brand blue */}
-              <div style={{ display:"inline-block", fontSize:10, fontWeight:600, letterSpacing:".12em", textTransform:"uppercase", padding:"4px 12px", borderRadius:999, background:"#1A73E8", color:"#fff", marginBottom:20 }}>
+              {/* badge — solid brand blue, with a green live dot before it */}
+              <div style={{ display:"inline-flex", alignItems:"center", gap:7, fontSize:10, fontWeight:600, letterSpacing:".12em", textTransform:"uppercase", padding:"4px 12px 4px 10px", borderRadius:999, background:"#1A73E8", color:"#fff", marginBottom:20 }}>
+                <motion.span className="rounded-full flex-shrink-0" style={{ width:6, height:6, background:"#10B981" }}
+                  animate={{ boxShadow:["0 0 0 0px rgba(16,185,129,.6)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.6)"] }}
+                  transition={{ duration:1.8, repeat:Infinity }} />
                 {current.badge}
               </div>
               <h3 className="text-xl md:text-2xl font-normal text-[#0B1F3A] leading-snug mb-3 tracking-tight">{current.title}</h3>
@@ -301,20 +313,34 @@ function EDIOfferings() {
                   </motion.div>
                 ))}
               </div>
-              {/* arrows — larger, more prominent */}
+              {/* arrows — aligned right with a "click to explore next" hint */}
               <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#0B1F3A]/[0.06]">
-                <span className="text-xs text-[#0B1F3A]/30">{active+1} of {offerings.length}</span>
-                <div className="flex gap-3">
-                  <button
-                    onClick={()=>setActive(a=>(a-1+offerings.length)%offerings.length)}
-                    className="flex items-center justify-center transition-all duration-200 hover:scale-105"
-                    style={{ width:38, height:38, borderRadius:"50%", background:"#1A73E8", border:"none", cursor:"pointer" }}>
-                    <ArrowRight size={16} strokeWidth={2} color="#fff" style={{transform:"rotate(180deg)"}} />
+                <span className="text-xs text-[#0B1F3A]/30 tabular-nums">{active+1} of {offerings.length}</span>
+                <div className="flex items-center gap-3">
+                  {/* hint to click for next — only while there's a next */}
+                  {active < offerings.length-1 && (
+                    <motion.span className="text-[11px] text-[#1A73E8]/70 font-medium hidden sm:inline"
+                      animate={{ opacity:[0.45,1,0.45] }}
+                      transition={{ duration:2, repeat:Infinity, ease:"easeInOut" }}>
+                      Click to explore next →
+                    </motion.span>
+                  )}
+                  <button type="button" aria-label="Previous offering"
+                    disabled={active===0}
+                    onClick={()=>setActive(a=>Math.max(0, a-1))}
+                    className="flex items-center justify-center"
+                    style={{ width:38, height:38, borderRadius:"50%", background:"transparent", border:"1px solid rgba(26,115,232,0.3)", cursor: active===0 ? "not-allowed" : "pointer", opacity: active===0 ? 0.35 : 1, transition:"background .18s, transform .18s, opacity .18s" }}
+                    onMouseEnter={e=>{ if(active===0) return; const t=e.currentTarget as HTMLElement;t.style.background="rgba(26,115,232,0.06)";t.style.transform="scale(1.06)";}}
+                    onMouseLeave={e=>{const t=e.currentTarget as HTMLElement;t.style.background="transparent";t.style.transform="scale(1)";}}>
+                    <ArrowRight size={16} strokeWidth={2} color="#1A73E8" style={{transform:"rotate(180deg)"}} />
                   </button>
-                  <button
-                    onClick={()=>setActive(a=>(a+1)%offerings.length)}
-                    className="flex items-center justify-center transition-all duration-200 hover:scale-105"
-                    style={{ width:38, height:38, borderRadius:"50%", background:"#1A73E8", border:"none", cursor:"pointer" }}>
+                  <button type="button" aria-label="Next offering"
+                    disabled={active===offerings.length-1}
+                    onClick={()=>setActive(a=>Math.min(offerings.length-1, a+1))}
+                    className="flex items-center justify-center"
+                    style={{ width:38, height:38, borderRadius:"50%", background:"#1A73E8", border:"none", cursor: active===offerings.length-1 ? "not-allowed" : "pointer", opacity: active===offerings.length-1 ? 0.35 : 1, transition:"background .18s, transform .18s, box-shadow .18s, opacity .18s" }}
+                    onMouseEnter={e=>{ if(active===offerings.length-1) return; const t=e.currentTarget as HTMLElement;t.style.background="#155CC0";t.style.transform="scale(1.06)";t.style.boxShadow="0 6px 18px rgba(26,115,232,0.35)";}}
+                    onMouseLeave={e=>{const t=e.currentTarget as HTMLElement;t.style.background="#1A73E8";t.style.transform="scale(1)";t.style.boxShadow="none";}}>
                     <ArrowRight size={16} strokeWidth={2} color="#fff" />
                   </button>
                 </div>

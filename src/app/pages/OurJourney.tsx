@@ -1,6 +1,6 @@
-import { motion, useTransform, useScroll, useSpring } from "motion/react";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate, useScroll, useSpring } from "motion/react";
 import { Link } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
 
 const journey = [
@@ -19,6 +19,21 @@ const roadmap = [
   { num: "03", label: "AI-Augmented OIC Managed Services",  desc: "Predictive monitoring across Oracle Fusion integration environments — anomaly detection, auto-triage, SLA forecasting for enterprise ERP clients." },
   { num: "04", label: "US Managed Staffing Model",           desc: "Dedicated EDI Analysts embedded in US clients' operations — EST night-shift, offshore delivery, day-one productivity with no recruitment overhead." },
   { num: "05", label: "Automotive EDI Centre of Excellence", desc: "Reusable EDI assets for 204/214/850/856 flows across OEM and LLP partner ecosystems — proven across automotive logistics engagements." },
+];
+
+const platforms = [
+  { name: "IBM Sterling B2B Integrator", years: "5+", vertical: "Freight & Logistics",  depth: "Maps, BPs, FileGateway, SFGs, DDF→XSD conversion, full platform upgrade" },
+  { name: "Cleo Integration Cloud",      years: "3+", vertical: "Transportation / Auto", depth: "Harmony, Clarify, Cloud Studio — active migration from legacy EDI platforms" },
+  { name: "Kleinschmidt EDI Platform",   years: "2+", vertical: "Automotive Logistics",  depth: "204/214 transaction support for automotive OEM/LLP partner ecosystems" },
+  { name: "Oracle Integration Cloud",    years: "3+", vertical: "Enterprise ERP",        depth: "32 integrations monitored, Oracle Fusion AP/AR/Accruals, L1 production support" },
+  { name: "MuleSoft Anypoint Platform",  years: "2+", vertical: "Multi-vertical",        depth: "API-led integration design, runtime management, hybrid connectivity" },
+  { name: "Boomi AtomSphere",            years: "2+", vertical: "Retail / Manufacturing",depth: "Cloud-native EDI connectors, process automation, partner onboarding" },
+];
+
+const values = [
+  { heading: "Depth over breadth.", desc: "We would rather be genuinely excellent at integration than average at everything. Specialist credibility takes years to build and one piece of sloppy work to lose." },
+  { heading: "Honesty over hype.",  desc: "We tell clients what is true, including what they don't want to hear. If your current setup will cause problems, we say so. If a platform isn't right for your needs, we say that too." },
+  { heading: "Accountability.",     desc: "When we take on your work, we own the outcome. Not the deliverable — the outcome. There is a difference, and it matters." },
 ];
 
 // ─── Hero integration network ─────────────────────────────────────────────────
@@ -309,35 +324,41 @@ function TimelineSection() {
   );
 }
 
-// ─── Roadmap expanding accordion ──────────────────────────────────────────────
-// Stacked full-width rows on the dark band. The active row expands to reveal its
-// detail; others collapse to a slim bar. Hover to open, auto-advances on a timer.
-function RoadmapAccordion() {
+// ─── Roadmap progression path ─────────────────────────────────────────────────
+// A calm, forward-moving journey: five milestones along a route. A progress line
+// fills left-to-right as the active milestone steps forward (auto + click). The
+// completed milestones stay marked; the active one is highlighted; upcoming ones
+// wait. No perpetual motion — just deliberate forward progress, like a roadmap.
+function RoadmapProgress() {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [inView, setInView] = useState(false);
+  const N = roadmap.length;
 
   useEffect(() => {
     const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.25 });
+    const obs = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.3 });
     obs.observe(el); return () => obs.disconnect();
   }, []);
 
-  // auto-advance while in view
+  // step forward through the milestones while in view (stops at the last one)
   useEffect(() => {
     if (!inView) return;
-    const id = setInterval(() => setActive(a => (a + 1) % roadmap.length), 3400);
+    const id = setInterval(() => setActive(a => (a + 1) % N), 3200);
     return () => clearInterval(id);
-  }, [inView]);
+  }, [inView, N]);
+
+  // progress fraction along the line (centre of active node)
+  const frac = N > 1 ? active / (N - 1) : 0;
 
   return (
     <section ref={ref} className="py-28 px-4 relative overflow-hidden" style={{ background: "#0B1F3A" }}>
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 50% 60% at 80% 15%, rgba(26,115,232,0.2) 0%, transparent 70%), radial-gradient(ellipse 50% 60% at 10% 90%, rgba(67,159,247,0.13) 0%, transparent 70%)",
+        background: "radial-gradient(ellipse 60% 60% at 85% 10%, rgba(26,115,232,0.18) 0%, transparent 70%), radial-gradient(ellipse 60% 60% at 5% 95%, rgba(67,159,247,0.12) 0%, transparent 70%)",
       }} />
 
       <div className="max-w-5xl mx-auto relative" style={{ zIndex: 1 }}>
-        <div className="max-w-2xl mb-16">
+        <div className="max-w-2xl mb-20">
           <motion.p className="text-xs uppercase tracking-widest mb-4" style={{ color: "#439FF7" }}
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Pipeline & Roadmap
@@ -349,78 +370,185 @@ function RoadmapAccordion() {
           </motion.h2>
           <motion.p className="text-base text-white/55 mt-4 leading-relaxed"
             variants={fadeUpLarge} custom={.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Five initiatives in active development. Hover a row to open it.
+            Five initiatives on the road ahead — built on the same foundation, delivered in sequence.
           </motion.p>
         </div>
 
-        <motion.div className="space-y-3"
-          variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-          {roadmap.map((item, i) => {
-            const isActive = active === i;
-            return (
-              <motion.div key={item.num} variants={staggerItem}
-                className="rounded-2xl overflow-hidden cursor-pointer relative"
-                style={{ border: "1px solid rgba(255,255,255,0.1)" }}
-                animate={{
-                  backgroundColor: isActive ? "rgba(67,159,247,0.08)" : "rgba(255,255,255,0.03)",
-                  borderColor: isActive ? "rgba(67,159,247,0.4)" : "rgba(255,255,255,0.1)",
-                }}
-                transition={{ duration: 0.4, ease: EASE }}
-                onMouseEnter={() => setActive(i)}
-                onClick={() => setActive(i)}>
+        {/* ── desktop: horizontal milestone route ── */}
+        <div className="hidden md:block">
+          {/* the route */}
+          <div className="relative mb-12" style={{ height: 56 }}>
+            {/* base line */}
+            <div className="absolute" style={{ top: 27, left: "10%", right: "10%", height: 2, background: "rgba(255,255,255,0.12)" }} />
+            {/* progress fill */}
+            <motion.div className="absolute origin-left" style={{ top: 27, left: "10%", height: 2, background: "linear-gradient(90deg,#439FF7,#1A73E8)" }}
+              animate={{ width: `${frac * 80}%` }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} />
 
-                {/* left accent bar that grows when active */}
-                <motion.div className="absolute left-0 top-0 bottom-0 origin-top"
-                  style={{ width: 3, background: "linear-gradient(180deg,#439FF7,#1A73E8)" }}
-                  animate={{ scaleY: isActive ? 1 : 0 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} />
+            {/* milestone nodes */}
+            <div className="absolute flex items-center justify-between" style={{ top: 0, left: "10%", right: "10%" }}>
+              {roadmap.map((item, i) => {
+                const done = i < active, isActive = i === active;
+                return (
+                  <button key={item.num} onClick={() => setActive(i)}
+                    className="relative flex items-center justify-center rounded-full"
+                    style={{ width: 54, height: 54, background: "none", border: "none", cursor: "pointer", transform: "translateX(-50%)", marginLeft: i === 0 ? 27 : 0 }}>
+                    {/* halo for active */}
+                    {isActive && (
+                      <motion.span className="absolute rounded-full"
+                        style={{ inset: -4, border: "1px solid rgba(67,159,247,0.4)" }}
+                        animate={{ scale: [1, 1.25, 1], opacity: [0.7, 0, 0.7] }}
+                        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }} />
+                    )}
+                    <motion.span className="rounded-full flex items-center justify-center"
+                      style={{ width: 54, height: 54 }}
+                      animate={{
+                        background: done ? "#1A73E8" : isActive ? "#1A73E8" : "#0B1F3A",
+                        borderWidth: 2, borderStyle: "solid",
+                        borderColor: done || isActive ? "#439FF7" : "rgba(255,255,255,0.18)",
+                        boxShadow: isActive ? "0 0 0 6px rgba(26,115,232,0.16), 0 0 22px rgba(67,159,247,0.45)" : "none",
+                        scale: isActive ? 1.1 : 1,
+                      }}
+                      transition={{ duration: 0.35 }}>
+                      {done
+                        ? <span className="text-white text-sm">✓</span>
+                        : <span className="text-sm font-light tabular-nums" style={{ color: isActive ? "#fff" : "rgba(67,159,247,0.7)" }}>{item.num}</span>}
+                    </motion.span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-                {/* header row — always visible */}
-                <div className="flex items-center gap-5 px-7 py-5">
-                  <motion.span className="text-2xl font-light tabular-nums flex-shrink-0"
-                    style={{ letterSpacing: "-.02em" }}
-                    animate={{ color: isActive ? "#439FF7" : "rgba(67,159,247,0.4)" }}
-                    transition={{ duration: 0.3 }}>
-                    {item.num}
-                  </motion.span>
-                  <motion.h3 className="text-base md:text-lg font-medium flex-1 leading-snug"
-                    animate={{ color: isActive ? "#fff" : "rgba(255,255,255,0.65)" }}
-                    transition={{ duration: 0.3 }}>
-                    {item.label}
-                  </motion.h3>
-                  {/* chevron / plus indicator */}
-                  <motion.div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
-                    style={{ border: "1px solid rgba(67,159,247,0.3)" }}
-                    animate={{
-                      rotate: isActive ? 90 : 0,
-                      backgroundColor: isActive ? "rgba(67,159,247,0.15)" : "transparent",
-                    }}
-                    transition={{ duration: 0.3 }}>
-                    <span className="text-sm" style={{ color: "#439FF7" }}>›</span>
-                  </motion.div>
+          {/* labels row, aligned under nodes */}
+          <div className="flex items-start justify-between mb-12" style={{ padding: "0 10%" }}>
+            {roadmap.map((item, i) => (
+              <button key={item.num} onClick={() => setActive(i)}
+                className="text-center px-2" style={{ flex: 1, background: "none", border: "none", cursor: "pointer" }}>
+                <motion.span className="block text-[11px] font-medium leading-tight"
+                  animate={{ color: i === active ? "#fff" : "rgba(255,255,255,0.45)" }}
+                  transition={{ duration: 0.25 }}>
+                  {item.label}
+                </motion.span>
+              </button>
+            ))}
+          </div>
+
+          {/* active detail card */}
+          <div className="max-w-2xl mx-auto relative" style={{ minHeight: 150 }}>
+            <AnimatePresence mode="wait">
+              <motion.div key={active}
+                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.35, ease: EASE }}
+                className="rounded-2xl p-7 text-center"
+                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <span className="text-2xl font-light tabular-nums" style={{ color: "rgba(67,159,247,0.6)", letterSpacing: "-.02em" }}>{roadmap[active].num}</span>
+                  <h3 className="text-lg font-medium text-white">{roadmap[active].label}</h3>
                 </div>
-
-                {/* expanding body */}
-                <motion.div initial={false}
-                  animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
-                  transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ overflow: "hidden" }}>
-                  <div className="px-7 pb-6 pl-[68px]">
-                    <p className="text-sm text-white/60 leading-relaxed max-w-2xl">{item.desc}</p>
-                    {/* progress shimmer line */}
-                    <div className="mt-4 h-px max-w-md" style={{ background: "rgba(255,255,255,0.1)", overflow: "hidden" }}>
-                      <motion.div className="h-full origin-left" style={{ background: "#439FF7" }}
-                        initial={{ scaleX: 0 }} animate={{ scaleX: isActive ? 1 : 0 }}
-                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} />
-                    </div>
-                  </div>
-                </motion.div>
+                <p className="text-sm text-white/60 leading-relaxed max-w-xl mx-auto">{roadmap[active].desc}</p>
               </motion.div>
-            );
-          })}
-        </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* ── mobile: vertical milestone list ── */}
+        <div className="md:hidden relative">
+          {/* vertical line */}
+          <div className="absolute left-[21px] top-2 bottom-2" style={{ width: 2, background: "rgba(255,255,255,0.12)" }} />
+          <div className="space-y-4">
+            {roadmap.map((item, i) => {
+              const done = i < active, isActive = i === active;
+              return (
+                <motion.button key={item.num} onClick={() => setActive(i)}
+                  initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.5, delay: i * 0.05, ease: EASE }}
+                  className="w-full text-left flex items-start gap-4 relative"
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                  <div className="rounded-full flex items-center justify-center flex-shrink-0 mt-1 relative z-10"
+                    style={{
+                      width: 44, height: 44,
+                      background: done || isActive ? "#1A73E8" : "#0B1F3A",
+                      border: `2px solid ${done || isActive ? "#439FF7" : "rgba(255,255,255,0.18)"}`,
+                    }}>
+                    {done ? <span className="text-white text-sm">✓</span>
+                      : <span className="text-sm font-light tabular-nums" style={{ color: isActive ? "#fff" : "#439FF7" }}>{item.num}</span>}
+                  </div>
+                  <div className="flex-1 rounded-2xl p-5"
+                    style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${isActive ? "rgba(67,159,247,0.4)" : "rgba(255,255,255,0.1)"}` }}>
+                    <h3 className="text-sm font-medium text-white mb-2">{item.label}</h3>
+                    <p className="text-xs text-white/55 leading-relaxed">{item.desc}</p>
+                  </div>
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
+  );
+}
+
+// ─── Platform row ─────────────────────────────────────────────────────────────
+function PlatformRow({ p }: { p: typeof platforms[0] }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.div variants={staggerItem}
+      className="grid md:grid-cols-12 gap-6 py-5 border-b border-[#0B1F3A]/[0.07] relative overflow-hidden cursor-default"
+      onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
+      <motion.div className="absolute inset-0 bg-[#1A73E8]/[0.02]" initial={{scaleX:0,originX:0}}
+        animate={{scaleX:hovered?1:0}} transition={{duration:.28,ease:[.16,1,.3,1]}} />
+      <div className="md:col-span-4 relative">
+        <motion.div className="text-sm font-medium"
+          animate={{color:hovered?"#1A73E8":"#0B1F3A"}}>{p.name}</motion.div>
+        <div className="mt-1 h-px w-full bg-[#0B1F3A]/[0.06] overflow-hidden">
+          <motion.div className="h-full bg-[#1A73E8] origin-left"
+            animate={{scaleX:hovered?1:0}} transition={{duration:.4,ease:[.16,1,.3,1]}} />
+        </div>
+      </div>
+      <div className="md:col-span-1 relative">
+        <span className="text-xs text-[#1A73E8] font-medium">{p.years}</span>
+      </div>
+      <div className="md:col-span-3 relative">
+        <span className="text-xs text-[#475569]">{p.vertical}</span>
+      </div>
+      <div className="md:col-span-4 relative">
+        <p className="text-xs text-[#475569] leading-relaxed">{p.depth}</p>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Value card ───────────────────────────────────────────────────────────────
+function ValueCard({ item }: { item: typeof values[0] }) {
+  const [hovered,setHovered]=useState(false);
+  const glowX=useMotionValue(50),glowY=useMotionValue(50),glowOp=useMotionValue(0);
+  const glowBg=useTransform([glowX,glowY],([x,y])=>`radial-gradient(ellipse at ${x}% ${y}%, rgba(26,115,232,0.06) 0%, transparent 65%)`);
+  const shimX=useMotionValue(-100);
+  const shimT=useTransform(shimX,v=>`${v}%`);
+  const onMove=(e:React.MouseEvent<HTMLDivElement>)=>{
+    const r=e.currentTarget.getBoundingClientRect();
+    glowX.set(((e.clientX-r.left)/r.width)*100);glowY.set(((e.clientY-r.top)/r.height)*100);
+    animate(glowOp,1,{duration:.25});
+  };
+  const onEnter=useCallback(()=>{setHovered(true);shimX.set(-100);animate(shimX,200,{duration:.5,ease:"easeInOut"});},[shimX]);
+  const onLeave=()=>{setHovered(false);animate(glowOp,0,{duration:.3});};
+  return (
+    <motion.div variants={staggerItem}
+      className="border border-[#0B1F3A]/10 rounded-xl p-8 bg-white space-y-3 relative overflow-hidden cursor-default"
+      whileHover={{y:-4,borderColor:"rgba(26,115,232,0.3)",boxShadow:"0 10px 36px rgba(26,115,232,0.1)",transition:{duration:.2,ease:EASE}}}
+      onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
+      <motion.div className="absolute inset-0 pointer-events-none rounded-xl" style={{opacity:glowOp,background:glowBg}} />
+      <motion.div className="absolute top-0 pointer-events-none"
+        style={{left:0,width:"55%",height:1,background:"linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)",x:shimT}} />
+      <motion.div className="absolute top-0 left-0 right-0 h-px"
+        style={{background:"linear-gradient(90deg,transparent,rgba(26,115,232,0.35),transparent)"}}
+        animate={{opacity:hovered?1:0}} transition={{duration:.2}} />
+      <h3 className="text-base font-medium text-[#0B1F3A] relative">{item.heading}</h3>
+      <p className="text-sm text-[#475569] leading-relaxed relative">{item.desc}</p>
+      <motion.div className="h-px bg-[#1A73E8] origin-left"
+        animate={{scaleX:hovered?1:0}} transition={{duration:.4,ease:[.16,1,.3,1]}} />
+    </motion.div>
   );
 }
 
@@ -565,8 +693,96 @@ export function OurJourneyPage() {
       {/* ── Journey timeline — SHOWPIECE ── */}
       <TimelineSection />
 
-      {/* ── Roadmap — expanding accordion ── */}
-      <RoadmapAccordion />
+      {/* ── Roadmap — progression path ── */}
+      <RoadmapProgress />
+
+      {/* ── Platform expertise ── */}
+      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-2xl mb-12">
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
+              variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+              Platform Expertise
+            </motion.p>
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
+              variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+              What we have <span className="text-[#1A73E8]">actually delivered on.</span>
+            </motion.h2>
+          </div>
+          <motion.div className="grid md:grid-cols-12 gap-6 pb-3 border-b border-[#0B1F3A]/10"
+            variants={fadeUp} custom={.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+            {["Platform","Years","Vertical","Depth of Delivery"].map((h,i)=>(
+              <div key={h} className={`text-[9px] text-[#1A73E8] uppercase tracking-wide ${i===0?"md:col-span-4":i===1?"md:col-span-1":i===2?"md:col-span-3":"md:col-span-4"}`}>{h}</div>
+            ))}
+          </motion.div>
+          <motion.div className="space-y-0"
+            variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+            {platforms.map(p=><PlatformRow key={p.name} p={p} />)}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── Values ── */}
+      <section className="py-24 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-2xl mb-12">
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
+              variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+              What We Stand For
+            </motion.p>
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
+              variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+              Three things we <span className="text-[#1A73E8]">do not compromise on.</span>
+            </motion.h2>
+          </div>
+          <motion.div className="grid md:grid-cols-3 gap-6"
+            variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+            {values.map(item=><ValueCard key={item.heading} item={item} />)}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── The Firm ── */}
+      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-start">
+          <div>
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
+              variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+              The Firm
+            </motion.p>
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight mb-6"
+              variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+              Small enough to care. <span className="text-[#1A73E8]">Disciplined enough to trust.</span>
+            </motion.h2>
+            <motion.p className="text-base text-[#475569] leading-relaxed"
+              variants={fadeUpLarge} custom={.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+              At 54 specialists, we are the size where senior people are genuinely on your engagement — not managing a team below them. That is a deliberate choice, not a constraint.
+            </motion.p>
+            <motion.p className="text-base text-[#475569] leading-relaxed mt-4"
+              variants={fadeUpLarge} custom={.18} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+              Our size is our edge: fast to respond, senior throughout, and structurally unable to hide behind a support tier.
+            </motion.p>
+          </div>
+          <motion.div className="space-y-0"
+            variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+            {[
+              {label:"Founded",             value:"2019"},
+              {label:"Team size",           value:"54 specialists"},
+              {label:"Certification",       value:"ISO 27001 / SOC 2-class"},
+              {label:"Transaction success", value:"99.1%"},
+              {label:"EDI satisfaction YTD",value:"99.04%"},
+              {label:"Platforms",           value:"IBM Sterling · Cleo · MuleSoft · Boomi · Apigee · Axway B2Bi"},
+              {label:"Contact",             value:"sales@exceptionalsolutions.in  ·  +91 8074960598"},
+            ].map((item)=>(
+              <motion.div key={item.label} variants={staggerItem}
+                className="py-4 border-b border-[#0B1F3A]/10 flex items-start justify-between gap-6">
+                <span className="text-sm text-[#0B1F3A]/40 flex-shrink-0">{item.label}</span>
+                <span className="text-sm text-[#0B1F3A] text-right">{item.value}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
 
       {/* ── CTA ── */}
       <section className="py-24 px-4 border-t border-[#0B1F3A]/10">

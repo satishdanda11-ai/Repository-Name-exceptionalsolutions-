@@ -1,7 +1,8 @@
-import { motion, useMotionValue, useTransform, animate } from "motion/react";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "motion/react";
 import { Link } from "react-router";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
+import { Plug, Boxes, BarChart3, Lightbulb, FolderSync, GitBranch, Headphones, ArrowRight, Check } from "lucide-react";
 
 const services = [
   { label: "Cloud Migration",  desc: "Move workloads to the cloud safely, with no disruption to live operations. Planned carefully, executed with precision — not rushed lift-and-shift that creates new problems." },
@@ -13,6 +14,16 @@ const valueProps = [
   { label: "Scalable by design",    desc: "Infrastructure that grows with your partner network, not against it",                         metric: "∞",    unit: "scale" },
   { label: "Resilient operations",  desc: "No single point of failure in the systems your business depends on",                          metric: "99.9%", unit: "uptime" },
   { label: "Cost under control",    desc: "Optimised cloud spend — you pay for what you use, not what you provisioned three years ago",  metric: "40%",   unit: "avg saving" },
+];
+
+const cloudOfferings = [
+  { icon: Plug,       label: "Cloud Integration",       badge: "Core",       title: "Cloud-based integration, connected end to end", desc: "EDI, B2B and API integration delivered on cloud foundations — connected cleanly to the ERP, CRM and partner systems your business already runs on.", tags: ["EDI","API","ERP","CRM","Hybrid"], items: ["Cloud-based EDI & B2B integration","API development & cloud connectivity","ERP/CRM cloud integration","Hybrid integration (on-prem + cloud)"] },
+  { icon: Boxes,      label: "Cloud-Native Apps",       badge: "Build",      title: "Cloud-native applications, built to scale",      desc: "Web and SaaS applications designed for the cloud from day one — deployed on AWS or Azure, containerised, and ready to grow.", tags: ["AWS","Azure","SaaS","Docker"], items: ["Web apps deployed on cloud (AWS/Azure)","SaaS product development","Cloud-hosted web applications","Basic containerisation (Docker)"] },
+  { icon: BarChart3,  label: "Data & Analytics",        badge: "Insight",    title: "Analytics and data pipelines on the cloud",      desc: "Turn cloud-hosted data into decisions — BI dashboards, managed pipelines and analytics delivered as a service.", tags: ["Power BI","Tableau","ETL","Warehouse"], items: ["BI dashboards on cloud (Power BI, Tableau)","Cloud-hosted data pipelines","Basic ETL & data warehouse on cloud","Analytics-as-a-service delivery"] },
+  { icon: Lightbulb,  label: "Strategy & Advisory",     badge: "Advisory",   title: "Cloud strategy, grounded in your environment",   desc: "Before you migrate, we assess. Readiness, roadmap, deployment model and cost — planned around your actual estate, not a template.", tags: ["Assessment","Roadmap","Hybrid","Cost"], items: ["Cloud readiness assessment","Migration roadmap & planning","Public vs private vs hybrid advisory","Cost optimisation consulting"] },
+  { icon: FolderSync, label: "Migration Services",      badge: "Migrate",    title: "Move to the cloud without disruption",           desc: "On-premise to cloud migration delivered safely — data, databases and workloads moved with no disruption to live operations.", tags: ["Lift-and-shift","Database","Data"], items: ["On-premise to cloud migration","Data & database migration","Lift-and-shift for SMBs"] },
+  { icon: GitBranch,  label: "DevOps & Automation",     badge: "Automate",   title: "Ship faster with CI/CD and IaC",                 desc: "Automated pipelines, testing and infrastructure-as-code — so deployments are repeatable, fast and reliable.", tags: ["CI/CD","Terraform","AWS CDK","Testing"], items: ["CI/CD pipeline setup","Automated testing on cloud","Basic IaC (Terraform / AWS CDK)","Deployment automation"] },
+  { icon: Headphones, label: "Managed Cloud",           badge: "24/7",       title: "Cloud operations, fully managed",                desc: "We monitor, tune and govern your cloud — performance, cost and recovery handled, so your team never has to firefight infrastructure.", tags: ["Monitoring","Cost","Backup","Tuning"], items: ["Cloud monitoring & alerting","Basic performance tuning","Cost governance & billing review","Backup & recovery setup"] },
 ];
 
 // ─── Floating cloud-node canvas — hero background ─────────────────────────────
@@ -376,6 +387,102 @@ function ServiceRow({ label, desc, index }: { label: string; desc: string; index
   );
 }
 
+// ─── Offering card (mobile/grid helper not needed — tab switcher below) ───────
+function CloudOfferings() {
+  const [active, setActive] = useState(0);
+  const current = cloudOfferings[active];
+  return (
+    <section className="py-24 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="max-w-2xl mb-14">
+          <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4" variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>Service Offerings</motion.p>
+          <motion.h2 className="text-4xl md:text-4xl font-normal text-[#0B1F3A] tracking-tight leading-tight" variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>Cloud services, <span className="text-[#1A73E8]">end to end</span></motion.h2>
+          <motion.p className="mt-4 text-base text-[#475569] leading-relaxed" variants={fadeUpLarge} custom={.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>From strategy to migration to managed operations — one team across the full cloud lifecycle.</motion.p>
+        </div>
+        <motion.div className="grid md:grid-cols-[220px_1fr] border border-[#0B1F3A]/10 rounded-xl overflow-hidden"
+          initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} viewport={VIEWPORT} transition={{duration:.6,delay:.15}}>
+          {/* LEFT nav */}
+          <div className="border-r border-[#0B1F3A]/10 py-2 bg-[#1A73E8]/[0.02]">
+            {cloudOfferings.map((o,i) => {
+              const NavIcon = o.icon;
+              const isActive = active===i;
+              return (
+                <button key={o.label} onClick={()=>setActive(i)}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left relative transition-all duration-200"
+                  style={{ background: isActive ? "#0B1F3A" : "transparent" }}>
+                  <NavIcon size={15} strokeWidth={1.75} color={isActive ? "#fff" : "rgba(26,115,232,0.55)"} style={{flexShrink:0, transition:"color .18s"}} />
+                  <span style={{ fontSize:13, fontWeight:isActive?500:400, color:isActive?"#fff":"rgba(11,31,58,0.6)", transition:"color .18s", lineHeight:1.3, flex:1 }}>{o.label}</span>
+                  {isActive && (
+                    <motion.span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background:"#439FF7" }}
+                      initial={{ scale:0, opacity:0 }} animate={{ scale:1, opacity:1 }} transition={{ duration:0.25, ease:EASE }} />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+          <AnimatePresence mode="wait">
+            <motion.div key={active} initial={{opacity:0,x:12}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-12}} transition={{duration:.25,ease:EASE}} className="p-8 md:p-10">
+              {/* badge with green live dot */}
+              <div style={{ display:"inline-flex", alignItems:"center", gap:7, fontSize:10, fontWeight:600, letterSpacing:".12em", textTransform:"uppercase", padding:"4px 12px 4px 10px", borderRadius:999, background:"#1A73E8", color:"#fff", marginBottom:20 }}>
+                <motion.span className="rounded-full flex-shrink-0" style={{ width:6, height:6, background:"#10B981" }}
+                  animate={{ boxShadow:["0 0 0 0px rgba(16,185,129,.6)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.6)"] }}
+                  transition={{ duration:1.8, repeat:Infinity }} />
+                {current.badge}
+              </div>
+              <h3 className="text-xl md:text-2xl font-normal text-[#0B1F3A] leading-snug mb-3 tracking-tight">{current.title}</h3>
+              <p className="text-sm text-[#475569] leading-relaxed mb-6 max-w-lg">{current.desc}</p>
+              <div className="flex flex-wrap gap-2 mb-8">
+                {current.tags.map(t=><span key={t} className="text-[11px] font-medium px-3 py-1 rounded-full border border-[#1A73E8]/15 text-[#1A73E8] bg-[#1A73E8]/[0.04]">{t}</span>)}
+              </div>
+              <div className="space-y-3">
+                {current.items.map((item,i)=>(
+                  <motion.div key={item} initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{duration:.3,delay:i*.07,ease:EASE}}
+                    className="flex items-start gap-3 p-3 rounded-lg border border-[#0B1F3A]/[0.07] hover:border-[#1A73E8]/30 transition-colors group">
+                    <div className="w-5 h-5 rounded-full border border-[#1A73E8]/20 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:border-[#1A73E8]/40 transition-colors">
+                      <Check size={10} strokeWidth={2.5} color="#1A73E8" />
+                    </div>
+                    <span className="text-sm text-[#475569] leading-snug">{item}</span>
+                  </motion.div>
+                ))}
+              </div>
+              {/* arrows — start at 1, stop at ends */}
+              <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#0B1F3A]/[0.06]">
+                <span className="text-xs text-[#0B1F3A]/30 tabular-nums">{active+1} of {cloudOfferings.length}</span>
+                <div className="flex items-center gap-3">
+                  {active < cloudOfferings.length-1 && (
+                    <motion.span className="text-[11px] text-[#1A73E8]/70 font-medium hidden sm:inline"
+                      animate={{ opacity:[0.45,1,0.45] }} transition={{ duration:2, repeat:Infinity, ease:"easeInOut" }}>
+                      Click to explore next →
+                    </motion.span>
+                  )}
+                  <button type="button" aria-label="Previous offering"
+                    disabled={active===0}
+                    onClick={()=>setActive(a=>Math.max(0, a-1))}
+                    className="flex items-center justify-center"
+                    style={{ width:38, height:38, borderRadius:"50%", background:"transparent", border:"1px solid rgba(26,115,232,0.3)", cursor: active===0 ? "not-allowed" : "pointer", opacity: active===0 ? 0.35 : 1, transition:"background .18s, transform .18s, opacity .18s" }}
+                    onMouseEnter={e=>{ if(active===0) return; const t=e.currentTarget as HTMLElement;t.style.background="rgba(26,115,232,0.06)";t.style.transform="scale(1.06)";}}
+                    onMouseLeave={e=>{const t=e.currentTarget as HTMLElement;t.style.background="transparent";t.style.transform="scale(1)";}}>
+                    <ArrowRight size={16} strokeWidth={2} color="#1A73E8" style={{transform:"rotate(180deg)"}} />
+                  </button>
+                  <button type="button" aria-label="Next offering"
+                    disabled={active===cloudOfferings.length-1}
+                    onClick={()=>setActive(a=>Math.min(cloudOfferings.length-1, a+1))}
+                    className="flex items-center justify-center"
+                    style={{ width:38, height:38, borderRadius:"50%", background:"#1A73E8", border:"none", cursor: active===cloudOfferings.length-1 ? "not-allowed" : "pointer", opacity: active===cloudOfferings.length-1 ? 0.35 : 1, transition:"background .18s, transform .18s, box-shadow .18s, opacity .18s" }}
+                    onMouseEnter={e=>{ if(active===cloudOfferings.length-1) return; const t=e.currentTarget as HTMLElement;t.style.background="#155CC0";t.style.transform="scale(1.06)";t.style.boxShadow="0 6px 18px rgba(26,115,232,0.35)";}}
+                    onMouseLeave={e=>{const t=e.currentTarget as HTMLElement;t.style.background="#1A73E8";t.style.transform="scale(1)";t.style.boxShadow="none";}}>
+                    <ArrowRight size={16} strokeWidth={2} color="#fff" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export function CloudPage() {
   return (
@@ -449,24 +556,10 @@ export function CloudPage() {
         </div>
       </section>
 
-      {/* ── Services ── */}
-      <section className="py-24 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="max-w-2xl mb-12">
-            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
-              variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              What We Do
-            </motion.p>
-            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
-              variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              From migration to <span className="text-[#1A73E8]">managed operations</span>
-            </motion.h2>
-          </div>
-          <motion.div className="space-y-0" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            {services.map((s, i) => <ServiceRow key={s.label} label={s.label} desc={s.desc} index={i} />)}
-          </motion.div>
-        </div>
-      </section>
+    
+
+      {/* ── Service Offerings (detailed tab switcher) ── */}
+      <CloudOfferings />
 
       {/* ── CTA ── */}
       <section className="py-24 px-4 border-t border-[#0B1F3A]/10">

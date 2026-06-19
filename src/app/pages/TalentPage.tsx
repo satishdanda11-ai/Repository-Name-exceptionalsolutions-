@@ -1,7 +1,8 @@
-import { motion, useMotionValue, useTransform, animate } from "motion/react";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "motion/react";
 import { Link } from "react-router";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
+import { Lightbulb, Building2, UserPlus, Globe, Users, Layers, ArrowRight, Check } from "lucide-react";
 
 const models = [
   { label: "Contract",          desc: "Senior specialists for a defined period, productive from day one. No ramp-up time, no knowledge gap — our people already understand enterprise integration." },
@@ -22,6 +23,15 @@ const whyCards = [
   { heading: "Domain-deep",           desc: "You get specialists who already understand enterprise integration — not generalists who need to learn your domain at your expense." },
   { heading: "Vetted to delivery standard", desc: "Every specialist is vetted to the standard we hold our own delivery teams to. The same bar, without exception." },
   { heading: "Fast to deploy",        desc: "A gap in your team should not become a gap in your roadmap. Our specialists are ready to contribute from day one." },
+];
+
+const talentOfferings = [
+  { icon: Lightbulb, label: "IT Consulting",            badge: "Advisory",   title: "Expert advisory across technology domains",       desc: "Senior advisory across the domains we deliver in — integration, cloud, data, AI and QA — grounded in real delivery experience, not slideware.", tags: ["EDI","Cloud","Data & AI","QA","Transformation"], items: ["EDI/B2B integration advisory & architecture","Cloud strategy & migration planning","Data & AI readiness assessment","QA strategy & test architecture consulting","Digital transformation roadmap"] },
+  { icon: Building2, label: "GCC Support",              badge: "Operations", title: "Build and run offshore tech centers",             desc: "Stand up and operate a Global Capability Center — staffing, delivery model, compliance and HR handled end to end.", tags: ["GCC Setup","Offshore","Hiring","Compliance"], items: ["GCC setup, staffing & operations support","Offshore delivery model design","Talent sourcing, hiring & retention strategy","Compliance, statutory & HR support"] },
+  { icon: UserPlus,  label: "Staff Augmentation",       badge: "On-demand",  title: "On-demand skilled professionals into your teams", desc: "Pre-vetted technology professionals deployed into your team on demand — fast, flexible engagement with proven specialists.", tags: ["Contract","Fixed-term","Gig","BGV-verified"], items: ["Pre-vetted technology professionals on demand","Contract, fixed-term & gig engagement models","Fast deployment — immediate joiners available","Skills: EDI/B2B, cloud, data, QA, AI/ML, web dev","BGV-verified candidates with proven track records"] },
+  { icon: Globe,     label: "Remote Talent Hiring",     badge: "Global",     title: "Hire verified remote professionals globally",     desc: "Access a curated pool of remote-ready specialists, matched to your domain, with onboarding and compliance managed for you.", tags: ["Remote","Part-time","Full-time","Project"], items: ["Curated pool of remote-ready specialists","Domain-aligned matching (EDI, cloud, automation)","Flexible engagement: part-time, full-time, project-based","Managed onboarding & compliance support"] },
+  { icon: Users,     label: "Managed Teams",            badge: "Squads",     title: "Dedicated squads integrated into your delivery",  desc: "A dedicated squad that owns delivery end to end — SLA-driven, plugged into your agile workflows, with transparent reporting.", tags: ["SLA","Agile","EDI","QA","Data","Cloud"], items: ["End-to-end delivery ownership by a dedicated squad","SLA-driven team performance & governance","Plug-and-play into agile workflows","Squads for EDI/integration, QA, data & cloud projects","Transparent reporting & milestone tracking"] },
+  { icon: Layers,    label: "Technology Skill Pools",   badge: "Skills",     title: "Domains we can staff for",                        desc: "Deep skill pools across every domain we deliver in — ready to staff your roadmap with specialists who already know the work.", tags: ["EDI","Cloud","Data","AI/ML","QA","Full-stack"], items: ["EDI / B2B Integration specialists","Cloud (AWS, Azure, GCP) engineers","Data analytics & BI developers","AI / ML & automation engineers","QA / quality engineering testers","Web & full-stack developers"] },
 ];
 
 // ─── Floating avatar network — hero background ────────────────────────────────
@@ -329,6 +339,100 @@ function SpeedCounter() {
   );
 }
 
+// ─── Talent service offerings (tab switcher) ──────────────────────────────────
+function TalentOfferings() {
+  const [active, setActive] = useState(0);
+  const current = talentOfferings[active];
+  return (
+    <section className="py-24 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="max-w-2xl mb-14">
+          <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4" variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>Service Offerings</motion.p>
+          <motion.h2 className="text-4xl md:text-4xl font-normal text-[#0B1F3A] tracking-tight leading-tight" variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>Talent solutions, <span className="text-[#1A73E8]">across every model</span></motion.h2>
+          <motion.p className="mt-4 text-base text-[#475569] leading-relaxed" variants={fadeUpLarge} custom={.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>From advisory to managed squads — resourcing models for however you need to scale.</motion.p>
+        </div>
+        <motion.div className="grid md:grid-cols-[220px_1fr] border border-[#0B1F3A]/10 rounded-xl overflow-hidden"
+          initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} viewport={VIEWPORT} transition={{duration:.6,delay:.15}}>
+          {/* LEFT nav */}
+          <div className="border-r border-[#0B1F3A]/10 py-2 bg-[#1A73E8]/[0.02]">
+            {talentOfferings.map((o,i) => {
+              const NavIcon = o.icon;
+              const isActive = active===i;
+              return (
+                <button key={o.label} onClick={()=>setActive(i)}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-left relative transition-all duration-200"
+                  style={{ background: isActive ? "#0B1F3A" : "transparent" }}>
+                  <NavIcon size={15} strokeWidth={1.75} color={isActive ? "#fff" : "rgba(26,115,232,0.55)"} style={{flexShrink:0, transition:"color .18s"}} />
+                  <span style={{ fontSize:13, fontWeight:isActive?500:400, color:isActive?"#fff":"rgba(11,31,58,0.6)", transition:"color .18s", lineHeight:1.3, flex:1 }}>{o.label}</span>
+                  {isActive && (
+                    <motion.span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background:"#439FF7" }}
+                      initial={{ scale:0, opacity:0 }} animate={{ scale:1, opacity:1 }} transition={{ duration:0.25, ease:EASE }} />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+          <AnimatePresence mode="wait">
+            <motion.div key={active} initial={{opacity:0,x:12}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-12}} transition={{duration:.25,ease:EASE}} className="p-8 md:p-10">
+              <div style={{ display:"inline-flex", alignItems:"center", gap:7, fontSize:10, fontWeight:600, letterSpacing:".12em", textTransform:"uppercase", padding:"4px 12px 4px 10px", borderRadius:999, background:"#1A73E8", color:"#fff", marginBottom:20 }}>
+                <motion.span className="rounded-full flex-shrink-0" style={{ width:6, height:6, background:"#10B981" }}
+                  animate={{ boxShadow:["0 0 0 0px rgba(16,185,129,.6)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.6)"] }}
+                  transition={{ duration:1.8, repeat:Infinity }} />
+                {current.badge}
+              </div>
+              <h3 className="text-xl md:text-2xl font-normal text-[#0B1F3A] leading-snug mb-3 tracking-tight">{current.title}</h3>
+              <p className="text-sm text-[#475569] leading-relaxed mb-6 max-w-lg">{current.desc}</p>
+              <div className="flex flex-wrap gap-2 mb-8">
+                {current.tags.map(t=><span key={t} className="text-[11px] font-medium px-3 py-1 rounded-full border border-[#1A73E8]/15 text-[#1A73E8] bg-[#1A73E8]/[0.04]">{t}</span>)}
+              </div>
+              <div className="space-y-3">
+                {current.items.map((item,i)=>(
+                  <motion.div key={item} initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{duration:.3,delay:i*.07,ease:EASE}}
+                    className="flex items-start gap-3 p-3 rounded-lg border border-[#0B1F3A]/[0.07] hover:border-[#1A73E8]/30 transition-colors group">
+                    <div className="w-5 h-5 rounded-full border border-[#1A73E8]/20 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:border-[#1A73E8]/40 transition-colors">
+                      <Check size={10} strokeWidth={2.5} color="#1A73E8" />
+                    </div>
+                    <span className="text-sm text-[#475569] leading-snug">{item}</span>
+                  </motion.div>
+                ))}
+              </div>
+              <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#0B1F3A]/[0.06]">
+                <span className="text-xs text-[#0B1F3A]/30 tabular-nums">{active+1} of {talentOfferings.length}</span>
+                <div className="flex items-center gap-3">
+                  {active < talentOfferings.length-1 && (
+                    <motion.span className="text-[11px] text-[#1A73E8]/70 font-medium hidden sm:inline"
+                      animate={{ opacity:[0.45,1,0.45] }} transition={{ duration:2, repeat:Infinity, ease:"easeInOut" }}>
+                      Click to explore next →
+                    </motion.span>
+                  )}
+                  <button type="button" aria-label="Previous offering"
+                    disabled={active===0}
+                    onClick={()=>setActive(a=>Math.max(0, a-1))}
+                    className="flex items-center justify-center"
+                    style={{ width:38, height:38, borderRadius:"50%", background:"transparent", border:"1px solid rgba(26,115,232,0.3)", cursor: active===0 ? "not-allowed" : "pointer", opacity: active===0 ? 0.35 : 1, transition:"background .18s, transform .18s, opacity .18s" }}
+                    onMouseEnter={e=>{ if(active===0) return; const t=e.currentTarget as HTMLElement;t.style.background="rgba(26,115,232,0.06)";t.style.transform="scale(1.06)";}}
+                    onMouseLeave={e=>{const t=e.currentTarget as HTMLElement;t.style.background="transparent";t.style.transform="scale(1)";}}>
+                    <ArrowRight size={16} strokeWidth={2} color="#1A73E8" style={{transform:"rotate(180deg)"}} />
+                  </button>
+                  <button type="button" aria-label="Next offering"
+                    disabled={active===talentOfferings.length-1}
+                    onClick={()=>setActive(a=>Math.min(talentOfferings.length-1, a+1))}
+                    className="flex items-center justify-center"
+                    style={{ width:38, height:38, borderRadius:"50%", background:"#1A73E8", border:"none", cursor: active===talentOfferings.length-1 ? "not-allowed" : "pointer", opacity: active===talentOfferings.length-1 ? 0.35 : 1, transition:"background .18s, transform .18s, box-shadow .18s, opacity .18s" }}
+                    onMouseEnter={e=>{ if(active===talentOfferings.length-1) return; const t=e.currentTarget as HTMLElement;t.style.background="#155CC0";t.style.transform="scale(1.06)";t.style.boxShadow="0 6px 18px rgba(26,115,232,0.35)";}}
+                    onMouseLeave={e=>{const t=e.currentTarget as HTMLElement;t.style.background="#1A73E8";t.style.transform="scale(1)";t.style.boxShadow="none";}}>
+                    <ArrowRight size={16} strokeWidth={2} color="#fff" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export function TalentPage() {
   return (
@@ -426,6 +530,9 @@ export function TalentPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* ── Service Offerings ── */}
+      <TalentOfferings />
 
       {/* ── CTA ── */}
       <section className="py-24 px-4">

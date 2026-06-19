@@ -452,72 +452,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* ── Our Story ── */}
-      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16">
-          <div className="space-y-5">
-            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide"
-              variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Our Story
-            </motion.p>
-            {["Exceptional Solutions was founded in 2019. We built our reputation on deep, dependable integration and technology delivery — the kind of work enterprises trust to specialists.",
-              "Today we are 54 specialists, and we are growing that foundation deliberately: bringing modern AI, data and cloud capability to the same enterprise clients who rely on us to keep their systems connected.",
-              "We are not a generalist IT shop chasing every trend. We are integration specialists, broadening with intent."
-            ].map((txt,i)=>(
-              <motion.p key={i} className="text-base text-[#334155] leading-relaxed"
-                variants={fadeUpLarge} custom={i*.06} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-                {txt}
-              </motion.p>
-            ))}
-          </div>
-
-          {/* proof metrics — scroll-count on enter */}
-          <motion.div className="space-y-3"
-            variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            {[
-              {metric:"99.04%", label:"EDI satisfaction YTD"},
-              {metric:"5+",     label:"Years — longest active partnership"},
-              {metric:"54",     label:"Specialists across 5 verticals"},
-              {metric:"45d",    label:"Sterling upgrade (industry norm 90–120d)"},
-              {metric:"32",     label:"Oracle Fusion integrations monitored"},
-              {metric:"9/10",   label:"Client ratings across multiple business units"},
-            ].map((item,i)=>(
-              <motion.div key={item.label} variants={staggerItem}
-                className="border border-[#0B1F3A]/10 rounded-lg p-5 bg-white flex items-center gap-5 relative overflow-hidden cursor-default"
-                whileHover={{y:-2,borderColor:"rgba(26,115,232,0.3)",boxShadow:"0 5px 18px rgba(26,115,232,0.08)",transition:{duration:.18,ease:EASE}}}>
-                <motion.div className="absolute inset-0 bg-[#1A73E8]/[0.018] origin-left" style={{scaleX:0}}
-                  whileHover={{scaleX:1}} transition={{duration:.3,ease:[.16,1,.3,1]}} />
-                <div className="text-xl font-light text-[#1A73E8] w-24 flex-shrink-0 tabular-nums relative">{item.metric}</div>
-                <div className="text-sm text-[#475569] relative">{item.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── Journey timeline ── */}
-      <section className="py-24 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="max-w-2xl mb-14">
-            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
-              variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              The Journey — 2019 to 2026
-            </motion.p>
-            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
-              variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Real work. Real years. <span className="text-[#1A73E8]">Real outcomes.</span>
-            </motion.h2>
-            <motion.p className="text-sm text-[#0B1F3A]/38 mt-3"
-              variants={fadeUp} custom={.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Click any year to expand the details.
-            </motion.p>
-          </div>
-          <motion.div className="space-y-0"
-            variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            {journey.map((item,i)=><JourneyRow key={item.year} item={item} index={i} />)}
-          </motion.div>
-        </div>
-      </section>
+    
 
       {/* ── Platform expertise ── */}
       <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
@@ -607,25 +542,6 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* ── Roadmap ── */}
-      <section className="py-24 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="max-w-2xl mb-12">
-            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
-              variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Pipeline & Roadmap
-            </motion.p>
-            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
-              variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Where we are <span className="text-[#1A73E8]">heading.</span>
-            </motion.h2>
-          </div>
-          <motion.div className="grid md:grid-cols-3 gap-5"
-            variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            {roadmap.map(item=><RoadmapCard key={item.num} item={item} />)}
-          </motion.div>
-        </div>
-      </section>
 
       {/* ── CTA ── */}
       <section className="py-24 px-4 border-t border-[#0B1F3A]/10">
