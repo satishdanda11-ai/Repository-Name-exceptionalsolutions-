@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, useMotionValue, useTransform, animate } from "motion/react";
-import { Link } from "react-router";
-import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
+import { EASE, VIEWPORT, fadeUp, staggerContainer, staggerItem } from "../lib/animations";
 
 type EnquiryType = "" | "edi" | "ai-data-cloud" | "talent" | "other";
 
@@ -25,12 +24,12 @@ function SocialProofTicker() {
     return () => clearInterval(id);
   }, []);
   return (
-    <motion.div className="inline-flex items-center gap-2.5 border border-black/10 rounded-full px-4 py-2"
+    <motion.div className="inline-flex items-center gap-2.5 border border-[#0B1F3A]/10 rounded-full px-4 py-2"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7, duration: 0.4 }}>
-      <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"
-        animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"] }}
+      <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981] flex-shrink-0"
+        animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,.5)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"] }}
         transition={{ duration: 1.8, repeat: Infinity }} />
-      <span className="text-[11px] text-black/50" style={{ opacity: vis ? 1 : 0, transition: "opacity 0.22s" }}>
+      <span className="text-[11px] text-[#475569]" style={{ opacity: vis ? 1 : 0, transition: "opacity 0.22s" }}>
         {proofs[idx]}
       </span>
     </motion.div>
@@ -43,7 +42,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     <motion.div className="space-y-1.5"
       initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: EASE }}>
-      <label className="text-xs text-black/45 font-medium">{label}</label>
+      <label className="text-xs text-[#0B1F3A]/55 font-medium">{label}</label>
       {children}
     </motion.div>
   );
@@ -54,7 +53,7 @@ function CTACard({ label, desc }: { label: string; desc: string }) {
   const [hovered, setHovered] = useState(false);
   const glowX = useMotionValue(50), glowY = useMotionValue(50), glowOp = useMotionValue(0);
   const glowBg = useTransform([glowX, glowY], ([x, y]) =>
-    `radial-gradient(ellipse at ${x}% ${y}%, rgba(0,0,0,0.04) 0%, transparent 65%)`);
+    `radial-gradient(ellipse at ${x}% ${y}%, rgba(26,115,232,0.05) 0%, transparent 65%)`);
   const shimX = useMotionValue(-100);
   const shimT = useTransform(shimX, v => `${v}%`);
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -71,28 +70,28 @@ function CTACard({ label, desc }: { label: string; desc: string }) {
 
   return (
     <motion.div variants={staggerItem}
-      className="border border-black/10 rounded-lg p-5 relative overflow-hidden cursor-pointer"
-      whileHover={{ y: -2, borderColor: "rgba(0,0,0,0.22)", boxShadow: "0 6px 22px rgba(0,0,0,0.07)", transition: { duration: 0.18, ease: EASE } }}
+      className="border border-[#0B1F3A]/10 rounded-lg p-5 relative overflow-hidden cursor-pointer"
+      whileHover={{ y: -2, borderColor: "rgba(26,115,232,0.3)", boxShadow: "0 6px 22px rgba(26,115,232,0.1)", transition: { duration: 0.18, ease: EASE } }}
       onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
       <motion.div className="absolute inset-0 pointer-events-none rounded-lg" style={{ opacity: glowOp, background: glowBg }} />
       <motion.div className="absolute top-0 pointer-events-none"
-        style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.28),transparent)", x: shimT }} />
+        style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)", x: shimT }} />
       <motion.div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.18),transparent)" }}
+        style={{ background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.35),transparent)" }}
         animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.2 }} />
       <div className="flex items-start justify-between gap-3 relative">
         <div>
           <motion.div className="text-sm font-medium mb-1"
-            animate={{ color: hovered ? "#000" : "#111" }} transition={{ duration: 0.2 }}>
+            animate={{ color: hovered ? "#1A73E8" : "#0B1F3A" }} transition={{ duration: 0.2 }}>
             {label}
           </motion.div>
-          <div className="text-xs text-black/50 leading-relaxed">{desc}</div>
+          <div className="text-xs text-[#475569] leading-relaxed">{desc}</div>
         </div>
-        <motion.span className="text-black/25 text-sm flex-shrink-0 mt-0.5"
-          animate={{ x: hovered ? 3 : 0, color: hovered ? "rgba(0,0,0,0.7)" : "rgba(0,0,0,0.25)" }}
+        <motion.span className="text-[#1A73E8]/40 text-sm flex-shrink-0 mt-0.5"
+          animate={{ x: hovered ? 3 : 0, color: hovered ? "rgba(26,115,232,0.9)" : "rgba(26,115,232,0.4)" }}
           transition={{ duration: 0.18 }}>→</motion.span>
       </div>
-      <motion.div className="h-px bg-black origin-left mt-3"
+      <motion.div className="h-px bg-[#1A73E8] origin-left mt-3"
         animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }} />
     </motion.div>
   );
@@ -109,22 +108,22 @@ function AssessmentPanel() {
   ];
   return (
     <motion.div
-      className="border border-black/10 rounded-xl p-7 relative overflow-hidden cursor-default"
-      style={{ background: "rgba(0,0,0,0.015)" }}
-      whileHover={{ borderColor: "rgba(0,0,0,0.2)", boxShadow: "0 8px 32px rgba(0,0,0,0.06)", transition: { duration: 0.2 } }}
+      className="border border-[#0B1F3A]/10 rounded-xl p-7 relative overflow-hidden cursor-default"
+      style={{ background: "rgba(26,115,232,0.02)" }}
+      whileHover={{ borderColor: "rgba(26,115,232,0.3)", boxShadow: "0 8px 32px rgba(26,115,232,0.08)", transition: { duration: 0.2 } }}
       variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       {/* shimmer on enter */}
       <motion.div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.18),transparent)" }}
+        style={{ background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.35),transparent)" }}
         animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.2 }} />
 
       {/* label + title */}
-      <p className="text-[9px] text-black/35 uppercase tracking-widest mb-3">The EDI Health Assessment</p>
-      <h3 className="text-base font-medium text-black mb-3">
+      <p className="text-[9px] text-[#1A73E8] uppercase tracking-widest mb-3">The EDI Health Assessment</p>
+      <h3 className="text-base font-medium text-[#0B1F3A] mb-3">
         A structured, no-obligation review of your EDI estate.
       </h3>
-      <p className="text-sm text-black/60 leading-relaxed mb-5">
+      <p className="text-sm text-[#475569] leading-relaxed mb-5">
         A senior architect reviews your current integration setup, platforms and pain points — and gives you a clear, honest summary of what is working, what is at risk, and what to prioritise.
       </p>
 
@@ -137,7 +136,7 @@ function AssessmentPanel() {
             viewport={VIEWPORT}
             transition={{ duration: 0.35, delay: i * 0.07, ease: EASE }}>
             <motion.div className="w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0"
-              whileInView={{ background: "#111", borderColor: "#111" }}
+              whileInView={{ background: "#1A73E8", borderColor: "#1A73E8" }}
               viewport={VIEWPORT}
               transition={{ duration: 0.3, delay: 0.2 + i * 0.07 }}>
               <motion.span className="text-white text-[8px] font-bold"
@@ -145,7 +144,7 @@ function AssessmentPanel() {
                 viewport={VIEWPORT}
                 transition={{ duration: 0.2, delay: 0.3 + i * 0.07 }}>✓</motion.span>
             </motion.div>
-            <span className="text-xs text-black/60">{item}</span>
+            <span className="text-xs text-[#475569]">{item}</span>
           </motion.div>
         ))}
       </div>
@@ -156,11 +155,11 @@ function AssessmentPanel() {
 // ─── Animated success state ───────────────────────────────────────────────────
 function SuccessState({ onReset }: { onReset: () => void }) {
   return (
-    <motion.div className="border border-black/10 rounded-xl p-12 text-center space-y-5"
+    <motion.div className="border border-[#0B1F3A]/10 rounded-xl p-12 text-center space-y-5"
       initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4, ease: EASE }}>
       {/* animated check circle */}
-      <motion.div className="w-14 h-14 rounded-full bg-black flex items-center justify-center mx-auto"
+      <motion.div className="w-14 h-14 rounded-full bg-[#1A73E8] flex items-center justify-center mx-auto"
         initial={{ scale: 0 }} animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}>
         <motion.svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
@@ -172,21 +171,21 @@ function SuccessState({ onReset }: { onReset: () => void }) {
         </motion.svg>
       </motion.div>
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.4 }}>
-        <h2 className="text-xl font-medium text-black mb-2">Enquiry received.</h2>
-        <p className="text-sm text-black/55 leading-relaxed max-w-xs mx-auto">
+        <h2 className="text-xl font-medium text-[#0B1F3A] mb-2">Enquiry received.</h2>
+        <p className="text-sm text-[#475569] leading-relaxed max-w-xs mx-auto">
           A senior specialist will review your situation and get back to you within one business day.
         </p>
       </motion.div>
       {/* live confirmation detail */}
-      <motion.div className="inline-flex items-center gap-2 text-[11px] text-black/40 border border-black/08 rounded-full px-3 py-1.5"
+      <motion.div className="inline-flex items-center gap-2 text-[11px] text-[#475569] border border-[#0B1F3A]/10 rounded-full px-3 py-1.5"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 0.4 }}>
-        <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500"
-          animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"] }}
+        <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
+          animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,.5)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"] }}
           transition={{ duration: 1.8, repeat: Infinity }} />
         Response time: within 1 business day
       </motion.div>
       <button onClick={onReset}
-        className="block text-xs text-black/35 underline underline-offset-4 hover:text-black transition-colors mx-auto mt-2">
+        className="block text-xs text-[#1A73E8]/70 underline underline-offset-4 hover:text-[#1A73E8] transition-colors mx-auto mt-2">
         Send another enquiry
       </button>
     </motion.div>
@@ -199,8 +198,8 @@ function ContactForm({ onSubmit }: { onSubmit: () => void }) {
   const [focused, setFocused] = useState<string | null>(null);
 
   const inputCls = (field: string) =>
-    `w-full border rounded-md px-3 py-2.5 text-sm text-black placeholder:text-black/20 focus:outline-none transition-all bg-white ${
-      focused === field ? "border-black/50 shadow-[0_0_0_3px_rgba(0,0,0,0.06)]" : "border-black/18 hover:border-black/30"
+    `w-full border rounded-md px-3 py-2.5 text-sm text-[#0B1F3A] placeholder:text-[#0B1F3A]/25 focus:outline-none transition-all bg-white ${
+      focused === field ? "border-[#1A73E8]/60 shadow-[0_0_0_3px_rgba(26,115,232,0.1)]" : "border-[#0B1F3A]/18 hover:border-[#1A73E8]/40"
     }`;
 
   function handleSubmit(e: React.FormEvent) {
@@ -250,15 +249,15 @@ function ContactForm({ onSubmit }: { onSubmit: () => void }) {
       </Field>
       <div className="space-y-3 pt-1">
         <motion.button type="submit"
-          className="w-full bg-black text-white py-3 text-sm rounded-md font-medium relative overflow-hidden"
-          whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(0,0,0,0.18)" }}
+          className="w-full bg-[#1A73E8] text-white py-3 text-sm rounded-md font-medium relative overflow-hidden"
+          whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(26,115,232,0.28)" }}
           whileTap={{ scale: 0.99 }}
           transition={{ duration: 0.15, ease: EASE }}>
-          <motion.span className="absolute inset-0 bg-white/[0.06]" style={{ opacity: 0 }}
+          <motion.span className="absolute inset-0 bg-white/[0.08]" style={{ opacity: 0 }}
             whileHover={{ opacity: 1 }} transition={{ duration: 0.2 }} />
           Send enquiry
         </motion.button>
-        <p className="text-xs text-black/28 text-center">
+        <p className="text-xs text-[#0B1F3A]/35 text-center">
           We'll only use your details to respond to your enquiry. No newsletters unless you ask.
         </p>
       </div>
@@ -276,15 +275,15 @@ export function ContactPage() {
       <section className="pt-40 pb-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-3xl space-y-6">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, ease: EASE, delay: 0.05 }}>
               Contact
             </motion.p>
-            <motion.h1 className="text-5xl md:text-6xl font-normal text-black leading-tight tracking-tight"
+            <motion.h1 className="text-5xl md:text-6xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: EASE, delay: 0.15 }}>
-              Let's talk about what you need to connect.
+              Let's talk about <span className="text-[#1A73E8]">what you need to connect.</span>
             </motion.h1>
-            <motion.p className="text-lg text-black/60 leading-relaxed"
+            <motion.p className="text-lg text-[#475569] leading-relaxed"
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}>
               Tell us a little about your situation and the right specialist will get back to you — usually within one business day.
             </motion.p>
@@ -295,7 +294,7 @@ export function ContactPage() {
       </section>
 
       {/* ── Form + right panel ── */}
-      <section className="py-24 px-4 border-t border-black/10">
+      <section className="py-24 px-4 border-t border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16">
 
           {/* ── LEFT: form ── */}
@@ -314,7 +313,7 @@ export function ContactPage() {
 
             {/* Not sure where to start */}
             <div>
-              <p className="text-xs text-black/40 uppercase tracking-wide mb-5">Not sure where to start?</p>
+              <p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-5">Not sure where to start?</p>
               <motion.div className="space-y-3"
                 variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
                 {[
@@ -327,15 +326,15 @@ export function ContactPage() {
 
             {/* Contact details */}
             <motion.div variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              <p className="text-xs text-black/40 uppercase tracking-wide mb-4">Contact details</p>
-              <div className="space-y-2 text-sm text-black/55">
+              <p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4">Contact details</p>
+              <div className="space-y-2 text-sm text-[#475569]">
                 {[
                   { label: "Email",  val: "sales@exceptionalsolutions.in" },
                   { label: "Phone",  val: "+91 8074960598" },
                   { label: "Web",    val: "exceptionalsolutions.in" },
                 ].map(d => (
                   <div key={d.label} className="flex items-center gap-3">
-                    <span className="text-[9px] uppercase tracking-wide text-black/30 w-10 flex-shrink-0">{d.label}</span>
+                    <span className="text-[9px] uppercase tracking-wide text-[#0B1F3A]/35 w-10 flex-shrink-0">{d.label}</span>
                     <span>{d.val}</span>
                   </div>
                 ))}

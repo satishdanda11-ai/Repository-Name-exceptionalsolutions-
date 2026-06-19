@@ -24,9 +24,9 @@ const models = [
 ];
 
 const STATUS = {
-  done:    { label: "Complete",    bg: "#f0fdf4", color: "#16a34a", dot: "#16a34a", pulse: false },
-  active:  { label: "In progress", bg: "#f3f4f6", color: "#111827", dot: "#111827", pulse: true  },
-  pending: { label: "Upcoming",    bg: "#fafafa", color: "rgba(0,0,0,0.38)", dot: "rgba(0,0,0,0.2)", pulse: false },
+  done:    { label: "Complete",    bg: "#ECFDF3", color: "#10B981", dot: "#10B981", pulse: false },
+  active:  { label: "In progress", bg: "#EAF2FE", color: "#1A73E8", dot: "#1A73E8", pulse: true  },
+  pending: { label: "Upcoming",    bg: "#F4F8FF", color: "rgba(11,31,58,0.4)", dot: "rgba(11,31,58,0.2)", pulse: false },
 };
 
 // ─── Live transaction counter ─────────────────────────────────────────────────
@@ -67,7 +67,7 @@ function TrackPackets({ trackRef }: { trackRef: React.RefObject<HTMLDivElement> 
         const x = p.p * canvas.width;
         const fade = p.p < 0.06 ? p.p / 0.06 : p.p > 0.88 ? (1 - p.p) / 0.12 : 1;
         ctx.globalAlpha = fade * 0.75;
-        ctx.fillStyle = "#111"; ctx.shadowColor = "#111"; ctx.shadowBlur = 6;
+        ctx.fillStyle = "#1A73E8"; ctx.shadowColor = "#1A73E8"; ctx.shadowBlur = 6;
         ctx.beginPath(); ctx.arc(x, canvas.height / 2, 3, 0, Math.PI * 2); ctx.fill();
         ctx.shadowBlur = 0; ctx.globalAlpha = 1;
         return true;
@@ -87,8 +87,8 @@ function ProgressBar({ value, delay }: { value: number; delay: number }) {
   const [w, setW] = useState(0);
   useEffect(() => { const t = setTimeout(() => setW(value), delay); return () => clearTimeout(t); }, [value, delay]);
   return (
-    <div className="w-full h-[2px] rounded-full" style={{ background: "rgba(0,0,0,0.06)", marginTop: 6 }}>
-      <div className="h-full rounded-full bg-black" style={{ width: `${w}%`, transition: "width 1.2s ease" }} />
+    <div className="w-full h-[2px] rounded-full" style={{ background: "rgba(11,31,58,0.06)", marginTop: 6 }}>
+      <div className="h-full rounded-full bg-[#1A73E8]" style={{ width: `${w}%`, transition: "width 1.2s ease" }} />
     </div>
   );
 }
@@ -109,21 +109,21 @@ function HeroPipeline() {
 
   return (
     <motion.div
-      className="bg-white border border-black/10 rounded-xl p-7"
-      style={{ boxShadow: "0 2px 24px rgba(0,0,0,0.05)" }}
+      className="bg-white border border-[#0B1F3A]/10 rounded-xl p-7"
+      style={{ boxShadow: "0 2px 24px rgba(26,115,232,0.06)" }}
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: EASE, delay: 0.55 }}>
 
       {/* header */}
       <div className="flex items-center justify-between mb-7">
-        <div className="flex items-center gap-2 text-[9px] text-black/38 uppercase tracking-widest">
-          <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500"
-            animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"] }}
+        <div className="flex items-center gap-2 text-[9px] text-[#0B1F3A]/38 uppercase tracking-widest">
+          <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
+            animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,.5)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"] }}
             transition={{ duration: 1.8, repeat: Infinity }} />
           Active engagement — Phase 03 in progress
         </div>
-        <div className="text-[9px] text-black/38 tabular-nums">
+        <div className="text-[9px] text-[#0B1F3A]/38 tabular-nums">
           <LiveCounter />
         </div>
       </div>
@@ -138,15 +138,15 @@ function HeroPipeline() {
               <motion.div
                 className="w-12 h-12 rounded-full border-2 flex items-center justify-center text-xs font-medium relative"
                 animate={{
-                  background:  p.state === "done" ? "#111" : "#fff",
-                  borderColor: p.state === "done" ? "#111" : p.state === "active" ? "#111" : "rgba(0,0,0,0.15)",
-                  color:       p.state === "done" ? "#fff" : p.state === "active" ? "#111" : "rgba(0,0,0,0.4)",
-                  boxShadow:   p.state === "active" ? "0 0 0 5px rgba(0,0,0,0.07)" : "none",
+                  background:  p.state === "done" ? "#1A73E8" : "#fff",
+                  borderColor: p.state === "done" ? "#1A73E8" : p.state === "active" ? "#1A73E8" : "rgba(11,31,58,0.15)",
+                  color:       p.state === "done" ? "#fff" : p.state === "active" ? "#1A73E8" : "rgba(11,31,58,0.4)",
+                  boxShadow:   p.state === "active" ? "0 0 0 5px rgba(26,115,232,0.08)" : "none",
                 }}
                 transition={{ duration: 0.3 }}>
                 {/* active ring */}
                 {p.state === "active" && (
-                  <motion.div className="absolute inset-0 rounded-full border border-black/15"
+                  <motion.div className="absolute inset-0 rounded-full border border-[#1A73E8]/20"
                     animate={{ scale: [1, 1.2, 1], opacity: [0.8, 0, 0.8] }}
                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
                 )}
@@ -155,7 +155,7 @@ function HeroPipeline() {
 
               {/* name */}
               <span className="text-[9px] text-center font-medium leading-tight"
-                style={{ color: p.state === "active" ? "#111" : "rgba(0,0,0,0.4)" }}>
+                style={{ color: p.state === "active" ? "#1A73E8" : "rgba(11,31,58,0.4)" }}>
                 {p.name}
               </span>
 
@@ -175,8 +175,8 @@ function HeroPipeline() {
         })}
 
         {/* track */}
-        <div ref={trackRef} className="absolute" style={{ top: 22, left: "5%", right: "5%", height: 2, background: "rgba(0,0,0,0.07)", zIndex: 1 }}>
-          <div className="absolute top-0 left-0 h-full bg-black/25 transition-all duration-700 ease-out" style={{ width: trackWidth }} />
+        <div ref={trackRef} className="absolute" style={{ top: 22, left: "5%", right: "5%", height: 2, background: "rgba(11,31,58,0.07)", zIndex: 1 }}>
+          <div className="absolute top-0 left-0 h-full bg-[#1A73E8]/25 transition-all duration-700 ease-out" style={{ width: trackWidth }} />
           {ready && <TrackPackets trackRef={trackRef} />}
         </div>
       </div>
@@ -209,8 +209,8 @@ function PhaseRow({ phase, index }: { phase: typeof phases[0]; index: number }) 
         pk.p += pk.spd; if (pk.p > 1) pk.p = 0;
         const x = pk.p * canvas.width;
         const fade = pk.p < 0.05 ? pk.p / 0.05 : pk.p > 0.9 ? (1 - pk.p) / 0.1 : 1;
-        ctx.globalAlpha = fade * 0.5; ctx.fillStyle = "#111";
-        ctx.shadowColor = "#111"; ctx.shadowBlur = 4;
+        ctx.globalAlpha = fade * 0.5; ctx.fillStyle = "#1A73E8";
+        ctx.shadowColor = "#1A73E8"; ctx.shadowBlur = 4;
         ctx.beginPath(); ctx.arc(x, canvas.height / 2, 2.5, 0, Math.PI * 2); ctx.fill();
         ctx.shadowBlur = 0; ctx.globalAlpha = 1;
         return pk;
@@ -223,29 +223,29 @@ function PhaseRow({ phase, index }: { phase: typeof phases[0]; index: number }) 
 
   return (
     <motion.div ref={rowRef} variants={staggerItem}
-      className="grid md:grid-cols-12 gap-6 py-8 border-b border-black/[0.07] items-start relative overflow-hidden cursor-default"
+      className="grid md:grid-cols-12 gap-6 py-8 border-b border-[#0B1F3A]/[0.07] items-start relative overflow-hidden cursor-default"
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       {/* hover sweep */}
-      <motion.div className="absolute inset-0 bg-black/[0.018]" initial={{ scaleX: 0, originX: 0 }}
+      <motion.div className="absolute inset-0 bg-[#1A73E8]/[0.02]" initial={{ scaleX: 0, originX: 0 }}
         animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }} />
       {/* packet trail on bottom */}
-      <div className="absolute bottom-0 left-0 right-0" style={{ height: 2, background: "rgba(0,0,0,0.04)", overflow: "hidden" }}>
+      <div className="absolute bottom-0 left-0 right-0" style={{ height: 2, background: "rgba(26,115,232,0.04)", overflow: "hidden" }}>
         <canvas ref={canvasRef} className="absolute top-0 left-0" />
       </div>
 
       {/* number */}
       <div className="md:col-span-1 relative pt-0.5">
         <motion.span className="text-xs font-medium"
-          animate={{ color: hovered ? "#111827" : "rgba(0,0,0,0.2)" }} transition={{ duration: 0.2 }}>
+          animate={{ color: hovered ? "#1A73E8" : "rgba(11,31,58,0.2)" }} transition={{ duration: 0.2 }}>
           {phase.num}
         </motion.span>
       </div>
 
       {/* label + bar + badge */}
       <div className="md:col-span-3 relative">
-        <h3 className="text-sm font-medium text-black">{phase.fullLabel}</h3>
-        <div className="mt-2 h-px w-full bg-black/[0.08] overflow-hidden">
-          <motion.div className="h-full bg-black origin-left"
+        <h3 className="text-sm font-medium text-[#0B1F3A]">{phase.fullLabel}</h3>
+        <div className="mt-2 h-px w-full bg-[#0B1F3A]/[0.08] overflow-hidden">
+          <motion.div className="h-full bg-[#1A73E8] origin-left"
             animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} />
         </div>
         <div className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[8.5px] mt-2"
@@ -259,7 +259,7 @@ function PhaseRow({ phase, index }: { phase: typeof phases[0]; index: number }) 
 
       {/* desc */}
       <div className="md:col-span-8 relative">
-        <p className="text-sm text-black/60 leading-relaxed">{phase.desc}</p>
+        <p className="text-sm text-[#475569] leading-relaxed">{phase.desc}</p>
       </div>
     </motion.div>
   );
@@ -270,7 +270,7 @@ function PredictCard({ label, desc }: { label: string; desc: string }) {
   const [hovered, setHovered] = useState(false);
   const glowX = useMotionValue(50), glowY = useMotionValue(50), glowOp = useMotionValue(0);
   const glowBg = useTransform([glowX, glowY], ([x, y]) =>
-    `radial-gradient(ellipse at ${x}% ${y}%, rgba(0,0,0,0.04) 0%, transparent 65%)`);
+    `radial-gradient(ellipse at ${x}% ${y}%, rgba(26,115,232,0.05) 0%, transparent 65%)`);
   const shimX = useMotionValue(-100);
   const shimT = useTransform(shimX, v => `${v}%`);
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -287,30 +287,30 @@ function PredictCard({ label, desc }: { label: string; desc: string }) {
 
   return (
     <motion.div variants={staggerItem}
-      className="border border-black/10 rounded-lg p-6 bg-white relative overflow-hidden cursor-default"
-      whileHover={{ y: -3, borderColor: "rgba(0,0,0,0.22)", boxShadow: "0 8px 28px rgba(0,0,0,0.07)", transition: { duration: 0.18, ease: EASE } }}
+      className="border border-[#0B1F3A]/10 rounded-lg p-6 bg-white relative overflow-hidden cursor-default"
+      whileHover={{ y: -3, borderColor: "rgba(26,115,232,0.3)", boxShadow: "0 8px 28px rgba(26,115,232,0.1)", transition: { duration: 0.18, ease: EASE } }}
       onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
       <motion.div className="absolute inset-0 pointer-events-none rounded-lg" style={{ opacity: glowOp, background: glowBg }} />
       <motion.div className="absolute top-0 pointer-events-none"
-        style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.28),transparent)", x: shimT }} />
+        style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)", x: shimT }} />
       <motion.div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.18),transparent)" }}
+        style={{ background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.35),transparent)" }}
         animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.2 }} />
 
       <div className="flex items-start gap-3 relative">
         <motion.div className="w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 mt-0.5"
-          animate={{ background: hovered ? "#111" : "#fff", borderColor: hovered ? "#111" : "rgba(0,0,0,0.2)" }}
+          animate={{ background: hovered ? "#1A73E8" : "#fff", borderColor: hovered ? "#1A73E8" : "rgba(26,115,232,0.2)" }}
           transition={{ duration: 0.25 }}>
           <motion.span className="text-white text-[9px] font-bold"
             animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.2 }}>✓</motion.span>
         </motion.div>
         <div>
-          <div className="text-sm font-medium text-black mb-1">{label}</div>
-          <div className="text-sm text-black/50">{desc}</div>
+          <div className="text-sm font-medium text-[#0B1F3A] mb-1">{label}</div>
+          <div className="text-sm text-[#475569]">{desc}</div>
         </div>
       </div>
 
-      <motion.div className="h-px bg-black origin-left mt-3"
+      <motion.div className="h-px bg-[#1A73E8] origin-left mt-3"
         animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} />
     </motion.div>
   );
@@ -321,7 +321,7 @@ function ModelCard({ label, desc }: { label: string; desc: string }) {
   const [hovered, setHovered] = useState(false);
   const glowX = useMotionValue(50), glowY = useMotionValue(50), glowOp = useMotionValue(0);
   const glowBg = useTransform([glowX, glowY], ([x, y]) =>
-    `radial-gradient(ellipse at ${x}% ${y}%, rgba(0,0,0,0.04) 0%, transparent 65%)`);
+    `radial-gradient(ellipse at ${x}% ${y}%, rgba(26,115,232,0.05) 0%, transparent 65%)`);
   const shimX = useMotionValue(-100);
   const shimT = useTransform(shimX, v => `${v}%`);
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -338,18 +338,18 @@ function ModelCard({ label, desc }: { label: string; desc: string }) {
 
   return (
     <motion.div variants={staggerItem}
-      className="border border-black/10 rounded-lg p-8 bg-white relative overflow-hidden cursor-default"
-      whileHover={{ y: -4, borderColor: "rgba(0,0,0,0.22)", boxShadow: "0 10px 36px rgba(0,0,0,0.08)", transition: { duration: 0.2, ease: EASE } }}
+      className="border border-[#0B1F3A]/10 rounded-lg p-8 bg-white relative overflow-hidden cursor-default"
+      whileHover={{ y: -4, borderColor: "rgba(26,115,232,0.3)", boxShadow: "0 10px 36px rgba(26,115,232,0.1)", transition: { duration: 0.2, ease: EASE } }}
       onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
       <motion.div className="absolute inset-0 pointer-events-none rounded-lg" style={{ opacity: glowOp, background: glowBg }} />
       <motion.div className="absolute top-0 pointer-events-none"
-        style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.28),transparent)", x: shimT }} />
+        style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)", x: shimT }} />
       <motion.div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.18),transparent)" }}
+        style={{ background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.35),transparent)" }}
         animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.2 }} />
-      <h3 className="text-base font-medium text-black mb-3 relative">{label}</h3>
-      <p className="text-sm text-black/60 leading-relaxed relative">{desc}</p>
-      <motion.div className="h-px bg-black origin-left mt-4"
+      <h3 className="text-base font-medium text-[#0B1F3A] mb-3 relative">{label}</h3>
+      <p className="text-sm text-[#475569] leading-relaxed relative">{desc}</p>
+      <motion.div className="h-px bg-[#1A73E8] origin-left mt-4"
         animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} />
     </motion.div>
   );
@@ -363,15 +363,15 @@ export function OurApproachPage() {
       <section className="pt-40 pb-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-3xl space-y-6">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, ease: EASE, delay: 0.05 }}>
               Our Approach
             </motion.p>
-            <motion.h1 className="text-5xl md:text-6xl font-normal text-black leading-tight tracking-tight"
+            <motion.h1 className="text-5xl md:text-6xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: EASE, delay: 0.15 }}>
-              A delivery approach built for zero surprises.
+              A delivery approach built for <span className="text-[#1A73E8]">zero surprises.</span>
             </motion.h1>
-            <motion.p className="text-lg text-black/60 leading-relaxed"
+            <motion.p className="text-lg text-[#475569] leading-relaxed"
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}>
               Enterprise integration goes wrong when delivery is improvised. Ours isn't. Every engagement follows a defined, proven path — with a single point of accountability and clear communication throughout.
             </motion.p>
@@ -382,16 +382,16 @@ export function OurApproachPage() {
       </section>
 
       {/* ── Five Phases ── */}
-      <section className="py-24 px-4 bg-black/[0.02] border-t border-b border-black/10">
+      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-14">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               The Five Phases
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Every engagement. Same discipline.
+              Every engagement. <span className="text-[#1A73E8]">Same discipline.</span>
             </motion.h2>
           </div>
           <motion.div className="space-y-0" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
@@ -404,19 +404,19 @@ export function OurApproachPage() {
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16">
           <div>
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Delivery Predictability
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight mb-6"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight mb-6"
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              How we keep delivery on track.
+              How we keep delivery <span className="text-[#1A73E8]">on track.</span>
             </motion.h2>
-            <motion.p className="text-base text-black/60 leading-relaxed"
+            <motion.p className="text-base text-[#475569] leading-relaxed"
               variants={fadeUpLarge} custom={0.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Most integration projects go wrong not because the technology is hard, but because delivery is improvised and accountability is shared by everyone, which means it is owned by no one.
             </motion.p>
-            <motion.p className="text-base text-black/60 leading-relaxed mt-4"
+            <motion.p className="text-base text-[#475569] leading-relaxed mt-4"
               variants={fadeUpLarge} custom={0.18} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               We give you a single point of accountability — one person responsible for your engagement from the first call to go-live and beyond.
             </motion.p>
@@ -429,16 +429,16 @@ export function OurApproachPage() {
       </section>
 
       {/* ── Engagement Models ── */}
-      <section className="py-24 px-4 bg-black/[0.02] border-t border-b border-black/10">
+      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-12">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Engagement Models
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              We work in the model that suits you.
+              We work in the model <span className="text-[#1A73E8]">that suits you.</span>
             </motion.h2>
           </div>
           <motion.div className="grid md:grid-cols-3 gap-6"
@@ -451,19 +451,19 @@ export function OurApproachPage() {
       {/* ── CTA ── */}
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto text-center space-y-6">
-          <motion.h2 className="text-4xl font-normal text-black tracking-tight"
+          <motion.h2 className="text-4xl font-normal text-[#0B1F3A] tracking-tight"
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Ready to talk about your project?
+            Ready to talk about <span className="text-[#1A73E8]">your project?</span>
           </motion.h2>
-          <motion.p className="text-base text-black/60 max-w-xl mx-auto leading-relaxed"
+          <motion.p className="text-base text-[#475569] max-w-xl mx-auto leading-relaxed"
             variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Tell us what you need to connect and we will tell you how we would approach it — clearly, honestly, without obligation.
           </motion.p>
           <motion.div variants={fadeUp} custom={0.2} initial="hidden" whileInView="visible" viewport={VIEWPORT}
             whileHover={{ y: -3 }} transition={{ duration: 0.18, ease: EASE }}>
             <Link to="/contact"
-              className="inline-block bg-black text-white px-6 py-2.5 text-sm rounded-md hover:bg-black/90 transition-colors"
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.18)"; }}
+              className="inline-block bg-[#1A73E8] text-white px-6 py-2.5 text-sm rounded-md hover:bg-[#155CC0] transition-colors"
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(26,115,232,0.28)"; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
               Talk to us about your project
             </Link>

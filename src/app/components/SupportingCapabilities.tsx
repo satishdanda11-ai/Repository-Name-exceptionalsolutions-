@@ -19,8 +19,8 @@ function CapCard({ icon: Icon, title, description, details, path }: typeof capab
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        background: hov ? "#0B1F3A" : "#fff",
-        border: `1px solid ${hov ? "#0B1F3A" : "rgba(11,31,58,0.1)"}`,
+        background: hov ? "#1A73E8" : "#fff",
+        border: `1px solid ${hov ? "1A73E8" : "rgba(11,31,58,0.1)"}`,
         borderRadius: 10, padding: "24px", display: "flex", flexDirection: "column",
         cursor: "pointer", position: "relative", overflow: "hidden",
         transition: "background .28s ease, border-color .28s ease, box-shadow .28s ease",

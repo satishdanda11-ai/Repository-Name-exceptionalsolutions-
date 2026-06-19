@@ -22,7 +22,7 @@ function WhyCard({ item }: { item: typeof whyItems[0] }) {
   const [hovered, setHovered] = useState(false);
   const glowX = useMotionValue(50), glowY = useMotionValue(50), glowOp = useMotionValue(0);
   const glowBg = useTransform([glowX, glowY], ([x, y]) =>
-    `radial-gradient(ellipse at ${x}% ${y}%, rgba(0,0,0,0.04) 0%, transparent 65%)`);
+    `radial-gradient(ellipse at ${x}% ${y}%, rgba(26,115,232,0.05) 0%, transparent 65%)`);
   const shimX = useMotionValue(-100);
   const shimT = useTransform(shimX, v => `${v}%`);
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -39,34 +39,34 @@ function WhyCard({ item }: { item: typeof whyItems[0] }) {
 
   return (
     <motion.div variants={staggerItem}
-      className="border border-black/10 rounded-lg p-6 bg-white relative overflow-hidden cursor-default"
-      whileHover={{ y: -3, borderColor: "rgba(0,0,0,0.22)", boxShadow: "0 8px 28px rgba(0,0,0,0.07)", transition: { duration: 0.18, ease: EASE } }}
+      className="border border-[#0B1F3A]/10 rounded-lg p-6 bg-white relative overflow-hidden cursor-default"
+      whileHover={{ y: -3, borderColor: "rgba(26,115,232,0.3)", boxShadow: "0 8px 28px rgba(26,115,232,0.1)", transition: { duration: 0.18, ease: EASE } }}
       onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
       <motion.div className="absolute inset-0 pointer-events-none rounded-lg" style={{ opacity: glowOp, background: glowBg }} />
       <motion.div className="absolute top-0 pointer-events-none"
-        style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.28),transparent)", x: shimT }} />
+        style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)", x: shimT }} />
       <motion.div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.18),transparent)" }}
+        style={{ background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.35),transparent)" }}
         animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.2 }} />
 
       <div className="flex items-start gap-3 relative">
         {/* animated check circle */}
         <motion.div className="w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 mt-0.5"
-          animate={{ background: hovered ? "#111" : "#fff", borderColor: hovered ? "#111" : "rgba(0,0,0,0.18)" }}
+          animate={{ background: hovered ? "#1A73E8" : "#fff", borderColor: hovered ? "#1A73E8" : "rgba(26,115,232,0.2)" }}
           transition={{ duration: 0.25 }}>
           <motion.span className="text-white text-[9px] font-bold"
             animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.2 }}>✓</motion.span>
         </motion.div>
         <div>
           <motion.div className="text-sm font-medium mb-1"
-            animate={{ color: hovered ? "#000" : "#111" }} transition={{ duration: 0.2 }}>
+            animate={{ color: hovered ? "#1A73E8" : "#0B1F3A" }} transition={{ duration: 0.2 }}>
             {item.heading}
           </motion.div>
-          <div className="text-sm text-black/50">{item.desc}</div>
+          <div className="text-sm text-[#475569]">{item.desc}</div>
         </div>
       </div>
 
-      <motion.div className="h-px bg-black origin-left mt-4"
+      <motion.div className="h-px bg-[#1A73E8] origin-left mt-4"
         animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} />
     </motion.div>
   );
@@ -96,8 +96,8 @@ function OpeningRow({ role, index }: { role: typeof openings[0]; index: number }
         pk.p += pk.spd; if (pk.p > 1) pk.p = 0;
         const x = pk.p * canvas.width;
         const fade = pk.p < 0.05 ? pk.p / 0.05 : pk.p > 0.9 ? (1 - pk.p) / 0.1 : 1;
-        ctx.globalAlpha = fade * 0.5; ctx.fillStyle = "#111";
-        ctx.shadowColor = "#111"; ctx.shadowBlur = 4;
+        ctx.globalAlpha = fade * 0.55; ctx.fillStyle = "#1A73E8";
+        ctx.shadowColor = "#1A73E8"; ctx.shadowBlur = 4;
         ctx.beginPath(); ctx.arc(x, canvas.height / 2, 2.5, 0, Math.PI * 2); ctx.fill();
         ctx.shadowBlur = 0; ctx.globalAlpha = 1;
         return pk;
@@ -110,30 +110,30 @@ function OpeningRow({ role, index }: { role: typeof openings[0]; index: number }
 
   return (
     <motion.div ref={rowRef} variants={staggerItem}
-      className="py-6 border-b border-black/[0.07] flex items-center justify-between gap-6 relative overflow-hidden -mx-4 px-4 rounded cursor-default"
+      className="py-6 border-b border-[#0B1F3A]/[0.07] flex items-center justify-between gap-6 relative overflow-hidden -mx-4 px-4 rounded cursor-default"
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       {/* hover sweep */}
-      <motion.div className="absolute inset-0 bg-black/[0.018] rounded" initial={{ scaleX: 0, originX: 0 }}
+      <motion.div className="absolute inset-0 bg-[#1A73E8]/[0.02] rounded" initial={{ scaleX: 0, originX: 0 }}
         animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }} />
       {/* packet dot on bottom */}
-      <div className="absolute bottom-0 left-4 right-4" style={{ height: 2, background: "rgba(0,0,0,0.04)", overflow: "hidden" }}>
+      <div className="absolute bottom-0 left-4 right-4" style={{ height: 2, background: "rgba(26,115,232,0.04)", overflow: "hidden" }}>
         <canvas ref={canvasRef} className="absolute top-0 left-0" />
       </div>
 
       <div className="space-y-1 relative">
         <motion.h3 className="text-base font-medium"
-          animate={{ color: hovered ? "#000" : "#111" }} transition={{ duration: 0.2 }}>
+          animate={{ color: hovered ? "#1A73E8" : "#0B1F3A" }} transition={{ duration: 0.2 }}>
           {role.title}
         </motion.h3>
         {/* title underline on hover */}
-        <div className="h-px w-full bg-black/[0.07] overflow-hidden">
-          <motion.div className="h-full bg-black origin-left"
+        <div className="h-px w-full bg-[#0B1F3A]/[0.07] overflow-hidden">
+          <motion.div className="h-full bg-[#1A73E8] origin-left"
             animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }} />
         </div>
-        <div className="flex items-center gap-3 text-xs text-black/40 pt-0.5">
+        <div className="flex items-center gap-3 text-xs text-[#0B1F3A]/40 pt-0.5">
           {/* live dot */}
-          <motion.span className="w-1 h-1 rounded-full bg-green-500 flex-shrink-0"
-            animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,.5)","0 0 0 3px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"] }}
+          <motion.span className="w-1 h-1 rounded-full bg-[#10B981] flex-shrink-0"
+            animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,.5)","0 0 0 3px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: index * 0.3 }} />
           <span>{role.type}</span>
           <span>·</span>
@@ -145,7 +145,7 @@ function OpeningRow({ role, index }: { role: typeof openings[0]; index: number }
       <motion.div className="flex-shrink-0 relative"
         whileHover={{ scale: 1.02 }} transition={{ duration: 0.15, ease: EASE }}>
         <Link to="/contact"
-          className="flex items-center gap-1.5 border border-black/20 text-black px-4 py-1.5 text-xs rounded-md relative overflow-hidden transition-colors hover:bg-black/[0.03]">
+          className="flex items-center gap-1.5 border border-[#1A73E8]/30 text-[#1A73E8] px-4 py-1.5 text-xs rounded-md relative overflow-hidden transition-colors hover:bg-[#1A73E8]/[0.05]">
           <motion.span animate={{ x: hovered ? 2 : 0 }} transition={{ duration: 0.18 }}>Apply</motion.span>
           <motion.span animate={{ opacity: hovered ? 1 : 0.4, x: hovered ? 1 : 0 }} transition={{ duration: 0.18 }}>→</motion.span>
         </Link>
@@ -162,24 +162,24 @@ export function CareersPage() {
       <section className="pt-40 pb-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-3xl space-y-6">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, ease: EASE, delay: 0.05 }}>
               Careers
             </motion.p>
-            <motion.h1 className="text-5xl md:text-6xl font-normal text-black leading-tight tracking-tight"
+            <motion.h1 className="text-5xl md:text-6xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: EASE, delay: 0.15 }}>
-              Do specialist work, with people who take it seriously.
+              Do specialist work, <span className="text-[#1A73E8]">with people who take it seriously.</span>
             </motion.h1>
-            <motion.p className="text-lg text-black/60 leading-relaxed"
+            <motion.p className="text-lg text-[#475569] leading-relaxed"
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}>
               We are integration and technology specialists who care about doing the work well. If that is how you want to work, we should talk.
             </motion.p>
             {/* team size pill */}
             <motion.div
-              className="inline-flex items-center gap-2 border border-black/10 rounded-full px-4 py-2 text-[11px] text-black/50"
+              className="inline-flex items-center gap-2 border border-[#0B1F3A]/10 rounded-full px-4 py-2 text-[11px] text-[#475569]"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55, duration: 0.4 }}>
-              <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500"
-                animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"] }}
+              <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
+                animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,.5)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"] }}
                 transition={{ duration: 1.8, repeat: Infinity }} />
               54 specialists · {openings.length} open roles
             </motion.div>
@@ -188,22 +188,22 @@ export function CareersPage() {
       </section>
 
       {/* ── Why Join Us ── */}
-      <section className="py-24 px-4 bg-black/[0.02] border-t border-b border-black/10">
+      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-start">
           <div>
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Why Join Us
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight mb-6"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight mb-6"
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Specialist depth, senior colleagues, real accountability.
+              Specialist depth, senior colleagues, <span className="text-[#1A73E8]">real accountability.</span>
             </motion.h2>
-            <motion.p className="text-base text-black/60 leading-relaxed"
+            <motion.p className="text-base text-[#475569] leading-relaxed"
               variants={fadeUpLarge} custom={0.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               We are 54 specialists. That means you are not one of a thousand — you are one of a team where your work is visible, your ideas are heard, and your growth has room.
             </motion.p>
-            <motion.p className="text-base text-black/60 leading-relaxed mt-4"
+            <motion.p className="text-base text-[#475569] leading-relaxed mt-4"
               variants={fadeUpLarge} custom={0.18} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               The problems we work on are real, complex, and consequential. The people you work alongside have built careers on getting them right.
             </motion.p>
@@ -219,15 +219,15 @@ export function CareersPage() {
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-12">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Open Roles
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Current openings
+              Current <span className="text-[#1A73E8]">openings</span>
             </motion.h2>
-            <motion.p className="text-sm text-black/40 mt-3"
+            <motion.p className="text-sm text-[#0B1F3A]/40 mt-3"
               variants={fadeUp} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Roles below are illustrative — replace with live openings before launch.
             </motion.p>
@@ -238,10 +238,10 @@ export function CareersPage() {
             {openings.map((role, i) => <OpeningRow key={role.title} role={role} index={i} />)}
           </motion.div>
 
-          <motion.p className="text-sm text-black/40 mt-10"
+          <motion.p className="text-sm text-[#475569] mt-10"
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Don't see the right role? We are always interested in meeting exceptional integration and technology specialists.{" "}
-            <Link to="/contact" className="underline underline-offset-4 hover:text-black transition-colors">
+            <Link to="/contact" className="text-[#1A73E8] underline underline-offset-4 hover:text-[#155CC0] transition-colors">
               Get in touch
             </Link>
             .
@@ -250,16 +250,16 @@ export function CareersPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-4 border-t border-black/10">
+      <section className="py-24 px-4 border-t border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto text-center space-y-6">
-          <motion.h2 className="text-4xl font-normal text-black tracking-tight"
+          <motion.h2 className="text-4xl font-normal text-[#0B1F3A] tracking-tight"
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Ready to work with people who take the craft seriously?
+            Ready to work with people who <span className="text-[#1A73E8]">take the craft seriously?</span>
           </motion.h2>
           <motion.div variants={fadeUp} custom={0.15} initial="hidden" whileInView="visible" viewport={VIEWPORT}
             whileHover={{ y: -3 }} transition={{ duration: 0.18, ease: EASE }}>
-            <Link to="/contact" className="inline-block bg-black text-white px-6 py-2.5 text-sm rounded-md hover:bg-black/90 transition-colors"
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.18)"; }}
+            <Link to="/contact" className="inline-block bg-[#1A73E8] text-white px-6 py-2.5 text-sm rounded-md hover:bg-[#155CC0] transition-colors"
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(26,115,232,0.28)"; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
               Get in touch
             </Link>

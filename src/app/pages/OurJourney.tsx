@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useTransform, animate, useScroll, useSpring } from "motion/react";
+import { motion, useTransform, useScroll, useSpring } from "motion/react";
 import { Link } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
@@ -309,89 +309,26 @@ function TimelineSection() {
   );
 }
 
-// ─── Roadmap step card ────────────────────────────────────────────────────────
-function RoadmapStepCard({ item, hovered, setHovered, align }: {
-  item: typeof roadmap[0]; hovered: boolean; setHovered: (v: boolean) => void; align: "left" | "right";
-}) {
-  const glowX=useMotionValue(50),glowY=useMotionValue(50),glowOp=useMotionValue(0);
-  const glowBg=useTransform([glowX,glowY],([x,y])=>`radial-gradient(ellipse at ${x}% ${y}%, rgba(67,159,247,0.14) 0%, transparent 65%)`);
-  const onMove=(e:React.MouseEvent<HTMLDivElement>)=>{
-    const r=e.currentTarget.getBoundingClientRect();
-    glowX.set(((e.clientX-r.left)/r.width)*100);glowY.set(((e.clientY-r.top)/r.height)*100);
-    animate(glowOp,1,{duration:.25});
-  };
-  return (
-    <motion.div
-      className="rounded-2xl p-6 relative overflow-hidden cursor-default"
-      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", textAlign: align === "right" ? "right" : "left" }}
-      animate={{ y: hovered ? -3 : 0, borderColor: hovered ? "rgba(67,159,247,0.4)" : "rgba(255,255,255,0.1)" }}
-      transition={{ duration: 0.2, ease: EASE }}
-      onMouseEnter={() => setHovered(true)} onMouseMove={onMove}
-      onMouseLeave={() => { setHovered(false); animate(glowOp, 0, { duration: 0.3 }); }}>
-      <motion.div className="absolute inset-0 pointer-events-none rounded-2xl" style={{ opacity: glowOp, background: glowBg }} />
-      <div className="relative">
-        <h3 className="text-sm font-medium text-white mb-2">{item.label}</h3>
-        <p className="text-xs text-white/55 leading-relaxed">{item.desc}</p>
-        <motion.div className={`h-px mt-4 ${align === "right" ? "ml-auto origin-right" : "origin-left"}`}
-          style={{ background: "#439FF7", width: "100%" }}
-          animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} />
-      </div>
-    </motion.div>
-  );
-}
-
-// ─── Roadmap step (node + alternating card) ───────────────────────────────────
-function RoadmapStep({ item, index }: { item: typeof roadmap[0]; index: number }) {
-  const [hovered, setHovered] = useState(false);
-  const left = index % 2 === 0;
-  return (
-    <motion.div
-      className="relative md:grid md:grid-cols-[1fr_64px_1fr] md:gap-0 md:items-center"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.5 }}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}>
-
-      {/* LEFT slot */}
-      <div className="hidden md:block">
-        {left && <RoadmapStepCard item={item} hovered={hovered} setHovered={setHovered} align="right" />}
-      </div>
-
-      {/* CENTER node */}
-      <div className="hidden md:flex justify-center">
-        <motion.div
-          className="relative z-10 rounded-full flex items-center justify-center"
-          style={{ width: 44, height: 44, background: "#0B1F3A", border: "2px solid #439FF7" }}
-          animate={{ boxShadow: hovered ? "0 0 0 6px rgba(67,159,247,0.15), 0 0 18px rgba(67,159,247,0.4)" : "0 0 0 4px rgba(67,159,247,0.08)" }}
-          transition={{ duration: 0.25 }}>
-          <span className="text-[11px] font-semibold tabular-nums" style={{ color: "#439FF7" }}>{item.num}</span>
-        </motion.div>
-      </div>
-
-      {/* RIGHT slot */}
-      <div className="hidden md:block">
-        {!left && <RoadmapStepCard item={item} hovered={hovered} setHovered={setHovered} align="left" />}
-      </div>
-
-      {/* MOBILE — node + card row */}
-      <div className="md:hidden flex items-start gap-4">
-        <div className="rounded-full flex items-center justify-center flex-shrink-0 mt-1"
-          style={{ width: 40, height: 40, background: "#0B1F3A", border: "2px solid #439FF7" }}>
-          <span className="text-[11px] font-semibold tabular-nums" style={{ color: "#439FF7" }}>{item.num}</span>
-        </div>
-        <div className="flex-1">
-          <RoadmapStepCard item={item} hovered={hovered} setHovered={setHovered} align="left" />
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-// ─── Roadmap journey path section ─────────────────────────────────────────────
-function RoadmapPath() {
+// ─── Roadmap expanding accordion ──────────────────────────────────────────────
+// Stacked full-width rows on the dark band. The active row expands to reveal its
+// detail; others collapse to a slim bar. Hover to open, auto-advances on a timer.
+function RoadmapAccordion() {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.7"] });
-  const pathScale = useSpring(scrollYProgress, { stiffness: 70, damping: 22 });
+  const [active, setActive] = useState(0);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const obs = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.25 });
+    obs.observe(el); return () => obs.disconnect();
+  }, []);
+
+  // auto-advance while in view
+  useEffect(() => {
+    if (!inView) return;
+    const id = setInterval(() => setActive(a => (a + 1) % roadmap.length), 3400);
+    return () => clearInterval(id);
+  }, [inView]);
 
   return (
     <section ref={ref} className="py-28 px-4 relative overflow-hidden" style={{ background: "#0B1F3A" }}>
@@ -400,7 +337,7 @@ function RoadmapPath() {
       }} />
 
       <div className="max-w-5xl mx-auto relative" style={{ zIndex: 1 }}>
-        <div className="text-center max-w-2xl mx-auto mb-20">
+        <div className="max-w-2xl mb-16">
           <motion.p className="text-xs uppercase tracking-widest mb-4" style={{ color: "#439FF7" }}
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Pipeline & Roadmap
@@ -412,22 +349,76 @@ function RoadmapPath() {
           </motion.h2>
           <motion.p className="text-base text-white/55 mt-4 leading-relaxed"
             variants={fadeUpLarge} custom={.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Five initiatives in active development — the path forward, step by step.
+            Five initiatives in active development. Hover a row to open it.
           </motion.p>
         </div>
 
-        <div className="relative">
-          {/* path line, scroll-drawn */}
-          <div className="absolute left-[19px] md:left-1/2 md:-translate-x-1/2 top-2 bottom-2" style={{ width: 2 }}>
-            <div className="absolute inset-0" style={{ background: "rgba(255,255,255,0.1)" }} />
-            <motion.div className="absolute left-0 right-0 top-0 bottom-0 origin-top"
-              style={{ scaleY: pathScale, background: "linear-gradient(180deg,#439FF7,#1A73E8)" }} />
-          </div>
+        <motion.div className="space-y-3"
+          variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+          {roadmap.map((item, i) => {
+            const isActive = active === i;
+            return (
+              <motion.div key={item.num} variants={staggerItem}
+                className="rounded-2xl overflow-hidden cursor-pointer relative"
+                style={{ border: "1px solid rgba(255,255,255,0.1)" }}
+                animate={{
+                  backgroundColor: isActive ? "rgba(67,159,247,0.08)" : "rgba(255,255,255,0.03)",
+                  borderColor: isActive ? "rgba(67,159,247,0.4)" : "rgba(255,255,255,0.1)",
+                }}
+                transition={{ duration: 0.4, ease: EASE }}
+                onMouseEnter={() => setActive(i)}
+                onClick={() => setActive(i)}>
 
-          <div className="space-y-6">
-            {roadmap.map((item, i) => <RoadmapStep key={item.num} item={item} index={i} />)}
-          </div>
-        </div>
+                {/* left accent bar that grows when active */}
+                <motion.div className="absolute left-0 top-0 bottom-0 origin-top"
+                  style={{ width: 3, background: "linear-gradient(180deg,#439FF7,#1A73E8)" }}
+                  animate={{ scaleY: isActive ? 1 : 0 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} />
+
+                {/* header row — always visible */}
+                <div className="flex items-center gap-5 px-7 py-5">
+                  <motion.span className="text-2xl font-light tabular-nums flex-shrink-0"
+                    style={{ letterSpacing: "-.02em" }}
+                    animate={{ color: isActive ? "#439FF7" : "rgba(67,159,247,0.4)" }}
+                    transition={{ duration: 0.3 }}>
+                    {item.num}
+                  </motion.span>
+                  <motion.h3 className="text-base md:text-lg font-medium flex-1 leading-snug"
+                    animate={{ color: isActive ? "#fff" : "rgba(255,255,255,0.65)" }}
+                    transition={{ duration: 0.3 }}>
+                    {item.label}
+                  </motion.h3>
+                  {/* chevron / plus indicator */}
+                  <motion.div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
+                    style={{ border: "1px solid rgba(67,159,247,0.3)" }}
+                    animate={{
+                      rotate: isActive ? 90 : 0,
+                      backgroundColor: isActive ? "rgba(67,159,247,0.15)" : "transparent",
+                    }}
+                    transition={{ duration: 0.3 }}>
+                    <span className="text-sm" style={{ color: "#439FF7" }}>›</span>
+                  </motion.div>
+                </div>
+
+                {/* expanding body */}
+                <motion.div initial={false}
+                  animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
+                  transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ overflow: "hidden" }}>
+                  <div className="px-7 pb-6 pl-[68px]">
+                    <p className="text-sm text-white/60 leading-relaxed max-w-2xl">{item.desc}</p>
+                    {/* progress shimmer line */}
+                    <div className="mt-4 h-px max-w-md" style={{ background: "rgba(255,255,255,0.1)", overflow: "hidden" }}>
+                      <motion.div className="h-full origin-left" style={{ background: "#439FF7" }}
+                        initial={{ scaleX: 0 }} animate={{ scaleX: isActive ? 1 : 0 }}
+                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} />
+                    </div>
+                  </div>
+                </motion.div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );
@@ -574,8 +565,8 @@ export function OurJourneyPage() {
       {/* ── Journey timeline — SHOWPIECE ── */}
       <TimelineSection />
 
-      {/* ── Roadmap — animated journey path ── */}
-      <RoadmapPath />
+      {/* ── Roadmap — expanding accordion ── */}
+      <RoadmapAccordion />
 
       {/* ── CTA ── */}
       <section className="py-24 px-4 border-t border-[#0B1F3A]/10">

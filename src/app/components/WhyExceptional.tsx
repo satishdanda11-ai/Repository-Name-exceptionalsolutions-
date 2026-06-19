@@ -17,8 +17,8 @@ function ReasonCard({ icon: Icon, number, title, description, stat, statLabel }:
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        background: hov ? "#0B1F3A" : "#fff",
-        border: `1px solid ${hov ? "#0B1F3A" : "rgba(11,31,58,0.1)"}`,
+        background: hov ? "#1A73E8" : "#fff",
+        border: `1px solid ${hov ? "#1A73E8" : "rgba(11,31,58,0.1)"}`,
         borderRadius: 10, padding: "32px 28px", display: "flex", flexDirection: "column", gap: 0,
         cursor: "default", position: "relative", overflow: "hidden",
         transition: "background .28s ease, border-color .28s ease, box-shadow .28s ease",
