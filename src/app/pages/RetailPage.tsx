@@ -10,7 +10,7 @@ const challenges = [
 ];
 
 // ─── Retail hub-and-spoke canvas ─────────────────────────────────────────────
-// Suppliers (circles) LEFT → Brand Hub (large black circle) CENTER → Retailers (rounded rects) RIGHT
+// Suppliers (circles) LEFT → Brand Hub (large brand-blue circle) CENTER → Retailers (rounded rects) RIGHT
 // Hub has triple breathing rings + flash on packet arrival
 // Retailer rects flash briefly when a packet lands on them
 function RetailNetworkCanvas() {
@@ -59,8 +59,8 @@ function RetailNetworkCanvas() {
       // edges — slightly different dash for supplier→hub vs hub→retailer
       edges.forEach((e,i) => {
         const a=nodes[e.from], b=nodes[e.to];
-        ctx.globalAlpha = 0.07+Math.sin(t*0.02+i)*0.025;
-        ctx.strokeStyle="#111"; ctx.lineWidth=1;
+        ctx.globalAlpha = 0.08+Math.sin(t*0.02+i)*0.03;
+        ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
         // supplier→hub: shorter dash; hub→retailer: longer dash
         ctx.setLineDash(e.to===4 ? [3,10] : [5,7]);
         ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
@@ -81,11 +81,11 @@ function RetailNetworkCanvas() {
         // comet trail
         for (let i=1;i<=5;i++){
           const tt=Math.max(0,p.t-i*0.022);
-          ctx.globalAlpha=((5-i)/10)*0.32*fade; ctx.fillStyle="#111";
+          ctx.globalAlpha=((5-i)/10)*0.36*fade; ctx.fillStyle="#1A73E8";
           ctx.beginPath(); ctx.arc(a.x+(b.x-a.x)*tt,a.y+(b.y-a.y)*tt,Math.max(0.4,2.2-i*0.32),0,Math.PI*2); ctx.fill();
         }
-        ctx.globalAlpha=fade*0.88; ctx.fillStyle="#111";
-        ctx.shadowColor="#111"; ctx.shadowBlur=6;
+        ctx.globalAlpha=fade*0.9; ctx.fillStyle="#1A73E8";
+        ctx.shadowColor="#1A73E8"; ctx.shadowBlur=6;
         ctx.beginPath(); ctx.arc(x,y,3.2,0,Math.PI*2); ctx.fill();
         ctx.shadowBlur=0; ctx.globalAlpha=1;
         return true;
@@ -101,21 +101,21 @@ function RetailNetworkCanvas() {
           // Brand Hub — three concentric rings pulsing outward, dramatic presence
           const hubBreath = Math.sin(t*0.03+n.phase)*3;
           // ring 1
-          ctx.globalAlpha=0.12+Math.sin(t*0.03+n.phase)*0.05;
-          ctx.strokeStyle="#111"; ctx.lineWidth=1;
+          ctx.globalAlpha=0.14+Math.sin(t*0.03+n.phase)*0.05;
+          ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
           ctx.beginPath(); ctx.arc(n.x,n.y,30+hubBreath,0,Math.PI*2); ctx.stroke();
           // ring 2
-          ctx.globalAlpha=0.055+Math.sin(t*0.025+n.phase)*0.02;
+          ctx.globalAlpha=0.07+Math.sin(t*0.025+n.phase)*0.02;
           ctx.beginPath(); ctx.arc(n.x,n.y,42+hubBreath,0,Math.PI*2); ctx.stroke();
           // ring 3 (faintest, widest)
-          ctx.globalAlpha=0.025;
+          ctx.globalAlpha=0.035;
           ctx.beginPath(); ctx.arc(n.x,n.y,56+hubBreath,0,Math.PI*2); ctx.stroke();
           // fill
-          ctx.globalAlpha=1; ctx.fillStyle="#111"; ctx.lineWidth=1.5;
+          ctx.globalAlpha=1; ctx.fillStyle="#1A73E8"; ctx.lineWidth=1.5;
           ctx.beginPath(); ctx.arc(n.x,n.y,24,0,Math.PI*2); ctx.fill();
           // flash ring on packet arrival
           if (n.flash > 0) {
-            ctx.globalAlpha=flashAlpha; ctx.strokeStyle="#111"; ctx.lineWidth=2;
+            ctx.globalAlpha=flashAlpha; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=2;
             ctx.beginPath(); ctx.arc(n.x,n.y,30+(18-n.flash)*2,0,Math.PI*2); ctx.stroke();
           }
           ctx.globalAlpha=1;
@@ -126,25 +126,24 @@ function RetailNetworkCanvas() {
         } else if (n.shape === "retailer") {
           // Retailers — rounded rects (brand/store badge feel)
           // Flash: rect brightens briefly when a packet arrives
-          const glow = n.flash > 0 ? `rgba(0,0,0,${0.07+flashAlpha})` : "rgba(0,0,0,0.06)";
-          ctx.globalAlpha=0.07; ctx.strokeStyle="#111"; ctx.lineWidth=1;
+          ctx.globalAlpha=0.08; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
           ctx.beginPath(); (ctx as any).roundRect(n.x-25,n.y-14,50,28,4); ctx.stroke();
           ctx.globalAlpha=1;
           // flash fill on arrival
-          ctx.fillStyle=n.flash>0 ? `rgba(0,0,0,${flashAlpha})` : "#f9fafb";
-          ctx.strokeStyle="rgba(0,0,0,0.2)"; ctx.lineWidth=1.2;
+          ctx.fillStyle=n.flash>0 ? `rgba(26,115,232,${flashAlpha})` : "#F4F8FF";
+          ctx.strokeStyle="rgba(26,115,232,0.28)"; ctx.lineWidth=1.2;
           ctx.beginPath(); (ctx as any).roundRect(n.x-23,n.y-13,46,26,4); ctx.fill(); ctx.stroke();
-          ctx.fillStyle="rgba(0,0,0,0.72)"; ctx.font="500 8px system-ui";
+          ctx.fillStyle="rgba(11,31,58,0.72)"; ctx.font="500 8px system-ui";
           ctx.textAlign="center"; ctx.textBaseline="middle";
           ctx.fillText(n.label,n.x,n.y);
 
         } else {
           // Suppliers — breathing circles
-          ctx.globalAlpha=0.055; ctx.strokeStyle="#111"; ctx.lineWidth=1;
+          ctx.globalAlpha=0.06; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
           ctx.beginPath(); ctx.arc(n.x,n.y,22+breathe,0,Math.PI*2); ctx.stroke();
-          ctx.globalAlpha=1; ctx.fillStyle="#fff"; ctx.strokeStyle="rgba(0,0,0,0.18)"; ctx.lineWidth=1.2;
+          ctx.globalAlpha=1; ctx.fillStyle="#fff"; ctx.strokeStyle="rgba(26,115,232,0.2)"; ctx.lineWidth=1.2;
           ctx.beginPath(); ctx.arc(n.x,n.y,17,0,Math.PI*2); ctx.fill(); ctx.stroke();
-          ctx.fillStyle="rgba(0,0,0,0.65)"; ctx.font="500 7.5px system-ui";
+          ctx.fillStyle="rgba(11,31,58,0.65)"; ctx.font="500 7.5px system-ui";
           ctx.textAlign="center"; ctx.textBaseline="middle";
           ctx.fillText(n.label,n.x,n.y);
         }
@@ -172,12 +171,12 @@ function PeakBar({ month, val, peak=false }: { month:string; val:number; peak?:b
   },[val]);
   return (
     <div ref={ref} className="flex items-center gap-2.5">
-      <span className="text-[9px] text-black/38 w-6 text-right flex-shrink-0">{month}</span>
-      <div className="flex-1 h-2 bg-black/[0.05] rounded-full overflow-hidden">
+      <span className="text-[9px] text-[#0B1F3A]/38 w-6 text-right flex-shrink-0">{month}</span>
+      <div className="flex-1 h-2 bg-[#1A73E8]/[0.08] rounded-full overflow-hidden">
         <div className="h-full rounded-full transition-all duration-700 ease-out"
-          style={{ width:`${w}%`, background: peak ? "#111" : "rgba(0,0,0,0.25)" }} />
+          style={{ width:`${w}%`, background: peak ? "#1A73E8" : "rgba(26,115,232,0.35)" }} />
       </div>
-      {peak && <span className="text-[8px] text-black/50 flex-shrink-0 font-medium">Peak</span>}
+      {peak && <span className="text-[8px] text-[#1A73E8] flex-shrink-0 font-medium">Peak</span>}
     </div>
   );
 }
@@ -194,7 +193,7 @@ function RetailMetricsBar() {
   },[]);
 
   return (
-    <motion.div className="inline-flex items-center gap-5 border border-black/10 rounded-lg px-5 py-3"
+    <motion.div className="inline-flex items-center gap-5 border border-[#0B1F3A]/10 rounded-lg px-5 py-3"
       initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.7,duration:.4}}>
       {[
         {val:orders.toLocaleString(), lbl:"Orders today"},
@@ -202,16 +201,16 @@ function RetailMetricsBar() {
         {val:`${chargebacks}%`,        lbl:"Chargeback rate"},
       ].map((m,i)=>(
         <div key={m.lbl} className="flex items-center gap-4">
-          {i>0 && <div className="w-px h-6 bg-black/10" />}
+          {i>0 && <div className="w-px h-6 bg-[#0B1F3A]/10" />}
           <div>
-            <div className="text-base font-medium text-black tabular-nums">{m.val}</div>
-            <div className="text-[9px] text-black/38 uppercase tracking-wide mt-0.5">{m.lbl}</div>
+            <div className="text-base font-medium text-[#0B1F3A] tabular-nums">{m.val}</div>
+            <div className="text-[9px] text-[#0B1F3A]/38 uppercase tracking-wide mt-0.5">{m.lbl}</div>
           </div>
         </div>
       ))}
-      <div className="w-px h-6 bg-black/10" />
-      <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"
-        animate={{boxShadow:["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"]}}
+      <div className="w-px h-6 bg-[#0B1F3A]/10" />
+      <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981] flex-shrink-0"
+        animate={{boxShadow:["0 0 0 0px rgba(16,185,129,.5)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"]}}
         transition={{duration:1.8,repeat:Infinity}} />
     </motion.div>
   );
@@ -240,8 +239,8 @@ function ChallengeRow({ label, desc, index }: { label:string; desc:string; index
         pk.p+=pk.spd;if(pk.p>1)pk.p=0;
         const x=pk.p*canvas.width;
         const fade=pk.p<0.05?pk.p/0.05:pk.p>0.9?(1-pk.p)/0.1:1;
-        ctx.globalAlpha=fade*0.5;ctx.fillStyle="#111";
-        ctx.shadowColor="#111";ctx.shadowBlur=4;
+        ctx.globalAlpha=fade*0.55;ctx.fillStyle="#1A73E8";
+        ctx.shadowColor="#1A73E8";ctx.shadowBlur=4;
         ctx.beginPath();ctx.arc(x,canvas.height/2,2.5,0,Math.PI*2);ctx.fill();
         ctx.shadowBlur=0;ctx.globalAlpha=1;
         return pk;
@@ -254,28 +253,28 @@ function ChallengeRow({ label, desc, index }: { label:string; desc:string; index
 
   return (
     <motion.div ref={rowRef} variants={staggerItem}
-      className="grid md:grid-cols-12 gap-6 py-10 border-b border-black/10 relative overflow-hidden cursor-default"
+      className="grid md:grid-cols-12 gap-6 py-10 border-b border-[#0B1F3A]/10 relative overflow-hidden cursor-default"
       onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
-      <motion.div className="absolute inset-0 bg-black/[0.018]" initial={{scaleX:0,originX:0}}
+      <motion.div className="absolute inset-0 bg-[#1A73E8]/[0.02]" initial={{scaleX:0,originX:0}}
         animate={{scaleX:hovered?1:0}} transition={{duration:.35,ease:[.16,1,.3,1]}} />
-      <div className="absolute bottom-0 left-0 right-0" style={{height:2,background:"rgba(0,0,0,0.05)",overflow:"hidden"}}>
+      <div className="absolute bottom-0 left-0 right-0" style={{height:2,background:"rgba(26,115,232,0.05)",overflow:"hidden"}}>
         <canvas ref={canvasRef} className="absolute top-0 left-0" />
       </div>
       <div className="md:col-span-1 pt-1 relative">
         <motion.span className="text-xs font-medium"
-          animate={{color:hovered?"#111827":"rgba(0,0,0,0.2)"}} transition={{duration:.2}}>
+          animate={{color:hovered?"#1A73E8":"rgba(26,115,232,0.35)"}} transition={{duration:.2}}>
           0{index+1}
         </motion.span>
       </div>
       <div className="md:col-span-3 relative">
-        <h3 className="text-base font-medium text-black">{label}</h3>
-        <div className="mt-2 h-px w-full bg-black/[0.08] overflow-hidden">
-          <motion.div className="h-full bg-black origin-left"
+        <h3 className="text-base font-medium text-[#0B1F3A]">{label}</h3>
+        <div className="mt-2 h-px w-full bg-[#0B1F3A]/[0.08] overflow-hidden">
+          <motion.div className="h-full bg-[#1A73E8] origin-left"
             animate={{scaleX:hovered?1:0}} transition={{duration:.5,ease:[.16,1,.3,1]}} />
         </div>
       </div>
       <div className="md:col-span-8 relative">
-        <p className="text-sm text-black/60 leading-relaxed">{desc}</p>
+        <p className="text-sm text-[#475569] leading-relaxed">{desc}</p>
       </div>
     </motion.div>
   );
@@ -303,20 +302,20 @@ function OrderTicker() {
     return ()=>{clearInterval(t1);clearInterval(t2);};
   },[]);
   return (
-    <div className="mt-8 bg-white border border-black/10 rounded-lg px-6 py-5">
+    <div className="mt-8 bg-white border border-[#0B1F3A]/10 rounded-lg px-6 py-5">
       <div className="flex items-center justify-between mb-4">
-        <p className="text-[9px] text-black/35 uppercase tracking-widest">Live order stream</p>
-        <div className="flex items-center gap-1.5 text-[9px] text-black/38">
-          <motion.span className="w-1 h-1 rounded-full bg-green-500"
-            animate={{boxShadow:["0 0 0 0px rgba(34,197,94,.5)","0 0 0 3px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"]}}
+        <p className="text-[9px] text-[#0B1F3A]/35 uppercase tracking-widest">Live order stream</p>
+        <div className="flex items-center gap-1.5 text-[9px] text-[#0B1F3A]/38">
+          <motion.span className="w-1 h-1 rounded-full bg-[#10B981]"
+            animate={{boxShadow:["0 0 0 0px rgba(16,185,129,.5)","0 0 0 3px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"]}}
             transition={{duration:1.8,repeat:Infinity}} />
           {count.toLocaleString()} today
         </div>
       </div>
-      <div className="flex items-center gap-2 bg-black/[0.03] rounded-md px-3 py-2">
-        <motion.span className="w-1 h-1 rounded-full bg-black/40 flex-shrink-0"
+      <div className="flex items-center gap-2 bg-[#1A73E8]/[0.04] rounded-md px-3 py-2">
+        <motion.span className="w-1 h-1 rounded-full bg-[#1A73E8] flex-shrink-0"
           animate={{opacity:[1,.3,1]}} transition={{duration:.9,repeat:Infinity}} />
-        <span className="text-xs text-black/55 font-mono"
+        <span className="text-xs text-[#475569] font-mono"
           style={{opacity:vis?1:0,transition:"opacity 0.2s"}}>
           {messages[idx]}
         </span>
@@ -329,7 +328,7 @@ function OrderTicker() {
 function MetricCard({ metric, label }: { metric:string; label:string }) {
   const [hovered,setHovered]=useState(false);
   const glowX=useMotionValue(50),glowY=useMotionValue(50),glowOp=useMotionValue(0);
-  const glowBg=useTransform([glowX,glowY],([x,y])=>`radial-gradient(ellipse at ${x}% ${y}%, rgba(0,0,0,0.04) 0%, transparent 65%)`);
+  const glowBg=useTransform([glowX,glowY],([x,y])=>`radial-gradient(ellipse at ${x}% ${y}%, rgba(26,115,232,0.05) 0%, transparent 65%)`);
   const shimX=useMotionValue(-100);
   const shimT=useTransform(shimX,v=>`${v}%`);
   const onMove=(e:React.MouseEvent<HTMLDivElement>)=>{
@@ -344,25 +343,25 @@ function MetricCard({ metric, label }: { metric:string; label:string }) {
   const onLeave=()=>{setHovered(false);animate(glowOp,0,{duration:.3});};
   return (
     <motion.div variants={staggerItem}
-      className="border border-black/10 rounded-lg p-6 bg-white flex items-center gap-4 relative overflow-hidden cursor-default"
-      whileHover={{y:-3,borderColor:"rgba(0,0,0,0.22)",boxShadow:"0 8px 28px rgba(0,0,0,0.07)",transition:{duration:.18,ease:EASE}}}
+      className="border border-[#0B1F3A]/10 rounded-lg p-6 bg-white flex items-center gap-4 relative overflow-hidden cursor-default"
+      whileHover={{y:-3,borderColor:"rgba(26,115,232,0.3)",boxShadow:"0 8px 28px rgba(26,115,232,0.1)",transition:{duration:.18,ease:EASE}}}
       onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
       <motion.div className="absolute inset-0 pointer-events-none rounded-lg" style={{opacity:glowOp,background:glowBg}} />
       <motion.div className="absolute top-0 pointer-events-none"
-        style={{left:0,width:"55%",height:1,background:"linear-gradient(90deg,transparent,rgba(0,0,0,0.28),transparent)",x:shimT}} />
+        style={{left:0,width:"55%",height:1,background:"linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)",x:shimT}} />
       <motion.div className="absolute top-0 left-0 right-0 h-px"
-        style={{background:"linear-gradient(90deg,transparent,rgba(0,0,0,0.18),transparent)"}}
+        style={{background:"linear-gradient(90deg,transparent,rgba(26,115,232,0.35),transparent)"}}
         animate={{opacity:hovered?1:0}} transition={{duration:.2}} />
-      <motion.div className="text-2xl font-light text-black w-24 flex-shrink-0 tabular-nums"
+      <motion.div className="text-2xl font-light text-[#1A73E8] w-24 flex-shrink-0 tabular-nums"
         animate={{scale:hovered?1.06:1}} transition={{duration:.2}}>
         {metric}
       </motion.div>
       <div className="flex-1 relative">
-        <motion.div className="text-sm text-black/60"
-          animate={{color:hovered?"rgba(0,0,0,0.85)":"rgba(0,0,0,0.6)"}} transition={{duration:.2}}>
+        <motion.div className="text-sm text-[#475569]"
+          animate={{color:hovered?"#0B1F3A":"rgba(71,85,105,1)"}} transition={{duration:.2}}>
           {label}
         </motion.div>
-        <motion.div className="mt-2 h-px bg-black origin-left"
+        <motion.div className="mt-2 h-px bg-[#1A73E8] origin-left"
           animate={{scaleX:hovered?1:0}} transition={{duration:.4,ease:[.16,1,.3,1]}} />
       </div>
     </motion.div>
@@ -380,15 +379,15 @@ export function RetailPage() {
 
             {/* LEFT */}
             <div className="space-y-6">
-              <motion.p className="text-xs text-black/40 uppercase tracking-wide"
+              <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide"
                 initial={{opacity:0}} animate={{opacity:1}} transition={{duration:.4,ease:EASE,delay:.05}}>
                 Retail & CPG
               </motion.p>
-              <motion.h1 className="text-5xl md:text-6xl font-normal text-black leading-tight tracking-tight"
+              <motion.h1 className="text-5xl md:text-6xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
                 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.55,ease:EASE,delay:.15}}>
-                When a trading partner mandates it, you have to be ready.
+                When a trading partner mandates it, <span className="text-[#1A73E8]">you have to be ready.</span>
               </motion.h1>
-              <motion.p className="text-lg text-black/60 leading-relaxed"
+              <motion.p className="text-lg text-[#475569] leading-relaxed"
                 initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{duration:.5,ease:EASE,delay:.3}}>
                 Retail and consumer goods run on EDI — high partner volumes, strict retailer mandates, and unforgiving peak seasons. We keep that machine running.
               </motion.p>
@@ -397,14 +396,14 @@ export function RetailPage() {
                 initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} transition={{duration:.45,ease:EASE,delay:.45}}>
                 <motion.div whileHover={{y:-3}} transition={{duration:.18,ease:EASE}}>
                   <Link to="/services/edi-b2b-integration"
-                    className="block bg-black text-white px-6 py-2.5 text-sm rounded-md hover:bg-black/90 transition-colors"
-                    onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(0,0,0,0.18)";}}
+                    className="block bg-[#1A73E8] text-white px-6 py-2.5 text-sm rounded-md hover:bg-[#155CC0] transition-colors"
+                    onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(26,115,232,0.28)";}}
                     onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.boxShadow="none";}}>
                     Explore EDI & B2B Integration
                   </Link>
                 </motion.div>
                 <motion.div whileHover={{y:-3}} transition={{duration:.18,ease:EASE}}>
-                  <Link to="/contact" className="block border border-black/20 text-black px-6 py-2.5 text-sm rounded-md hover:bg-black/[0.03] transition-colors">
+                  <Link to="/contact" className="block border border-[#1A73E8]/30 text-[#1A73E8] px-6 py-2.5 text-sm rounded-md hover:bg-[#1A73E8]/[0.05] transition-colors">
                     Book an EDI health assessment
                   </Link>
                 </motion.div>
@@ -413,15 +412,15 @@ export function RetailPage() {
 
             {/* RIGHT — hub-and-spoke diagram */}
             <motion.div
-              className="hidden md:block bg-white border border-black/10 rounded-xl overflow-hidden"
+              className="hidden md:block bg-white border border-[#0B1F3A]/10 rounded-xl overflow-hidden"
               style={{height:420}}
               initial={{opacity:0,x:24}} animate={{opacity:1,x:0}}
               transition={{duration:.7,ease:EASE,delay:.35}}>
-              <div className="px-5 py-3 border-b border-black/[0.07] flex items-center justify-between">
-                <span className="text-[9px] text-black/35 uppercase tracking-widest">Partner network</span>
-                <div className="flex items-center gap-1.5 text-[9px] text-black/38">
-                  <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500"
-                    animate={{boxShadow:["0 0 0 0px rgba(34,197,94,.5)","0 0 0 3px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"]}}
+              <div className="px-5 py-3 border-b border-[#0B1F3A]/[0.07] flex items-center justify-between">
+                <span className="text-[9px] text-[#1A73E8] uppercase tracking-widest">Partner network</span>
+                <div className="flex items-center gap-1.5 text-[9px] text-[#0B1F3A]/38">
+                  <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
+                    animate={{boxShadow:["0 0 0 0px rgba(16,185,129,.5)","0 0 0 3px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"]}}
                     transition={{duration:1.8,repeat:Infinity}} />
                   Live
                 </div>
@@ -436,16 +435,16 @@ export function RetailPage() {
       </section>
 
       {/* ── Challenges ── */}
-      <section className="py-24 px-4 bg-black/[0.02] border-t border-b border-black/10">
+      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-12">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               The Integration Challenges
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Where retail integration breaks — and costs you.
+              Where retail integration breaks — <span className="text-[#1A73E8]">and costs you.</span>
             </motion.h2>
           </div>
           <motion.div className="space-y-0" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
@@ -458,15 +457,15 @@ export function RetailPage() {
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-start">
           <div>
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               How We Help
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight mb-6"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight mb-6"
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Protecting revenue when it matters most.
+              Protecting revenue <span className="text-[#1A73E8]">when it matters most.</span>
             </motion.h2>
-            <motion.p className="text-base text-black/60 leading-relaxed"
+            <motion.p className="text-base text-[#475569] leading-relaxed"
               variants={fadeUpLarge} custom={0.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               We onboard partners fast, cut transaction errors that drive chargebacks, and make sure your integration scales through peak without drama. The result: revenue protected when the pressure is highest.
             </motion.p>
@@ -475,9 +474,9 @@ export function RetailPage() {
             </motion.div>
 
             {/* peak-season volume bars — scroll-animate in */}
-            <motion.div className="mt-8 bg-white border border-black/10 rounded-lg px-6 py-5 space-y-2"
+            <motion.div className="mt-8 bg-white border border-[#0B1F3A]/10 rounded-lg px-6 py-5 space-y-2"
               variants={fadeUp} custom={0.28} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              <p className="text-[9px] text-black/35 uppercase tracking-widest mb-4">Volume by month</p>
+              <p className="text-[9px] text-[#0B1F3A]/35 uppercase tracking-widest mb-4">Volume by month</p>
               {[
                 {m:"Mar",v:42},  {m:"Jun",v:55}, {m:"Sep",v:60},
                 {m:"Oct",v:72},  {m:"Nov",v:100,peak:true}, {m:"Dec",v:92,peak:true},
@@ -497,27 +496,27 @@ export function RetailPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-4 border-t border-black/10">
+      <section className="py-24 px-4 border-t border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto text-center space-y-6">
-          <motion.h2 className="text-4xl font-normal text-black tracking-tight"
+          <motion.h2 className="text-4xl font-normal text-[#0B1F3A] tracking-tight"
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Ready to protect your retail integration?
+            Ready to protect <span className="text-[#1A73E8]">your retail integration?</span>
           </motion.h2>
-          <motion.p className="text-base text-black/60 max-w-xl mx-auto leading-relaxed"
+          <motion.p className="text-base text-[#475569] max-w-xl mx-auto leading-relaxed"
             variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Book a no-obligation EDI health assessment. We review your current estate and give you a clear, honest picture of what's at risk.
           </motion.p>
           <motion.div className="flex flex-wrap justify-center gap-3"
             variants={fadeUp} custom={0.2} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             <motion.div whileHover={{y:-3}} transition={{duration:.18,ease:EASE}}>
-              <Link to="/contact" className="block bg-black text-white px-6 py-2.5 text-sm rounded-md hover:bg-black/90 transition-colors"
-                onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(0,0,0,0.18)";}}
+              <Link to="/contact" className="block bg-[#1A73E8] text-white px-6 py-2.5 text-sm rounded-md hover:bg-[#155CC0] transition-colors"
+                onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(26,115,232,0.28)";}}
                 onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.boxShadow="none";}}>
                 Book an EDI health assessment
               </Link>
             </motion.div>
             <motion.div whileHover={{y:-3}} transition={{duration:.18,ease:EASE}}>
-              <Link to="/services/edi-b2b-integration" className="block border border-black/20 text-black px-6 py-2.5 text-sm rounded-md hover:bg-black/[0.03] transition-colors">
+              <Link to="/services/edi-b2b-integration" className="block border border-[#1A73E8]/30 text-[#1A73E8] px-6 py-2.5 text-sm rounded-md hover:bg-[#1A73E8]/[0.05] transition-colors">
                 Explore EDI & B2B Integration
               </Link>
             </motion.div>

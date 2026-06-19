@@ -6,6 +6,7 @@ import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } fr
 // ─── Brand tokens ─────────────────────────────────────────────────────────────
 const NAVY        = "#0B1F3A";
 const BLUE        = "#1A73E8";
+const BLUE_HOVER  = "#155CC0";
 const BLUE_LIGHT  = "#A1CFFB";
 const BLUE_TINT   = "#F4F8FF";
 const BLUE_HEADER = "#EBF3FE";
@@ -170,7 +171,7 @@ function HealthcareCanvas() {
           ctx.globalAlpha = 1; ctx.fillStyle = "#fff"; ctx.strokeStyle = BLUE_BORDER; ctx.lineWidth = 1.2;
           ctx.beginPath(); ctx.arc(n.x, n.y, 16, 0, Math.PI*2); ctx.fill(); ctx.stroke();
           // Online dot
-          ctx.fillStyle = "#22c55e";
+          ctx.fillStyle = "#10B981";
           ctx.beginPath(); ctx.arc(n.x+10, n.y-10, 3.5, 0, Math.PI*2); ctx.fill();
           ctx.fillStyle = NAVY; ctx.font = "500 7.5px system-ui";
           ctx.textAlign = "center"; ctx.textBaseline = "middle";
@@ -212,15 +213,15 @@ function HealthcareMetricsBar() {
         <div key={m.lbl} className="flex items-center gap-4">
           {i > 0 && <div className="w-px h-6" style={{ background: NAVY_12 }} />}
           <div>
-            <div className="text-base font-semibold tabular-nums" style={{ color: NAVY }}>{m.val}</div>
+            <div className="text-base font-medium tabular-nums" style={{ color: NAVY }}>{m.val}</div>
             <div className="text-[9px] uppercase tracking-wide mt-0.5" style={{ color: NAVY_42 }}>{m.lbl}</div>
           </div>
         </div>
       ))}
       <div className="w-px h-6" style={{ background: NAVY_12 }} />
       <motion.span
-        className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"
-        animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,0.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,0.5)"] }}
+        className="w-1.5 h-1.5 rounded-full bg-[#10B981] flex-shrink-0"
+        animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,0.5)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,0.5)"] }}
         transition={{ duration: 1.8, repeat: Infinity }} />
     </motion.div>
   );
@@ -248,7 +249,7 @@ function ComplianceBadges() {
               <motion.div
                 className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
                 style={{ border: `1px solid ${BLUE_BORDER}` }}
-                whileInView={{ background: [BLUE_TINT, NAVY], borderColor: [BLUE_BORDER, NAVY] }}
+                whileInView={{ background: [BLUE_TINT, BLUE], borderColor: [BLUE_BORDER, BLUE] }}
                 viewport={VIEWPORT}
                 transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}>
                 <motion.span
@@ -300,8 +301,8 @@ function ClaimsTicker() {
         </p>
         <div className="flex items-center gap-1.5 text-[9px]" style={{ color: NAVY_42 }}>
           <motion.span
-            className="w-1 h-1 rounded-full bg-green-500"
-            animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,0.5)","0 0 0 3px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,0.5)"] }}
+            className="w-1 h-1 rounded-full bg-[#10B981]"
+            animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,0.5)","0 0 0 3px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,0.5)"] }}
             transition={{ duration: 1.8, repeat: Infinity }} />
           {count.toLocaleString()} today
         </div>
@@ -376,14 +377,14 @@ function ChallengeRow({ label, desc, index }: { label: string; desc: string; ind
       </div>
       <div className="md:col-span-1 pt-1 relative">
         <motion.span
-          className="text-xs font-semibold"
+          className="text-xs font-medium"
           animate={{ color: hovered ? BLUE : NAVY_42 }}
           transition={{ duration: 0.2 }}>
           0{index + 1}
         </motion.span>
       </div>
       <div className="md:col-span-3 relative">
-        <h3 className="text-base font-semibold" style={{ color: NAVY }}>{label}</h3>
+        <h3 className="text-base font-medium" style={{ color: NAVY }}>{label}</h3>
         <div className="mt-2 h-px w-full overflow-hidden" style={{ background: BLUE_BORDER }}>
           <motion.div
             className="h-full origin-left"
@@ -456,18 +457,18 @@ export function HealthcarePage() {
             {/* LEFT */}
             <div className="space-y-6">
               <motion.p
-                className="text-xs font-semibold uppercase tracking-widest"
+                className="text-xs uppercase tracking-widest"
                 style={{ color: BLUE }}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 transition={{ duration: 0.4, ease: EASE, delay: 0.05 }}>
                 Healthcare
               </motion.p>
               <motion.h1
-                className="text-5xl md:text-6xl font-semibold leading-tight tracking-tight"
+                className="text-5xl md:text-6xl font-normal leading-tight tracking-tight"
                 style={{ color: NAVY }}
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, ease: EASE, delay: 0.15 }}>
-                Secure, compliant data exchange — with no room for error.
+                Secure, compliant data exchange — <span style={{ color: BLUE }}>with no room for error.</span>
               </motion.h1>
               <motion.p
                 className="text-lg leading-relaxed"
@@ -489,7 +490,7 @@ export function HealthcarePage() {
                     className="block text-white px-6 py-2.5 text-sm rounded-md transition-colors"
                     style={{ background: BLUE }}
                     onMouseEnter={e => {
-                      (e.currentTarget as HTMLElement).style.background = "#155CC8";
+                      (e.currentTarget as HTMLElement).style.background = BLUE_HOVER;
                       (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(26,115,232,0.32)";
                     }}
                     onMouseLeave={e => {
@@ -521,7 +522,7 @@ export function HealthcarePage() {
               <div
                 className="px-5 py-3 border-b flex items-center justify-between"
                 style={{ borderColor: BLUE_BORDER, background: BLUE_HEADER }}>
-                <span className="text-[9px] uppercase tracking-widest font-semibold" style={{ color: BLUE }}>
+                <span className="text-[9px] uppercase tracking-widest font-medium" style={{ color: BLUE }}>
                   Secure exchange network
                 </span>
                 <div className="flex items-center gap-2 text-[9px]" style={{ color: NAVY_42 }}>
@@ -529,8 +530,8 @@ export function HealthcarePage() {
                   <span>Encrypted</span>
                   <div className="w-px h-3" style={{ background: NAVY_12 }} />
                   <motion.span
-                    className="w-1.5 h-1.5 rounded-full bg-green-500"
-                    animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,0.5)","0 0 0 3px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,0.5)"] }}
+                    className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
+                    animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,0.5)","0 0 0 3px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,0.5)"] }}
                     transition={{ duration: 1.8, repeat: Infinity }} />
                   Live
                 </div>
@@ -552,16 +553,16 @@ export function HealthcarePage() {
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-12">
             <motion.p
-              className="text-xs font-semibold uppercase tracking-widest mb-4"
+              className="text-xs uppercase tracking-widest mb-4"
               style={{ color: BLUE }}
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               The Integration Challenges
             </motion.p>
             <motion.h2
-              className="text-4xl font-semibold leading-tight tracking-tight"
+              className="text-4xl font-normal leading-tight tracking-tight"
               style={{ color: NAVY }}
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Why healthcare integration demands a specialist.
+              Why healthcare integration <span style={{ color: BLUE }}>demands a specialist.</span>
             </motion.h2>
           </div>
           <motion.div
@@ -579,16 +580,16 @@ export function HealthcarePage() {
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-start">
           <div>
             <motion.p
-              className="text-xs font-semibold uppercase tracking-widest mb-4"
+              className="text-xs uppercase tracking-widest mb-4"
               style={{ color: BLUE }}
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               How We Help
             </motion.p>
             <motion.h2
-              className="text-4xl font-semibold leading-tight tracking-tight mb-6"
+              className="text-4xl font-normal leading-tight tracking-tight mb-6"
               style={{ color: NAVY }}
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Compliant, secure, and reliable — by design.
+              Compliant, secure, and reliable — <span style={{ color: BLUE }}>by design.</span>
             </motion.h2>
             <motion.p
               className="text-base leading-relaxed"
@@ -614,10 +615,10 @@ export function HealthcarePage() {
       <section className="py-24 px-4 bg-white">
         <div className="max-w-6xl mx-auto text-center space-y-6">
           <motion.h2
-            className="text-4xl font-semibold tracking-tight"
+            className="text-4xl font-normal tracking-tight"
             style={{ color: NAVY }}
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Is your healthcare integration meeting the standard?
+            Is your healthcare integration <span style={{ color: BLUE }}>meeting the standard?</span>
           </motion.h2>
           <motion.p
             className="text-base max-w-xl mx-auto leading-relaxed"
@@ -634,7 +635,7 @@ export function HealthcarePage() {
                 className="block text-white px-6 py-2.5 text-sm rounded-md transition-colors"
                 style={{ background: BLUE }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.background = "#155CC8";
+                  (e.currentTarget as HTMLElement).style.background = BLUE_HOVER;
                   (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(26,115,232,0.32)";
                 }}
                 onMouseLeave={e => {

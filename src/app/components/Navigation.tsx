@@ -65,7 +65,7 @@ const navItems: NavItem[] = [
     label: "Company", category: "COMPANY",
     items: [
       { icon: <Building2  className={ICON_CLS} style={iconStyle} />, label: "About Us",    desc: "Integration specialists, evolving with intent since 2019", path: "/company/about" },
-      { icon: <UserCheck  className={ICON_CLS} style={iconStyle} />, label: "Leadership",  desc: "Senior people accountable for your success",               path: "/company/leadership" },
+      // { icon: <UserCheck  className={ICON_CLS} style={iconStyle} />, label: "Leadership",  desc: "Senior people accountable for your success",               path: "/company/leadership" },
       { icon: <Briefcase  className={ICON_CLS} style={iconStyle} />, label: "Careers",     desc: "Do specialist work with people who take it seriously",      path: "/company/careers" },
     ],
   },

@@ -16,7 +16,7 @@ const howWeHelp = [
 ];
 
 // ─── Logistics journey canvas — strict LEFT→RIGHT shipment flow ───────────────
-// Warehouse (black rect) → TMS Hub (circle + rings) → Carriers (diamonds) → Customers (circles + green dot)
+// Warehouse (navy rect) → TMS Hub (circle + rings) → Carriers (diamonds) → Customers (circles + green dot)
 function LogisticsNetworkCanvas() {
   const ref = useRef<HTMLCanvasElement>(null);
 
@@ -35,7 +35,7 @@ function LogisticsNetworkCanvas() {
     // Strict left → right: Warehouse → TMS Hub → 3 Carriers → 3 Customers
     const LABELS = ["Warehouse", "TMS\nHub", "Carrier A", "3PL", "Carrier B", "Customer\nA", "Customer\nB", "Customer\nC"];
     const REL: [number, number][] = [
-      [0.10, 0.50], // Warehouse — origin LEFT (black rect)
+      [0.10, 0.50], // Warehouse — origin LEFT (navy rect)
       [0.38, 0.50], // TMS Hub  — center (large circle, double rings)
       [0.66, 0.20], // Carrier A — upper mid-right (diamond)
       [0.66, 0.50], // 3PL       — mid-right (diamond)
@@ -71,8 +71,8 @@ function LogisticsNetworkCanvas() {
       // edges — dashed to suggest data in transit
       edges.forEach((e, i) => {
         const a = nodes[e.from], b = nodes[e.to];
-        ctx.globalAlpha = 0.07 + Math.sin(t * 0.02 + i) * 0.025;
-        ctx.strokeStyle = "#111"; ctx.lineWidth = 1; ctx.setLineDash([4, 8]);
+        ctx.globalAlpha = 0.08 + Math.sin(t * 0.02 + i) * 0.03;
+        ctx.strokeStyle = "#1A73E8"; ctx.lineWidth = 1; ctx.setLineDash([4, 8]);
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         ctx.setLineDash([]);
       });
@@ -86,11 +86,11 @@ function LogisticsNetworkCanvas() {
         const fade = p.t < 0.08 ? p.t / 0.08 : p.t > 0.88 ? (1 - p.t) / 0.12 : 1;
         for (let i = 1; i <= 5; i++) {
           const tt = Math.max(0, p.t - i * 0.02);
-          ctx.globalAlpha = ((5-i)/10)*0.3*fade; ctx.fillStyle = "#111";
+          ctx.globalAlpha = ((5-i)/10)*0.35*fade; ctx.fillStyle = "#1A73E8";
           ctx.beginPath(); ctx.arc(a.x+(b.x-a.x)*tt, a.y+(b.y-a.y)*tt, Math.max(0.5,2.2-i*0.3), 0, Math.PI*2); ctx.fill();
         }
-        ctx.globalAlpha = fade*0.85; ctx.fillStyle = "#111";
-        ctx.shadowColor = "#111"; ctx.shadowBlur = 6;
+        ctx.globalAlpha = fade*0.9; ctx.fillStyle = "#1A73E8";
+        ctx.shadowColor = "#1A73E8"; ctx.shadowBlur = 6;
         ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI*2); ctx.fill();
         ctx.shadowBlur = 0; ctx.globalAlpha = 1;
         return true;
@@ -102,24 +102,24 @@ function LogisticsNetworkCanvas() {
         const lines = n.label.split("\n");
 
         if (n.type === "origin") {
-          // Warehouse — solid BLACK rounded rect (heavy, grounded, starting point)
-          ctx.globalAlpha = 0.06; ctx.strokeStyle = "#111"; ctx.lineWidth = 1;
+          // Warehouse — solid NAVY rounded rect (heavy, grounded, starting point)
+          ctx.globalAlpha = 0.07; ctx.strokeStyle = "#1A73E8"; ctx.lineWidth = 1;
           ctx.beginPath(); (ctx as any).roundRect(n.x-28, n.y-17, 56, 34, 3); ctx.stroke();
-          ctx.globalAlpha = 1; ctx.fillStyle = "#111"; ctx.lineWidth = 1.5;
+          ctx.globalAlpha = 1; ctx.fillStyle = "#0B1F3A"; ctx.lineWidth = 1.5;
           ctx.beginPath(); (ctx as any).roundRect(n.x-25, n.y-15, 50, 30, 3); ctx.fill();
           ctx.fillStyle = "#fff"; ctx.font = "500 8px system-ui";
           ctx.textAlign = "center"; ctx.textBaseline = "middle";
           lines.forEach((l,j)=>ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*10));
 
         } else if (n.type === "hub") {
-          // TMS Hub — large black circle, triple breathing rings
-          ctx.globalAlpha = 0.10 + Math.sin(t*0.03+n.phase)*0.04; ctx.strokeStyle="#111"; ctx.lineWidth=1;
+          // TMS Hub — large brand-blue circle, triple breathing rings
+          ctx.globalAlpha = 0.12 + Math.sin(t*0.03+n.phase)*0.04; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
           ctx.beginPath(); ctx.arc(n.x,n.y,30+breathe,0,Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 0.05;
+          ctx.globalAlpha = 0.06;
           ctx.beginPath(); ctx.arc(n.x,n.y,40+breathe,0,Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 0.025;
+          ctx.globalAlpha = 0.03;
           ctx.beginPath(); ctx.arc(n.x,n.y,52+breathe,0,Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1; ctx.fillStyle = "#111"; ctx.lineWidth = 1.5;
+          ctx.globalAlpha = 1; ctx.fillStyle = "#1A73E8"; ctx.lineWidth = 1.5;
           ctx.beginPath(); ctx.arc(n.x,n.y,24,0,Math.PI*2); ctx.fill();
           ctx.fillStyle = "#fff"; ctx.font = "bold 8px system-ui";
           ctx.textAlign = "center"; ctx.textBaseline = "middle";
@@ -127,27 +127,27 @@ function LogisticsNetworkCanvas() {
 
         } else if (n.type === "carrier") {
           // Carriers — rotated DIAMOND (in motion, transit feel)
-          ctx.globalAlpha = 0.05; ctx.strokeStyle="#111"; ctx.lineWidth=1;
+          ctx.globalAlpha = 0.06; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
           ctx.beginPath(); ctx.arc(n.x,n.y,22+breathe,0,Math.PI*2); ctx.stroke();
           ctx.globalAlpha = 1;
           ctx.save(); ctx.translate(n.x,n.y); ctx.rotate(Math.PI/4);
-          ctx.fillStyle = "#f9fafb"; ctx.strokeStyle = "rgba(0,0,0,0.22)"; ctx.lineWidth = 1.2;
+          ctx.fillStyle = "#F4F8FF"; ctx.strokeStyle = "rgba(26,115,232,0.3)"; ctx.lineWidth = 1.2;
           ctx.beginPath(); (ctx as any).roundRect(-13,-13,26,26,2); ctx.fill(); ctx.stroke();
           ctx.restore();
-          ctx.fillStyle = "rgba(0,0,0,0.68)"; ctx.font = "500 7.5px system-ui";
+          ctx.fillStyle = "rgba(11,31,58,0.68)"; ctx.font = "500 7.5px system-ui";
           ctx.textAlign = "center"; ctx.textBaseline = "middle";
           lines.forEach((l,j)=>ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*9));
 
         } else {
           // Customers/Destinations — circle with green DELIVERED dot
-          ctx.globalAlpha = 0.05; ctx.strokeStyle="#111"; ctx.lineWidth=1;
+          ctx.globalAlpha = 0.06; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
           ctx.beginPath(); ctx.arc(n.x,n.y,20+breathe,0,Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1; ctx.fillStyle="#fff"; ctx.strokeStyle="rgba(0,0,0,0.15)"; ctx.lineWidth=1.2;
+          ctx.globalAlpha = 1; ctx.fillStyle="#fff"; ctx.strokeStyle="rgba(26,115,232,0.2)"; ctx.lineWidth=1.2;
           ctx.beginPath(); ctx.arc(n.x,n.y,15,0,Math.PI*2); ctx.fill(); ctx.stroke();
           // green delivered indicator
-          ctx.fillStyle = "#22c55e";
+          ctx.fillStyle = "#10B981";
           ctx.beginPath(); ctx.arc(n.x+10, n.y-10, 3.5, 0, Math.PI*2); ctx.fill();
-          ctx.fillStyle = "rgba(0,0,0,0.65)"; ctx.font = "500 7.5px system-ui";
+          ctx.fillStyle = "rgba(11,31,58,0.65)"; ctx.font = "500 7.5px system-ui";
           ctx.textAlign = "center"; ctx.textBaseline = "middle";
           lines.forEach((l,j)=>ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*9));
         }
@@ -176,7 +176,7 @@ function LogisticsMetricsBar() {
 
   return (
     <motion.div
-      className="inline-flex items-center gap-5 border border-black/10 rounded-lg px-5 py-3"
+      className="inline-flex items-center gap-5 border border-[#0B1F3A]/10 rounded-lg px-5 py-3"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7, duration: 0.4 }}>
       {[
         { val: msgs.toLocaleString(), lbl: "Messages today"  },
@@ -184,16 +184,16 @@ function LogisticsMetricsBar() {
         { val: "0",                    lbl: "Failed messages" },
       ].map((m, i) => (
         <div key={m.lbl} className="flex items-center gap-4">
-          {i > 0 && <div className="w-px h-6 bg-black/10" />}
+          {i > 0 && <div className="w-px h-6 bg-[#0B1F3A]/10" />}
           <div>
-            <div className="text-base font-medium text-black tabular-nums">{m.val}</div>
-            <div className="text-[9px] text-black/38 uppercase tracking-wide mt-0.5">{m.lbl}</div>
+            <div className="text-base font-medium text-[#0B1F3A] tabular-nums">{m.val}</div>
+            <div className="text-[9px] text-[#0B1F3A]/38 uppercase tracking-wide mt-0.5">{m.lbl}</div>
           </div>
         </div>
       ))}
-      <div className="w-px h-6 bg-black/10" />
-      <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"
-        animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"] }}
+      <div className="w-px h-6 bg-[#0B1F3A]/10" />
+      <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981] flex-shrink-0"
+        animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,.5)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"] }}
         transition={{ duration: 1.8, repeat: Infinity }} />
     </motion.div>
   );
@@ -223,8 +223,8 @@ function ChallengeRow({ label, desc, index }: { label: string; desc: string; ind
         pk.p += pk.spd; if (pk.p > 1) pk.p = 0;
         const x = pk.p * canvas.width;
         const fade = pk.p < 0.05 ? pk.p/0.05 : pk.p > 0.9 ? (1-pk.p)/0.1 : 1;
-        ctx.globalAlpha = fade*0.5; ctx.fillStyle="#111";
-        ctx.shadowColor="#111"; ctx.shadowBlur=4;
+        ctx.globalAlpha = fade*0.55; ctx.fillStyle="#1A73E8";
+        ctx.shadowColor="#1A73E8"; ctx.shadowBlur=4;
         ctx.beginPath(); ctx.arc(x, canvas.height/2, 2.5, 0, Math.PI*2); ctx.fill();
         ctx.shadowBlur=0; ctx.globalAlpha=1;
         return pk;
@@ -237,28 +237,28 @@ function ChallengeRow({ label, desc, index }: { label: string; desc: string; ind
 
   return (
     <motion.div ref={rowRef} variants={staggerItem}
-      className="grid md:grid-cols-12 gap-6 py-10 border-b border-black/10 relative overflow-hidden cursor-default"
+      className="grid md:grid-cols-12 gap-6 py-10 border-b border-[#0B1F3A]/10 relative overflow-hidden cursor-default"
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      <motion.div className="absolute inset-0 bg-black/[0.018]" initial={{ scaleX: 0, originX: 0 }}
+      <motion.div className="absolute inset-0 bg-[#1A73E8]/[0.02]" initial={{ scaleX: 0, originX: 0 }}
         animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.35, ease: [0.16,1,0.3,1] }} />
-      <div className="absolute bottom-0 left-0 right-0" style={{ height: 2, background: "rgba(0,0,0,0.05)", overflow: "hidden" }}>
+      <div className="absolute bottom-0 left-0 right-0" style={{ height: 2, background: "rgba(26,115,232,0.05)", overflow: "hidden" }}>
         <canvas ref={canvasRef} className="absolute top-0 left-0" />
       </div>
       <div className="md:col-span-1 pt-1 relative">
         <motion.span className="text-xs font-medium"
-          animate={{ color: hovered ? "#111827" : "rgba(0,0,0,0.2)" }} transition={{ duration: 0.2 }}>
+          animate={{ color: hovered ? "#1A73E8" : "rgba(26,115,232,0.35)" }} transition={{ duration: 0.2 }}>
           0{index + 1}
         </motion.span>
       </div>
       <div className="md:col-span-3 relative">
-        <h3 className="text-base font-medium text-black">{label}</h3>
-        <div className="mt-2 h-px w-full bg-black/[0.08] overflow-hidden">
-          <motion.div className="h-full bg-black origin-left"
+        <h3 className="text-base font-medium text-[#0B1F3A]">{label}</h3>
+        <div className="mt-2 h-px w-full bg-[#0B1F3A]/[0.08] overflow-hidden">
+          <motion.div className="h-full bg-[#1A73E8] origin-left"
             animate={{ scaleX: hovered ? 1 : 0 }} transition={{ duration: 0.5, ease: [0.16,1,0.3,1] }} />
         </div>
       </div>
       <div className="md:col-span-8 relative">
-        <p className="text-sm text-black/60 leading-relaxed">{desc}</p>
+        <p className="text-sm text-[#475569] leading-relaxed">{desc}</p>
       </div>
     </motion.div>
   );
@@ -269,7 +269,7 @@ function HelpCard({ label }: { label: string }) {
   const [hovered, setHovered] = useState(false);
   const glowX = useMotionValue(50), glowY = useMotionValue(50), glowOp = useMotionValue(0);
   const glowBg = useTransform([glowX, glowY], ([x,y]) =>
-    `radial-gradient(ellipse at ${x}% ${y}%, rgba(0,0,0,0.04) 0%, transparent 65%)`);
+    `radial-gradient(ellipse at ${x}% ${y}%, rgba(26,115,232,0.07) 0%, transparent 65%)`);
   const shimX = useMotionValue(-100);
   const shimT = useTransform(shimX, v => `${v}%`);
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -285,18 +285,18 @@ function HelpCard({ label }: { label: string }) {
 
   return (
     <motion.div variants={staggerItem}
-      className="border border-black/10 rounded-lg p-5 bg-white flex items-start gap-3 relative overflow-hidden cursor-default"
-      whileHover={{ y: -2, borderColor: "rgba(0,0,0,0.22)", boxShadow: "0 6px 22px rgba(0,0,0,0.07)", transition: { duration: 0.18, ease: EASE } }}
+      className="border border-[#0B1F3A]/10 rounded-lg p-5 bg-white flex items-start gap-3 relative overflow-hidden cursor-default"
+      whileHover={{ y: -2, borderColor: "rgba(26,115,232,0.3)", boxShadow: "0 6px 22px rgba(26,115,232,0.1)", transition: { duration: 0.18, ease: EASE } }}
       onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
       <motion.div className="absolute inset-0 pointer-events-none rounded-lg" style={{ opacity: glowOp, background: glowBg }} />
       <motion.div className="absolute top-0 pointer-events-none"
-        style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.28),transparent)", x: shimT }} />
-      <motion.span className="text-black/30 mt-0.5 flex-shrink-0 relative z-10"
-        animate={{ x: hovered ? 3 : 0, color: hovered ? "#111827" : "rgba(0,0,0,0.25)" }} transition={{ duration: 0.2 }}>
+        style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)", x: shimT }} />
+      <motion.span className="text-[#1A73E8]/40 mt-0.5 flex-shrink-0 relative z-10"
+        animate={{ x: hovered ? 3 : 0, color: hovered ? "#1A73E8" : "rgba(26,115,232,0.4)" }} transition={{ duration: 0.2 }}>
         →
       </motion.span>
       <motion.span className="text-sm relative z-10"
-        animate={{ color: hovered ? "#111827" : "rgba(0,0,0,0.7)" }} transition={{ duration: 0.2 }}>
+        animate={{ color: hovered ? "#0B1F3A" : "rgba(71,85,105,1)" }} transition={{ duration: 0.2 }}>
         {label}
       </motion.span>
     </motion.div>
@@ -327,20 +327,20 @@ function MessageTicker() {
   }, []);
 
   return (
-    <div className="mt-8 bg-white border border-black/10 rounded-lg px-6 py-5">
+    <div className="mt-8 bg-white border border-[#0B1F3A]/10 rounded-lg px-6 py-5">
       <div className="flex items-center justify-between mb-4">
-        <p className="text-[9px] text-black/35 uppercase tracking-widest">Live message stream</p>
-        <div className="flex items-center gap-1.5 text-[9px] text-black/38">
-          <motion.span className="w-1 h-1 rounded-full bg-green-500"
-            animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,.5)","0 0 0 3px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"] }}
+        <p className="text-[9px] text-[#0B1F3A]/35 uppercase tracking-widest">Live message stream</p>
+        <div className="flex items-center gap-1.5 text-[9px] text-[#0B1F3A]/38">
+          <motion.span className="w-1 h-1 rounded-full bg-[#10B981]"
+            animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,.5)","0 0 0 3px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"] }}
             transition={{ duration: 1.8, repeat: Infinity }} />
           {count.toLocaleString()} today
         </div>
       </div>
-      <div className="flex items-center gap-2 bg-black/[0.03] rounded-md px-3 py-2">
-        <motion.span className="w-1 h-1 rounded-full bg-black/40 flex-shrink-0"
+      <div className="flex items-center gap-2 bg-[#1A73E8]/[0.04] rounded-md px-3 py-2">
+        <motion.span className="w-1 h-1 rounded-full bg-[#1A73E8] flex-shrink-0"
           animate={{ opacity:[1,0.3,1] }} transition={{ duration: 0.9, repeat: Infinity }} />
-        <span className="text-xs text-black/55 font-mono"
+        <span className="text-xs text-[#475569] font-mono"
           style={{ opacity: vis ? 1 : 0, transition: "opacity 0.2s" }}>
           {messages[idx]}
         </span>
@@ -360,15 +360,15 @@ export function LogisticsPage() {
 
             {/* LEFT — copy + metrics, no canvas */}
             <div className="space-y-6">
-              <motion.p className="text-xs text-black/40 uppercase tracking-wide"
+              <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, ease: EASE, delay: 0.05 }}>
                 Logistics & Supply Chain
               </motion.p>
-              <motion.h1 className="text-5xl md:text-6xl font-normal text-black leading-tight tracking-tight"
+              <motion.h1 className="text-5xl md:text-6xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: EASE, delay: 0.15 }}>
-                Every shipment depends on data that arrives on time.
+                Every shipment depends on <span className="text-[#1A73E8]">data that arrives on time.</span>
               </motion.h1>
-              <motion.p className="text-lg text-black/60 leading-relaxed"
+              <motion.p className="text-lg text-[#475569] leading-relaxed"
                 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}>
                 Logistics runs on the constant, accurate exchange of data between carriers, partners and customers. We make sure that exchange never fails.
               </motion.p>
@@ -379,15 +379,15 @@ export function LogisticsPage() {
                 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: EASE, delay: 0.45 }}>
                 <motion.div whileHover={{ y: -3 }} transition={{ duration: 0.18, ease: EASE }}>
                   <Link to="/services/edi-b2b-integration"
-                    className="block bg-black text-white px-6 py-2.5 text-sm rounded-md hover:bg-black/90 transition-colors"
-                    onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(0,0,0,0.18)";}}
+                    className="block bg-[#1A73E8] text-white px-6 py-2.5 text-sm rounded-md hover:bg-[#155CC0] transition-colors"
+                    onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(26,115,232,0.28)";}}
                     onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.boxShadow="none";}}>
                     Explore EDI & B2B Integration
                   </Link>
                 </motion.div>
                 <motion.div whileHover={{ y: -3 }} transition={{ duration: 0.18, ease: EASE }}>
                   <Link to="/contact"
-                    className="block border border-black/20 text-black px-6 py-2.5 text-sm rounded-md hover:bg-black/[0.03] transition-colors">
+                    className="block border border-[#1A73E8]/30 text-[#1A73E8] px-6 py-2.5 text-sm rounded-md hover:bg-[#1A73E8]/[0.05] transition-colors">
                     Book an EDI health assessment
                   </Link>
                 </motion.div>
@@ -396,15 +396,15 @@ export function LogisticsPage() {
 
             {/* RIGHT — logistics journey diagram in contained card */}
             <motion.div
-              className="hidden md:block bg-white border border-black/10 rounded-xl overflow-hidden"
+              className="hidden md:block bg-white border border-[#0B1F3A]/10 rounded-xl overflow-hidden"
               style={{ height: 400 }}
               initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, ease: EASE, delay: 0.35 }}>
-              <div className="px-5 py-3 border-b border-black/[0.07] flex items-center justify-between">
-                <span className="text-[9px] text-black/35 uppercase tracking-widest">Supply chain network</span>
-                <div className="flex items-center gap-1.5 text-[9px] text-black/38">
-                  <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500"
-                    animate={{ boxShadow: ["0 0 0 0px rgba(34,197,94,.5)","0 0 0 3px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"] }}
+              <div className="px-5 py-3 border-b border-[#0B1F3A]/[0.07] flex items-center justify-between">
+                <span className="text-[9px] text-[#1A73E8] uppercase tracking-widest">Supply chain network</span>
+                <div className="flex items-center gap-1.5 text-[9px] text-[#0B1F3A]/38">
+                  <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
+                    animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,.5)","0 0 0 3px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"] }}
                     transition={{ duration: 1.8, repeat: Infinity }} />
                   Live
                 </div>
@@ -419,16 +419,16 @@ export function LogisticsPage() {
       </section>
 
       {/* ── Challenges ── */}
-      <section className="py-24 px-4 bg-black/[0.02] border-t border-b border-black/10">
+      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-12">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               The Integration Challenges
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Where logistics integration breaks down.
+              Where logistics integration <span className="text-[#1A73E8]">breaks down.</span>
             </motion.h2>
           </div>
           <motion.div className="space-y-0" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
@@ -443,15 +443,15 @@ export function LogisticsPage() {
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-start">
           <div>
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               How We Help
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight mb-6"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight mb-6"
               variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Data that flows. Operations that run.
+              Data that flows. <span className="text-[#1A73E8]">Operations that run.</span>
             </motion.h2>
-            <motion.p className="text-base text-black/60 leading-relaxed"
+            <motion.p className="text-base text-[#475569] leading-relaxed"
               variants={fadeUpLarge} custom={0.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               We implement and operate EDI and B2B integration across the carrier, partner, and customer network — so every message arrives correctly, every time. We monitor proactively and handle exceptions before they become shipment failures.
             </motion.p>
@@ -467,21 +467,21 @@ export function LogisticsPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-4 border-t border-black/10">
+      <section className="py-24 px-4 border-t border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto text-center space-y-6">
-          <motion.h2 className="text-4xl font-normal text-black tracking-tight"
+          <motion.h2 className="text-4xl font-normal text-[#0B1F3A] tracking-tight"
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Protect the data behind every shipment.
+            Protect the data behind <span className="text-[#1A73E8]">every shipment.</span>
           </motion.h2>
-          <motion.p className="text-base text-black/60 max-w-xl mx-auto leading-relaxed"
+          <motion.p className="text-base text-[#475569] max-w-xl mx-auto leading-relaxed"
             variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Book an EDI health assessment and find out exactly where your logistics integration is at risk.
           </motion.p>
           <motion.div variants={fadeUp} custom={0.2} initial="hidden" whileInView="visible" viewport={VIEWPORT}
             whileHover={{ y: -3 }} transition={{ duration: 0.18, ease: EASE }}>
             <Link to="/contact"
-              className="inline-block bg-black text-white px-6 py-2.5 text-sm rounded-md hover:bg-black/90 transition-colors"
-              onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(0,0,0,0.18)";}}
+              className="inline-block bg-[#1A73E8] text-white px-6 py-2.5 text-sm rounded-md hover:bg-[#155CC0] transition-colors"
+              onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(26,115,232,0.28)";}}
               onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.boxShadow="none";}}>
               Book an EDI health assessment
             </Link>

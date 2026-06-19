@@ -3,27 +3,12 @@ import { Link } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
 
-// ── Brand tokens ──────────────────────────────────────────────────────────────
-const B = {
-  grad:      "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",
-  primary:   "#057DCD",
-  accent:    "#057DCD",
-  navy:      "#0B1F3A",
-  slate400:  "#94A3B8",
-  slate500:  "#64748B",
-  success:   "#10B981",
-  error:     "#EF4444",
-  warning:   "#F59E0B",
-  white:     "#ffffff",
-};
-
 const bullets = [
   { title: "Modernization",      desc: "Transform legacy EDI into cloud-native architecture" },
   { title: "Partner Onboarding", desc: "Reduce onboarding time from weeks to days" },
   { title: "24/7 Monitoring",    desc: "Proactive monitoring and rapid incident response" },
 ];
 
-// ─── Live status pill ─────────────────────────────────────────────────────────
 function StatusPill() {
   const [count, setCount] = useState(847);
   useEffect(() => {
@@ -31,11 +16,9 @@ function StatusPill() {
     return () => clearInterval(id);
   }, []);
   return (
-    <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] mb-3"
-      style={{ background: B.primary50, color: B.navy500, border: "1px solid rgba(67,176,241,0.2)" }}>
+    <div className="inline-flex items-center gap-1.5 bg-[#1A73E8]/8 rounded-full px-3 py-1 text-[10px] text-[#0B1F3A]/60 mb-3">
       <motion.span
-        className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-        style={{ background: B.success }}
+        className="w-1.5 h-1.5 rounded-full bg-[#10B981] flex-shrink-0"
         animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,0.5)", "0 0 0 4px rgba(16,185,129,0)", "0 0 0 0px rgba(16,185,129,0.5)"] }}
         transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -44,7 +27,6 @@ function StatusPill() {
   );
 }
 
-// ─── Horizontal packet ────────────────────────────────────────────────────────
 function HorizPacket({ connRef, delay, loopMs, label }: {
   connRef: React.RefObject<HTMLDivElement>;
   delay: number; loopMs: number; label: string;
@@ -71,47 +53,26 @@ function HorizPacket({ connRef, delay, loopMs, label }: {
 
   return (
     <>
-      {/* floating label — brand navy */}
-      <div
-        ref={badgeRef}
-        className="absolute -top-5 pointer-events-none text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap"
-        style={{ opacity: 0, background: B.navy500, color: "#0B1F3A" }}
-      >
-        {label}
-      </div>
-      {/* moving dot — brand blue */}
-      <div
-        ref={pktRef}
-        className="absolute top-1/2 -translate-y-1/2 w-[7px] h-[7px] rounded-full"
-        style={{ opacity: 0, background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)", boxShadow: `0 0 8px ${B.primary400}` }}
-      />
+      <div ref={badgeRef} className="absolute -top-5 pointer-events-none bg-[#0B1F3A] text-white text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap" style={{ opacity: 0 }}>{label}</div>
+      <div ref={pktRef} className="absolute top-1/2 -translate-y-1/2 w-[7px] h-[7px] rounded-full bg-[#1A73E8]" style={{ opacity: 0, boxShadow: "0 0 6px rgba(26,115,232,0.4)" }} />
     </>
   );
 }
 
-// ─── Connector ────────────────────────────────────────────────────────────────
 function Connector({ pktDelay, pktLoop, label, shimmerDelay = 0 }: {
   pktDelay: number; pktLoop: number; label: string; shimmerDelay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null!);
   return (
-    <div ref={ref} className="flex-1 mx-3 relative" style={{ height: 2, background: B.primary100 }}>
-      {/* shimmer — brand blue */}
-      <motion.div
-        className="absolute inset-0"
-        style={{ background: `linear-gradient(90deg,transparent,${B.primary400},transparent)` }}
-        animate={{ x: ["-100%", "200%"] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: "linear", delay: shimmerDelay }}
-      />
-      {/* midpoint dot */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
-        style={{ background: B.primary300 }} />
+    <div ref={ref} className="flex-1 mx-3 relative" style={{ height: 2, background: "rgba(11,31,58,0.08)" }}>
+      <motion.div className="absolute inset-0" style={{ background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)" }}
+        animate={{ x: ["-100%", "200%"] }} transition={{ duration: 2.2, repeat: Infinity, ease: "linear", delay: shimmerDelay }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-[#1A73E8] rounded-full" />
       <HorizPacket connRef={ref} delay={pktDelay} loopMs={pktLoop} label={label} />
     </div>
   );
 }
 
-// ─── Vertical drop ────────────────────────────────────────────────────────────
 function VerticalDrop() {
   const lineRef = useRef<HTMLDivElement>(null);
   const pktRef  = useRef<HTMLDivElement>(null);
@@ -128,54 +89,42 @@ function VerticalDrop() {
 
   return (
     <div className="flex flex-col items-center mb-3.5">
-      <div ref={lineRef} className="relative overflow-hidden" style={{ width: 1.5, height: 28, background: B.primary100 }}>
-        <div ref={pktRef} className="absolute left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
-          style={{ background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)", boxShadow: `0 0 5px ${B.primary400}` }} />
+      <div ref={lineRef} className="relative overflow-hidden" style={{ width: 1.5, height: 28, background: "rgba(11,31,58,0.1)" }}>
+        <div ref={pktRef} className="absolute left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#1A73E8]" style={{ boxShadow: "0 0 5px rgba(26,115,232,0.35)" }} />
       </div>
-      <div className="relative overflow-hidden" style={{ width: "80%", height: 1.5, background: B.primary100 }}>
-        <motion.div
-          className="absolute inset-0"
-          style={{ background: `linear-gradient(90deg,transparent,${B.primary400},transparent)` }}
-          animate={{ x: ["-100%", "200%"] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 0.4 }}
-        />
+      <div className="relative overflow-hidden" style={{ width: "80%", height: 1.5, background: "rgba(11,31,58,0.08)" }}>
+        <motion.div className="absolute inset-0" style={{ background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)" }}
+          animate={{ x: ["-100%", "200%"] }} transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 0.4 }} />
       </div>
     </div>
   );
 }
 
-// ─── EDI Hub ──────────────────────────────────────────────────────────────────
 function EDIHub() {
   return (
     <div className="relative flex items-center justify-center flex-shrink-0">
       {[{ inset: -8, delay: 0, opacity: 0.18 }, { inset: -15, delay: 0.5, opacity: 0.1 }, { inset: -22, delay: 1, opacity: 0.05 }]
         .map((r, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-lg border"
-            style={{ inset: r.inset, borderColor: `rgba(5,125,205,${r.opacity})` }}
+          <motion.div key={i} className="absolute rounded-lg border"
+            style={{ inset: r.inset, borderColor: `rgba(26,115,232,${r.opacity})` }}
             animate={{ scale: [1, 1.06, 1], opacity: [0.9, 0.2, 0.9] }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: r.delay }}
-          />
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: r.delay }} />
         ))}
-      {/* hub body — brand navy */}
-      <div className="relative z-10 text-white px-3 py-2 rounded-md text-center"
-        style={{ background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)" }}>
+      <div className="relative z-10 bg-[#1A73E8] text-white px-3 py-2 rounded-md text-center">
         <div className="text-xs font-medium">EDI Hub</div>
-        <div className="text-[10px] mt-0.5" style={{ color: "#4A6380" }}>B2B</div>
+        <div className="text-[10px] text-white/60 mt-0.5">B2B</div>
       </div>
     </div>
   );
 }
 
-// ─── Endpoint node ────────────────────────────────────────────────────────────
 function EndpointNode({ label, sub, flashDelay }: { label: string; sub: string; flashDelay: number }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const flash = () => {
       if (!ref.current) return;
       ref.current.style.transition = "box-shadow 0.15s";
-      ref.current.style.boxShadow = `0 0 0 3px ${B.primary200}`;
+      ref.current.style.boxShadow = "0 0 0 3px rgba(26,115,232,0.18)";
       setTimeout(() => { if (ref.current) ref.current.style.boxShadow = "none"; }, 320);
     };
     const id = setInterval(flash, 2000);
@@ -184,22 +133,20 @@ function EndpointNode({ label, sub, flashDelay }: { label: string; sub: string; 
   }, [flashDelay]);
 
   return (
-    <div ref={ref} className="border px-3 py-2 rounded-md text-center flex-shrink-0"
-      style={{ background: "rgba(67,176,241,0.06)", borderColor: "rgba(5,125,205,0.3)" }}>
-      <div className="text-xs font-medium" style={{ color: B.navy }}>{label}</div>
-      <div className="text-[10px] mt-0.5" style={{ color: B.slate400 }}>{sub}</div>
+    <div ref={ref} className="bg-[#1A73E8]/5 border border-[#1A73E8]/10 px-3 py-2 rounded-md text-center flex-shrink-0">
+      <div className="text-xs font-medium text-[#0B1F3A]">{label}</div>
+      <div className="text-[10px] text-[#0B1F3A]/40 mt-0.5">{sub}</div>
     </div>
   );
 }
 
-// ─── Partner card ─────────────────────────────────────────────────────────────
 function PartnerCard({ label, dotDelay, flashDelay }: { label: string; dotDelay: number; flashDelay: number }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const flash = () => {
       if (!ref.current) return;
       ref.current.style.transition = "box-shadow 0.15s";
-      ref.current.style.boxShadow = `0 0 0 2px ${B.primary200}`;
+      ref.current.style.boxShadow = "0 0 0 2px rgba(26,115,232,0.15)";
       setTimeout(() => { if (ref.current) ref.current.style.boxShadow = "none"; }, 300);
     };
     const id = setInterval(flash, 1400);
@@ -208,43 +155,26 @@ function PartnerCard({ label, dotDelay, flashDelay }: { label: string; dotDelay:
   }, [flashDelay]);
 
   return (
-    <motion.div
-      ref={ref}
-      className="relative overflow-hidden border rounded-md p-2.5 text-center cursor-pointer"
-      style={{ background: "rgba(67,176,241,0.06)", borderColor: "rgba(5,125,205,0.2)" }}
-      variants={staggerItem}
-      whileHover="hovered"
-    >
-      {/* activity dot — brand success green */}
-      <motion.div
-        className="w-1.5 h-1.5 rounded-full mx-auto mb-1.5"
-        style={{ background: B.success }}
+    <motion.div ref={ref} className="relative overflow-hidden bg-[#1A73E8]/[0.03] border border-[#1A73E8]/[0.08] rounded-md p-2.5 text-center cursor-pointer"
+      variants={staggerItem} whileHover="hovered">
+      <motion.div className="w-1.5 h-1.5 rounded-full bg-[#10B981] mx-auto mb-1.5"
         animate={{ boxShadow: ["0 0 0 0px rgba(16,185,129,.5)", "0 0 0 4px rgba(16,185,129,0)", "0 0 0 0px rgba(16,185,129,.5)"] }}
-        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: dotDelay }}
-      />
-      {/* hover fill — brand navy */}
-      <motion.span
-        className="absolute inset-0 rounded-md"
-        style={{ originX: 0, background: B.navy500 }}
-        variants={{ initial: { scaleX: 0 }, hovered: { scaleX: 1 } }}
-        initial="initial"
-        transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
-      />
+        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: dotDelay }} />
+      <motion.span className="absolute inset-0 bg-[#1A73E8] rounded-md" style={{ originX: 0 }}
+        variants={{ initial: { scaleX: 0 }, hovered: { scaleX: 1 } }} initial="initial"
+        transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }} />
       <motion.div className="text-[10px] relative z-10"
-        variants={{ initial: { color: "#4A6380" }, hovered: { color: "#0B1F3A" } }}
-        initial="initial" transition={{ duration: 0.2 }}>
+        variants={{ initial: { color: "rgba(11,31,58,0.4)" }, hovered: { color: "#fff" } }} initial="initial" transition={{ duration: 0.2 }}>
         {label}
       </motion.div>
       <motion.div className="text-sm relative z-10 mt-0.5"
-        variants={{ initial: { color: "rgba(255,255,255,0.85)" }, hovered: { color: "#0B1F3A" } }}
-        initial="initial" transition={{ duration: 0.2 }}>
+        variants={{ initial: { color: "#0B1F3A" }, hovered: { color: "#fff" } }} initial="initial" transition={{ duration: 0.2 }}>
         ✓
       </motion.div>
     </motion.div>
   );
 }
 
-// ─── Live stats ───────────────────────────────────────────────────────────────
 function LiveStats() {
   const [txn, setTxn]     = useState(847);
   const [latency, setLat] = useState(58);
@@ -254,49 +184,41 @@ function LiveStats() {
     return () => { clearInterval(t1); clearInterval(t2); };
   }, []);
   return (
-    <div className="grid grid-cols-3 gap-2 mt-4 pt-4" style={{ borderTop: "1px solid rgba(67,176,241,0.15)" }}>
+    <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-[#0B1F3A]/[0.06]">
       {[
         { val: txn.toLocaleString(), lbl: "Transactions" },
         { val: "99.9%",              lbl: "Uptime" },
         { val: `${latency}ms`,       lbl: "Avg Latency" },
       ].map(({ val, lbl }) => (
         <div key={lbl} className="text-center">
-          <div className="text-base font-medium tabular-nums" style={{ color: "#0B1F3A" }}>{val}</div>
-          <div className="text-[9px] uppercase tracking-wide mt-0.5" style={{ color: "#4A6380" }}>{lbl}</div>
+          <div className="text-base font-medium text-[#0B1F3A] tabular-nums">{val}</div>
+          <div className="text-[9px] text-[#0B1F3A]/38 uppercase tracking-wide mt-0.5">{lbl}</div>
         </div>
       ))}
     </div>
   );
 }
 
-// ─── Section ──────────────────────────────────────────────────────────────────
 export function FlagshipCapability() {
   return (
-    <section className="py-24 px-4" style={{background:"#FFFFFF"}}>
+    <section className="py-24 px-4 bg-[#1A73E8]/[0.02]">
       <div className="max-w-6xl mx-auto">
 
         <motion.div className="text-center mb-12"
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={VIEWPORT}
           transition={{ duration: 0.4, ease: EASE }}>
-          <span className="text-xs uppercase tracking-wide" style={{ color: "#057DCD" }}>
-            OUR FLAGSHIP CAPABILITY
-          </span>
+          <span className="text-xs text-[#1A73E8] uppercase tracking-wide">OUR FLAGSHIP CAPABILITY</span>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-16 items-center">
 
-          {/* ── Left copy ── */}
           <div className="space-y-6">
-            <motion.h2
-              className="text-4xl md:text-5xl font-normal leading-tight tracking-tight"
-              style={{background:"linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}
-            variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              <span style={{ background:"linear-gradient(135deg,#0B1F3A,#43B0F1)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>EDI and B2B integration,</span>
-              <br />
-              <span style={{ color: "#057DCD" }}>engineered for enterprises that can't afford downtime.</span>
+            <motion.h2 className="text-4xl md:text-5xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
+              variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
+              EDI and B2B integration, <span className="text-[#1A73E8]">engineered for enterprises that can't afford downtime.</span>
             </motion.h2>
 
-            <motion.p style={{color:"#4A6380",fontSize:16,lineHeight:1.7}}
+            <motion.p className="text-base text-[#475569] leading-relaxed"
               variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               We modernize legacy EDI systems, accelerate partner onboarding, and build resilient
               integration architectures that scale with your business.
@@ -306,53 +228,36 @@ export function FlagshipCapability() {
               variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               {bullets.map(({ title, desc }) => (
                 <motion.div key={title} variants={staggerItem} className="flex items-start gap-3">
-                  <motion.span style={{ color: B.primary500, marginTop: 4 }}
+                  <motion.span className="text-[#1A73E8]/50 mt-1"
                     animate={{ x: [0, 3, 0] }}
-                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: Math.random() }}>
-                    →
-                  </motion.span>
+                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: Math.random() }}>→</motion.span>
                   <div>
-                    <div className="text-sm font-medium" style={{ color: "#0B1F3A" }}>{title}</div>
-                    <div style={{fontSize:13,color:"#4A6380"}}>{desc}</div>
+                    <div className="text-sm font-medium text-[#0B1F3A]">{title}</div>
+                    <div className="text-sm text-[#475569]">{desc}</div>
                   </div>
                 </motion.div>
               ))}
             </motion.div>
 
-            <motion.div
-              variants={fadeUp} custom={0.35} initial="hidden" whileInView="visible" viewport={VIEWPORT}
+            <motion.div variants={fadeUp} custom={0.35} initial="hidden" whileInView="visible" viewport={VIEWPORT}
               whileHover={{ y: -3 }} transition={{ duration: 0.18, ease: EASE }} className="inline-block mt-6">
               <Link to="/services/edi-b2b-integration"
-                className="text-white px-6 py-2.5 text-sm rounded-md transition-colors"
-                style={{ background: "linear-gradient(135deg, #057DCD 0%, #43B0F1 100%)" }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.background = "#046AAD";
-                  (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 24px rgba(5,125,205,0.25)`;
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(5,125,205,0.04)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "none";
-                }}>
+                className="bg-[#1A73E8] text-white px-6 py-2.5 text-sm rounded-md hover:bg-[#155CC0] transition-colors"
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(26,115,232,0.28)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
                 Explore EDI & B2B Integration
               </Link>
             </motion.div>
           </div>
 
-          {/* ── Right — animated diagram ── */}
-          <motion.div
-            className="rounded-lg p-8"
-            style={{ background:"#ffffff", border:"1px solid rgba(67,176,241,0.22)", boxShadow:"0 4px 24px rgba(67,176,241,0.1)" }}
+          <motion.div className="bg-white border border-[#0B1F3A]/10 rounded-lg p-8"
             variants={fadeUp} custom={0.2} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             <div className="space-y-6">
-
-              <div className="text-center pb-5" style={{ borderBottom: "1px solid rgba(67,176,241,0.15)" }}>
+              <div className="text-center pb-5 border-b border-[#0B1F3A]/[0.08]">
                 <StatusPill />
-                <h3 className="text-sm font-medium mb-1" style={{ color: "#0B1F3A" }}>
-                  Enterprise Integration Architecture
-                </h3>
-                <p className="text-xs" style={{ color: "#4A6380" }}>Real-time data flow visualization</p>
+                <h3 className="text-sm font-medium text-[#0B1F3A] mb-1">Enterprise Integration Architecture</h3>
+                <p className="text-xs text-[#0B1F3A]/40">Real-time data flow visualization</p>
               </div>
-
               <div className="flex items-center">
                 <EndpointNode label="ERP" sub="SAP"    flashDelay={100} />
                 <Connector pktDelay={200}  pktLoop={2000} label="856 Order"  shimmerDelay={0} />
@@ -360,16 +265,13 @@ export function FlagshipCapability() {
                 <Connector pktDelay={1050} pktLoop={2000} label="810 Invoice" shimmerDelay={0.9} />
                 <EndpointNode label="WMS" sub="Oracle" flashDelay={1100} />
               </div>
-
               <VerticalDrop />
-
               <motion.div className="grid grid-cols-3 gap-2.5"
                 variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
                 <PartnerCard label="Partner A" dotDelay={0}   flashDelay={1200} />
                 <PartnerCard label="Partner B" dotDelay={0.5} flashDelay={1450} />
                 <PartnerCard label="Partner C" dotDelay={1.0} flashDelay={1700} />
               </motion.div>
-
               <LiveStats />
             </div>
           </motion.div>

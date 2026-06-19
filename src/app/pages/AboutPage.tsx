@@ -66,7 +66,7 @@ function HeroNetwork() {
       ctx.setLineDash([3,9]);
       nodes.forEach((n,i)=>n.conns.forEach(j=>{
         const m=nodes[j];
-        ctx.globalAlpha=.04+Math.sin(t+i*.8)*.015;ctx.strokeStyle="#111";ctx.lineWidth=.7;
+        ctx.globalAlpha=.045+Math.sin(t+i*.8)*.015;ctx.strokeStyle="#1A73E8";ctx.lineWidth=.7;
         ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(m.x,m.y);ctx.stroke();
       }));
       ctx.setLineDash([]);ctx.globalAlpha=1;
@@ -74,18 +74,18 @@ function HeroNetwork() {
         p.t+=p.spd;if(p.t>1)return false;
         const x=p.sx+(p.dx-p.sx)*p.t,y=p.sy+(p.dy-p.sy)*p.t;
         const fade=p.t<.08?p.t/.08:p.t>.88?(1-p.t)/.12:1;
-        for(let i=1;i<=4;i++){const tt=Math.max(0,p.t-i*.018);ctx.globalAlpha=((4-i)/8)*.28*fade;ctx.fillStyle="#111";ctx.beginPath();ctx.arc(p.sx+(p.dx-p.sx)*tt,p.sy+(p.dy-p.sy)*tt,Math.max(.4,1.8-i*.25),0,Math.PI*2);ctx.fill();}
-        ctx.globalAlpha=fade*.75;ctx.fillStyle="#111";ctx.shadowColor="#111";ctx.shadowBlur=4;
+        for(let i=1;i<=4;i++){const tt=Math.max(0,p.t-i*.018);ctx.globalAlpha=((4-i)/8)*.3*fade;ctx.fillStyle="#1A73E8";ctx.beginPath();ctx.arc(p.sx+(p.dx-p.sx)*tt,p.sy+(p.dy-p.sy)*tt,Math.max(.4,1.8-i*.25),0,Math.PI*2);ctx.fill();}
+        ctx.globalAlpha=fade*.8;ctx.fillStyle="#1A73E8";ctx.shadowColor="#1A73E8";ctx.shadowBlur=4;
         ctx.beginPath();ctx.arc(x,y,2.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.globalAlpha=1;
         return true;
       });
       nodes.forEach(n=>{
         const b=Math.sin(t*1.1+n.phase)*1.5;
-        ctx.globalAlpha=.04+Math.sin(t+n.phase)*.012;ctx.strokeStyle="#111";ctx.lineWidth=.8;
+        ctx.globalAlpha=.045+Math.sin(t+n.phase)*.012;ctx.strokeStyle="#1A73E8";ctx.lineWidth=.8;
         ctx.beginPath();ctx.arc(n.x,n.y,n.r+6+b,0,Math.PI*2);ctx.stroke();
-        ctx.globalAlpha=1;ctx.fillStyle="#fff";ctx.strokeStyle="rgba(17,24,39,.14)";ctx.lineWidth=.8;
+        ctx.globalAlpha=1;ctx.fillStyle="#fff";ctx.strokeStyle="rgba(11,31,58,.16)";ctx.lineWidth=.8;
         ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();ctx.stroke();
-        ctx.fillStyle="rgba(17,24,39,.55)";ctx.font="500 8px system-ui";
+        ctx.fillStyle="rgba(11,31,58,.55)";ctx.font="500 8px system-ui";
         ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(n.label,n.x,n.y);
       });
       ctx.globalAlpha=1;frame++;if(frame%65===0)spawn();id=requestAnimationFrame(draw);
@@ -119,17 +119,17 @@ function CountUp({ to, suffix="" }: { to: number; suffix?: string }) {
 // ─── Hero stat card ───────────────────────────────────────────────────────────
 function HeroStat({ val, label, sub, isLive=false }: { val: React.ReactNode; label: string; sub?: string; isLive?: boolean }) {
   return (
-    <div className="bg-white/80 border border-black/[0.09] rounded-xl p-5 backdrop-blur-sm">
-      <div className="text-2xl font-light text-black tracking-tight mb-1 tabular-nums">{val}</div>
-      <div className="text-[9.5px] text-black/45 uppercase tracking-wide">{label}</div>
+    <div className="bg-white/80 border border-[#0B1F3A]/[0.09] rounded-xl p-5 backdrop-blur-sm">
+      <div className="text-2xl font-light text-[#0B1F3A] tracking-tight mb-1 tabular-nums">{val}</div>
+      <div className="text-[9.5px] text-[#0B1F3A]/45 uppercase tracking-wide">{label}</div>
       {sub && (
         <div className="flex items-center gap-1.5 mt-2">
           {isLive && (
-            <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"
-              animate={{boxShadow:["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"]}}
+            <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981] flex-shrink-0"
+              animate={{boxShadow:["0 0 0 0px rgba(16,185,129,.5)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"]}}
               transition={{duration:1.8,repeat:Infinity}} />
           )}
-          <span className="text-[9px] text-black/30">{sub}</span>
+          <span className="text-[9px] text-[#0B1F3A]/30">{sub}</span>
         </div>
       )}
     </div>
@@ -168,7 +168,7 @@ function JourneyRow({ item, index }: { item: typeof journey[0]; index: number })
         pk.p+=pk.spd;if(pk.p>1)pk.p=0;
         const x=pk.p*canvas.width;
         const fade=pk.p<.05?pk.p/.05:pk.p>.9?(1-pk.p)/.1:1;
-        ctx.globalAlpha=fade*.5;ctx.fillStyle="#111";ctx.shadowColor="#111";ctx.shadowBlur=4;
+        ctx.globalAlpha=fade*.55;ctx.fillStyle="#1A73E8";ctx.shadowColor="#1A73E8";ctx.shadowBlur=4;
         ctx.beginPath();ctx.arc(x,canvas.height/2,2.5,0,Math.PI*2);ctx.fill();
         ctx.shadowBlur=0;ctx.globalAlpha=1;return pk;
       });
@@ -179,18 +179,18 @@ function JourneyRow({ item, index }: { item: typeof journey[0]; index: number })
 
   // tag colours by era
   const tagColors: Record<string,string> = {
-    Foundation:"rgba(0,0,0,0.06)", Endurance:"rgba(0,0,0,0.06)",
-    Expansion:"rgba(0,0,0,0.08)", "Enterprise Scale":"rgba(0,0,0,0.1)",
-    "US Market":"rgba(0,0,0,0.1)", Intelligence:"rgba(0,0,0,0.12)", Scale:"rgba(0,0,0,0.14)",
+    Foundation:"rgba(26,115,232,0.06)", Endurance:"rgba(26,115,232,0.06)",
+    Expansion:"rgba(26,115,232,0.09)", "Enterprise Scale":"rgba(26,115,232,0.12)",
+    "US Market":"rgba(26,115,232,0.12)", Intelligence:"rgba(26,115,232,0.15)", Scale:"rgba(26,115,232,0.18)",
   };
 
   return (
     <motion.div ref={rowRef} variants={staggerItem}
-      className="border-b border-black/[0.07] relative overflow-hidden"
+      className="border-b border-[#0B1F3A]/[0.07] relative overflow-hidden"
       onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
-      <motion.div className="absolute inset-0 bg-black/[0.014]" initial={{scaleX:0,originX:0}}
+      <motion.div className="absolute inset-0 bg-[#1A73E8]/[0.02]" initial={{scaleX:0,originX:0}}
         animate={{scaleX:hovered?1:0}} transition={{duration:.32,ease:[.16,1,.3,1]}} />
-      <div className="absolute bottom-0 left-0 right-0" style={{height:2,background:"rgba(0,0,0,0.04)",overflow:"hidden"}}>
+      <div className="absolute bottom-0 left-0 right-0" style={{height:2,background:"rgba(26,115,232,0.05)",overflow:"hidden"}}>
         <canvas ref={canvasRef} className="absolute top-0 left-0" />
       </div>
 
@@ -199,11 +199,11 @@ function JourneyRow({ item, index }: { item: typeof journey[0]; index: number })
         {/* year + era tag */}
         <div className="md:col-span-2 flex flex-col gap-1.5">
           <motion.span className="text-sm font-medium"
-            animate={{color:hovered?"#000":"rgba(0,0,0,0.85)"}}>
+            animate={{color:hovered?"#1A73E8":"rgba(11,31,58,0.85)"}}>
             {item.year}
           </motion.span>
           <span className="inline-block text-[8.5px] uppercase tracking-wide px-2 py-0.5 rounded-full w-fit"
-            style={{background:tagColors[item.tag]||"rgba(0,0,0,0.06)",color:"rgba(0,0,0,0.5)"}}>
+            style={{background:tagColors[item.tag]||"rgba(26,115,232,0.06)",color:"#1A73E8"}}>
             {item.tag}
           </span>
         </div>
@@ -211,9 +211,9 @@ function JourneyRow({ item, index }: { item: typeof journey[0]; index: number })
         {/* headline + underline */}
         <div className="md:col-span-8">
           <motion.h3 className="text-sm font-medium leading-snug"
-            animate={{color:hovered?"#000":"#111"}}>{item.headline}</motion.h3>
-          <div className="mt-1.5 h-px w-full bg-black/[0.06] overflow-hidden">
-            <motion.div className="h-full bg-black origin-left"
+            animate={{color:hovered?"#1A73E8":"#0B1F3A"}}>{item.headline}</motion.h3>
+          <div className="mt-1.5 h-px w-full bg-[#0B1F3A]/[0.06] overflow-hidden">
+            <motion.div className="h-full bg-[#1A73E8] origin-left"
               animate={{scaleX:hovered?1:0}} transition={{duration:.45,ease:[.16,1,.3,1]}} />
           </div>
         </div>
@@ -221,8 +221,8 @@ function JourneyRow({ item, index }: { item: typeof journey[0]; index: number })
         {/* expand icon */}
         <div className="md:col-span-2 flex justify-end items-start">
           <motion.div
-            className="w-7 h-7 rounded-full border border-black/12 flex items-center justify-center text-black/35 text-sm"
-            animate={{rotate:expanded?45:0,background:hovered?"rgba(0,0,0,0.05)":"#fff",borderColor:hovered?"rgba(0,0,0,0.22)":"rgba(0,0,0,0.12)"}}
+            className="w-7 h-7 rounded-full border border-[#1A73E8]/20 flex items-center justify-center text-[#1A73E8]/50 text-sm"
+            animate={{rotate:expanded?45:0,background:hovered?"rgba(26,115,232,0.06)":"#fff",borderColor:hovered?"rgba(26,115,232,0.35)":"rgba(26,115,232,0.2)"}}
             transition={{duration:.2}}>
             +
           </motion.div>
@@ -237,17 +237,17 @@ function JourneyRow({ item, index }: { item: typeof journey[0]; index: number })
           <div className="md:col-span-2" />
           <div className="md:col-span-6 space-y-2">
             {item.bullets.map((b,i)=>(
-              <motion.div key={i} className="flex items-start gap-2 text-xs text-black/60"
+              <motion.div key={i} className="flex items-start gap-2 text-xs text-[#475569]"
                 initial={{opacity:0,x:-8}} animate={{opacity:expanded?1:0,x:expanded?0:-8}}
                 transition={{duration:.28,delay:i*.06}}>
-                <span className="text-black/20 mt-0.5 flex-shrink-0">▸</span>{b}
+                <span className="text-[#1A73E8]/40 mt-0.5 flex-shrink-0">▸</span>{b}
               </motion.div>
             ))}
           </div>
           <div className="md:col-span-4">
-            <div className="bg-black/[0.03] border border-black/[0.06] rounded-xl p-4">
-              <p className="text-[8.5px] uppercase tracking-wide text-black/32 mb-2">Outcome</p>
-              <p className="text-xs text-black/60 leading-relaxed italic">{item.outcome}</p>
+            <div className="bg-[#1A73E8]/[0.03] border border-[#1A73E8]/[0.1] rounded-xl p-4">
+              <p className="text-[8.5px] uppercase tracking-wide text-[#1A73E8] mb-2">Outcome</p>
+              <p className="text-xs text-[#475569] leading-relaxed italic">{item.outcome}</p>
             </div>
           </div>
         </div>
@@ -261,26 +261,26 @@ function PlatformRow({ p }: { p: typeof platforms[0] }) {
   const [hovered, setHovered] = useState(false);
   return (
     <motion.div variants={staggerItem}
-      className="grid md:grid-cols-12 gap-6 py-5 border-b border-black/[0.07] relative overflow-hidden cursor-default"
+      className="grid md:grid-cols-12 gap-6 py-5 border-b border-[#0B1F3A]/[0.07] relative overflow-hidden cursor-default"
       onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
-      <motion.div className="absolute inset-0 bg-black/[0.014]" initial={{scaleX:0,originX:0}}
+      <motion.div className="absolute inset-0 bg-[#1A73E8]/[0.02]" initial={{scaleX:0,originX:0}}
         animate={{scaleX:hovered?1:0}} transition={{duration:.28,ease:[.16,1,.3,1]}} />
       <div className="md:col-span-4 relative">
         <motion.div className="text-sm font-medium"
-          animate={{color:hovered?"#000":"#111"}}>{p.name}</motion.div>
-        <div className="mt-1 h-px w-full bg-black/[0.06] overflow-hidden">
-          <motion.div className="h-full bg-black origin-left"
+          animate={{color:hovered?"#1A73E8":"#0B1F3A"}}>{p.name}</motion.div>
+        <div className="mt-1 h-px w-full bg-[#0B1F3A]/[0.06] overflow-hidden">
+          <motion.div className="h-full bg-[#1A73E8] origin-left"
             animate={{scaleX:hovered?1:0}} transition={{duration:.4,ease:[.16,1,.3,1]}} />
         </div>
       </div>
       <div className="md:col-span-1 relative">
-        <span className="text-xs text-black/40 font-medium">{p.years}</span>
+        <span className="text-xs text-[#1A73E8] font-medium">{p.years}</span>
       </div>
       <div className="md:col-span-3 relative">
-        <span className="text-xs text-black/50">{p.vertical}</span>
+        <span className="text-xs text-[#475569]">{p.vertical}</span>
       </div>
       <div className="md:col-span-4 relative">
-        <p className="text-xs text-black/50 leading-relaxed">{p.depth}</p>
+        <p className="text-xs text-[#475569] leading-relaxed">{p.depth}</p>
       </div>
     </motion.div>
   );
@@ -290,7 +290,7 @@ function PlatformRow({ p }: { p: typeof platforms[0] }) {
 function RoadmapCard({ item }: { item: typeof roadmap[0] }) {
   const [hovered,setHovered]=useState(false);
   const glowX=useMotionValue(50),glowY=useMotionValue(50),glowOp=useMotionValue(0);
-  const glowBg=useTransform([glowX,glowY],([x,y])=>`radial-gradient(ellipse at ${x}% ${y}%, rgba(0,0,0,0.04) 0%, transparent 65%)`);
+  const glowBg=useTransform([glowX,glowY],([x,y])=>`radial-gradient(ellipse at ${x}% ${y}%, rgba(26,115,232,0.06) 0%, transparent 65%)`);
   const shimX=useMotionValue(-100);
   const shimT=useTransform(shimX,v=>`${v}%`);
   const onMove=(e:React.MouseEvent<HTMLDivElement>)=>{
@@ -302,20 +302,20 @@ function RoadmapCard({ item }: { item: typeof roadmap[0] }) {
   const onLeave=()=>{setHovered(false);animate(glowOp,0,{duration:.3});};
   return (
     <motion.div variants={staggerItem}
-      className="border border-black/10 rounded-xl p-6 bg-white relative overflow-hidden cursor-default"
-      whileHover={{y:-3,borderColor:"rgba(0,0,0,0.22)",boxShadow:"0 8px 28px rgba(0,0,0,0.07)",transition:{duration:.18,ease:EASE}}}
+      className="border border-[#0B1F3A]/10 rounded-xl p-6 bg-white relative overflow-hidden cursor-default"
+      whileHover={{y:-3,borderColor:"rgba(26,115,232,0.3)",boxShadow:"0 8px 28px rgba(26,115,232,0.1)",transition:{duration:.18,ease:EASE}}}
       onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
       <motion.div className="absolute inset-0 pointer-events-none rounded-xl" style={{opacity:glowOp,background:glowBg}} />
       <motion.div className="absolute top-0 pointer-events-none"
-        style={{left:0,width:"55%",height:1,background:"linear-gradient(90deg,transparent,rgba(0,0,0,0.28),transparent)",x:shimT}} />
+        style={{left:0,width:"55%",height:1,background:"linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)",x:shimT}} />
       <motion.div className="absolute top-0 left-0 right-0 h-px"
-        style={{background:"linear-gradient(90deg,transparent,rgba(0,0,0,0.18),transparent)"}}
+        style={{background:"linear-gradient(90deg,transparent,rgba(26,115,232,0.35),transparent)"}}
         animate={{opacity:hovered?1:0}} transition={{duration:.2}} />
       <div className="relative">
-        <div className="text-[9px] text-black/25 mb-3 font-medium tracking-wide">{item.num}</div>
-        <h3 className="text-sm font-medium text-black mb-2">{item.label}</h3>
-        <p className="text-xs text-black/55 leading-relaxed">{item.desc}</p>
-        <motion.div className="h-px bg-black origin-left mt-4"
+        <div className="text-[9px] text-[#1A73E8]/40 mb-3 font-medium tracking-wide">{item.num}</div>
+        <h3 className="text-sm font-medium text-[#0B1F3A] mb-2">{item.label}</h3>
+        <p className="text-xs text-[#475569] leading-relaxed">{item.desc}</p>
+        <motion.div className="h-px bg-[#1A73E8] origin-left mt-4"
           animate={{scaleX:hovered?1:0}} transition={{duration:.4,ease:[.16,1,.3,1]}} />
       </div>
     </motion.div>
@@ -326,7 +326,7 @@ function RoadmapCard({ item }: { item: typeof roadmap[0] }) {
 function ValueCard({ item }: { item: typeof values[0] }) {
   const [hovered,setHovered]=useState(false);
   const glowX=useMotionValue(50),glowY=useMotionValue(50),glowOp=useMotionValue(0);
-  const glowBg=useTransform([glowX,glowY],([x,y])=>`radial-gradient(ellipse at ${x}% ${y}%, rgba(0,0,0,0.04) 0%, transparent 65%)`);
+  const glowBg=useTransform([glowX,glowY],([x,y])=>`radial-gradient(ellipse at ${x}% ${y}%, rgba(26,115,232,0.06) 0%, transparent 65%)`);
   const shimX=useMotionValue(-100);
   const shimT=useTransform(shimX,v=>`${v}%`);
   const onMove=(e:React.MouseEvent<HTMLDivElement>)=>{
@@ -338,18 +338,18 @@ function ValueCard({ item }: { item: typeof values[0] }) {
   const onLeave=()=>{setHovered(false);animate(glowOp,0,{duration:.3});};
   return (
     <motion.div variants={staggerItem}
-      className="border border-black/10 rounded-xl p-8 bg-white space-y-3 relative overflow-hidden cursor-default"
-      whileHover={{y:-4,borderColor:"rgba(0,0,0,0.22)",boxShadow:"0 10px 36px rgba(0,0,0,0.07)",transition:{duration:.2,ease:EASE}}}
+      className="border border-[#0B1F3A]/10 rounded-xl p-8 bg-white space-y-3 relative overflow-hidden cursor-default"
+      whileHover={{y:-4,borderColor:"rgba(26,115,232,0.3)",boxShadow:"0 10px 36px rgba(26,115,232,0.1)",transition:{duration:.2,ease:EASE}}}
       onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
       <motion.div className="absolute inset-0 pointer-events-none rounded-xl" style={{opacity:glowOp,background:glowBg}} />
       <motion.div className="absolute top-0 pointer-events-none"
-        style={{left:0,width:"55%",height:1,background:"linear-gradient(90deg,transparent,rgba(0,0,0,0.28),transparent)",x:shimT}} />
+        style={{left:0,width:"55%",height:1,background:"linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)",x:shimT}} />
       <motion.div className="absolute top-0 left-0 right-0 h-px"
-        style={{background:"linear-gradient(90deg,transparent,rgba(0,0,0,0.18),transparent)"}}
+        style={{background:"linear-gradient(90deg,transparent,rgba(26,115,232,0.35),transparent)"}}
         animate={{opacity:hovered?1:0}} transition={{duration:.2}} />
-      <h3 className="text-base font-medium text-black relative">{item.heading}</h3>
-      <p className="text-sm text-black/60 leading-relaxed relative">{item.desc}</p>
-      <motion.div className="h-px bg-black origin-left"
+      <h3 className="text-base font-medium text-[#0B1F3A] relative">{item.heading}</h3>
+      <p className="text-sm text-[#475569] leading-relaxed relative">{item.desc}</p>
+      <motion.div className="h-px bg-[#1A73E8] origin-left"
         animate={{scaleX:hovered?1:0}} transition={{duration:.4,ease:[.16,1,.3,1]}} />
     </motion.div>
   );
@@ -372,16 +372,16 @@ export function AboutPage() {
 
             {/* LEFT — copy */}
             <div className="space-y-7">
-              <motion.p className="text-xs text-black/40 uppercase tracking-wide"
+              <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide"
                 initial={{opacity:0}} animate={{opacity:1}} transition={{duration:.4,ease:EASE,delay:.05}}>
                 About Us
               </motion.p>
-              <motion.h1 className="text-5xl md:text-6xl font-light text-black leading-[1.06] tracking-tight"
+              <motion.h1 className="text-5xl md:text-6xl font-light text-[#0B1F3A] leading-[1.06] tracking-tight"
                 style={{letterSpacing:"-.025em"}}
                 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.6,ease:EASE,delay:.12}}>
-                The integration specialists, evolving into a modern enterprise technology partner.
+                The integration specialists, <span className="text-[#1A73E8]">evolving into a modern enterprise technology partner.</span>
               </motion.h1>
-              <motion.p className="text-lg text-black/55 leading-relaxed"
+              <motion.p className="text-lg text-[#475569] leading-relaxed"
                 initial={{opacity:0,y:14}} animate={{opacity:1,y:0}} transition={{duration:.5,ease:EASE,delay:.28}}>
                 Founded in 2019. Built on IBM Sterling. Grown across six enterprise platforms, five verticals, and two continents.
               </motion.p>
@@ -389,31 +389,31 @@ export function AboutPage() {
               {/* year founded / specialists live pill */}
               <motion.div className="flex items-center gap-3 flex-wrap"
                 initial={{opacity:0}} animate={{opacity:1}} transition={{duration:.4,delay:.45}}>
-                <div className="inline-flex items-center gap-2 text-[11px] text-black/45 border border-black/10 rounded-full px-4 py-2">
-                  <span className="font-medium text-black">2019</span> — founded
+                <div className="inline-flex items-center gap-2 text-[11px] text-[#475569] border border-[#0B1F3A]/10 rounded-full px-4 py-2">
+                  <span className="font-medium text-[#1A73E8]">2019</span> — founded
                 </div>
-                <div className="inline-flex items-center gap-2 text-[11px] text-black/45 border border-black/10 rounded-full px-4 py-2">
-                  <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500"
-                    animate={{boxShadow:["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"]}}
+                <div className="inline-flex items-center gap-2 text-[11px] text-[#475569] border border-[#0B1F3A]/10 rounded-full px-4 py-2">
+                  <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
+                    animate={{boxShadow:["0 0 0 0px rgba(16,185,129,.5)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"]}}
                     transition={{duration:1.8,repeat:Infinity}} />
-                  <span className="font-medium text-black">54</span> specialists
+                  <span className="font-medium text-[#1A73E8]">54</span> specialists
                 </div>
-                <div className="inline-flex items-center gap-2 text-[11px] text-black/45 border border-black/10 rounded-full px-4 py-2">
-                  <span className="font-medium text-black">6</span> platforms
+                <div className="inline-flex items-center gap-2 text-[11px] text-[#475569] border border-[#0B1F3A]/10 rounded-full px-4 py-2">
+                  <span className="font-medium text-[#1A73E8]">6</span> platforms
                 </div>
               </motion.div>
 
               <motion.div className="flex flex-wrap gap-3 pt-1"
                 initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:.45,ease:EASE,delay:.58}}>
                 <motion.div whileHover={{y:-3}} transition={{duration:.18,ease:EASE}}>
-                  <Link to="/contact" className="block bg-black text-white px-6 py-2.5 text-sm rounded-lg hover:bg-black/90 transition-colors"
-                    onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(0,0,0,0.18)";}}
+                  <Link to="/contact" className="block bg-[#1A73E8] text-white px-6 py-2.5 text-sm rounded-lg hover:bg-[#155CC0] transition-colors"
+                    onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(26,115,232,0.28)";}}
                     onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.boxShadow="none";}}>
                     Get in touch
                   </Link>
                 </motion.div>
                 <motion.div whileHover={{y:-3}} transition={{duration:.18,ease:EASE}}>
-                  <Link to="/company/leadership" className="block border border-black/20 text-black px-6 py-2.5 text-sm rounded-lg hover:bg-black/[0.03] transition-colors">
+                  <Link to="/company/leadership" className="block border border-[#1A73E8]/30 text-[#1A73E8] px-6 py-2.5 text-sm rounded-lg hover:bg-[#1A73E8]/[0.05] transition-colors">
                     Meet the team
                   </Link>
                 </motion.div>
@@ -438,11 +438,11 @@ export function AboutPage() {
                 val={<CountUp to={5} suffix="+ yrs" />}
                 label="Longest engagement" sub="Active since 2019" />
               {/* full-width 5th card */}
-              <div className="col-span-2 bg-white/80 border border-black/[0.09] rounded-xl px-5 py-4 flex items-center justify-between backdrop-blur-sm">
-                <div className="text-sm font-medium text-black">ISO 27001 / SOC 2-class certified</div>
-                <div className="flex items-center gap-1.5 text-[9px] text-black/38">
-                  <motion.span className="w-1.5 h-1.5 rounded-full bg-green-500"
-                    animate={{boxShadow:["0 0 0 0px rgba(34,197,94,.5)","0 0 0 4px rgba(34,197,94,0)","0 0 0 0px rgba(34,197,94,.5)"]}}
+              <div className="col-span-2 bg-white/80 border border-[#0B1F3A]/[0.09] rounded-xl px-5 py-4 flex items-center justify-between backdrop-blur-sm">
+                <div className="text-sm font-medium text-[#0B1F3A]">ISO 27001 / SOC 2-class certified</div>
+                <div className="flex items-center gap-1.5 text-[9px] text-[#0B1F3A]/38">
+                  <motion.span className="w-1.5 h-1.5 rounded-full bg-[#10B981]"
+                    animate={{boxShadow:["0 0 0 0px rgba(16,185,129,.5)","0 0 0 4px rgba(16,185,129,0)","0 0 0 0px rgba(16,185,129,.5)"]}}
                     transition={{duration:1.8,repeat:Infinity}} />
                   Certified
                 </div>
@@ -453,10 +453,10 @@ export function AboutPage() {
       </section>
 
       {/* ── Our Story ── */}
-      <section className="py-24 px-4 bg-black/[0.02] border-t border-b border-black/10">
+      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16">
           <div className="space-y-5">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Our Story
             </motion.p>
@@ -464,7 +464,7 @@ export function AboutPage() {
               "Today we are 54 specialists, and we are growing that foundation deliberately: bringing modern AI, data and cloud capability to the same enterprise clients who rely on us to keep their systems connected.",
               "We are not a generalist IT shop chasing every trend. We are integration specialists, broadening with intent."
             ].map((txt,i)=>(
-              <motion.p key={i} className="text-base text-black/70 leading-relaxed"
+              <motion.p key={i} className="text-base text-[#334155] leading-relaxed"
                 variants={fadeUpLarge} custom={i*.06} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
                 {txt}
               </motion.p>
@@ -483,12 +483,12 @@ export function AboutPage() {
               {metric:"9/10",   label:"Client ratings across multiple business units"},
             ].map((item,i)=>(
               <motion.div key={item.label} variants={staggerItem}
-                className="border border-black/10 rounded-lg p-5 bg-white flex items-center gap-5 relative overflow-hidden cursor-default"
-                whileHover={{y:-2,borderColor:"rgba(0,0,0,0.22)",boxShadow:"0 5px 18px rgba(0,0,0,0.06)",transition:{duration:.18,ease:EASE}}}>
-                <motion.div className="absolute inset-0 bg-black/[0.013] origin-left" style={{scaleX:0}}
+                className="border border-[#0B1F3A]/10 rounded-lg p-5 bg-white flex items-center gap-5 relative overflow-hidden cursor-default"
+                whileHover={{y:-2,borderColor:"rgba(26,115,232,0.3)",boxShadow:"0 5px 18px rgba(26,115,232,0.08)",transition:{duration:.18,ease:EASE}}}>
+                <motion.div className="absolute inset-0 bg-[#1A73E8]/[0.018] origin-left" style={{scaleX:0}}
                   whileHover={{scaleX:1}} transition={{duration:.3,ease:[.16,1,.3,1]}} />
-                <div className="text-xl font-light text-black w-24 flex-shrink-0 tabular-nums relative">{item.metric}</div>
-                <div className="text-sm text-black/50 relative">{item.label}</div>
+                <div className="text-xl font-light text-[#1A73E8] w-24 flex-shrink-0 tabular-nums relative">{item.metric}</div>
+                <div className="text-sm text-[#475569] relative">{item.label}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -499,15 +499,15 @@ export function AboutPage() {
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-14">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               The Journey — 2019 to 2026
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Real work. Real years. Real outcomes.
+              Real work. Real years. <span className="text-[#1A73E8]">Real outcomes.</span>
             </motion.h2>
-            <motion.p className="text-sm text-black/38 mt-3"
+            <motion.p className="text-sm text-[#0B1F3A]/38 mt-3"
               variants={fadeUp} custom={.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Click any year to expand the details.
             </motion.p>
@@ -520,22 +520,22 @@ export function AboutPage() {
       </section>
 
       {/* ── Platform expertise ── */}
-      <section className="py-24 px-4 bg-black/[0.02] border-t border-b border-black/10">
+      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-12">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Platform Expertise
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              What we have actually delivered on.
+              What we have <span className="text-[#1A73E8]">actually delivered on.</span>
             </motion.h2>
           </div>
-          <motion.div className="grid md:grid-cols-12 gap-6 pb-3 border-b border-black/10"
+          <motion.div className="grid md:grid-cols-12 gap-6 pb-3 border-b border-[#0B1F3A]/10"
             variants={fadeUp} custom={.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             {["Platform","Years","Vertical","Depth of Delivery"].map((h,i)=>(
-              <div key={h} className={`text-[9px] text-black/32 uppercase tracking-wide ${i===0?"md:col-span-4":i===1?"md:col-span-1":i===2?"md:col-span-3":"md:col-span-4"}`}>{h}</div>
+              <div key={h} className={`text-[9px] text-[#1A73E8] uppercase tracking-wide ${i===0?"md:col-span-4":i===1?"md:col-span-1":i===2?"md:col-span-3":"md:col-span-4"}`}>{h}</div>
             ))}
           </motion.div>
           <motion.div className="space-y-0"
@@ -549,13 +549,13 @@ export function AboutPage() {
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-12">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               What We Stand For
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Three things we do not compromise on.
+              Three things we <span className="text-[#1A73E8]">do not compromise on.</span>
             </motion.h2>
           </div>
           <motion.div className="grid md:grid-cols-3 gap-6"
@@ -566,22 +566,22 @@ export function AboutPage() {
       </section>
 
       {/* ── The Firm ── */}
-      <section className="py-24 px-4 bg-black/[0.02] border-t border-b border-black/10">
+      <section className="py-24 px-4 bg-[#1A73E8]/[0.02] border-t border-b border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-start">
           <div>
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               The Firm
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight mb-6"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight mb-6"
               variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Small enough to care. Disciplined enough to trust.
+              Small enough to care. <span className="text-[#1A73E8]">Disciplined enough to trust.</span>
             </motion.h2>
-            <motion.p className="text-base text-black/60 leading-relaxed"
+            <motion.p className="text-base text-[#475569] leading-relaxed"
               variants={fadeUpLarge} custom={.12} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               At 54 specialists, we are the size where senior people are genuinely on your engagement — not managing a team below them. That is a deliberate choice, not a constraint.
             </motion.p>
-            <motion.p className="text-base text-black/60 leading-relaxed mt-4"
+            <motion.p className="text-base text-[#475569] leading-relaxed mt-4"
               variants={fadeUpLarge} custom={.18} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Our size is our edge: fast to respond, senior throughout, and structurally unable to hide behind a support tier.
             </motion.p>
@@ -598,9 +598,9 @@ export function AboutPage() {
               {label:"Contact",             value:"sales@exceptionalsolutions.in  ·  +91 8074960598"},
             ].map((item)=>(
               <motion.div key={item.label} variants={staggerItem}
-                className="py-4 border-b border-black/10 flex items-start justify-between gap-6">
-                <span className="text-sm text-black/40 flex-shrink-0">{item.label}</span>
-                <span className="text-sm text-black text-right">{item.value}</span>
+                className="py-4 border-b border-[#0B1F3A]/10 flex items-start justify-between gap-6">
+                <span className="text-sm text-[#0B1F3A]/40 flex-shrink-0">{item.label}</span>
+                <span className="text-sm text-[#0B1F3A] text-right">{item.value}</span>
               </motion.div>
             ))}
           </motion.div>
@@ -611,13 +611,13 @@ export function AboutPage() {
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-2xl mb-12">
-            <motion.p className="text-xs text-black/40 uppercase tracking-wide mb-4"
+            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-4"
               variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
               Pipeline & Roadmap
             </motion.p>
-            <motion.h2 className="text-4xl font-normal text-black leading-tight tracking-tight"
+            <motion.h2 className="text-4xl font-normal text-[#0B1F3A] leading-tight tracking-tight"
               variants={fadeUp} custom={.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Where we are heading.
+              Where we are <span className="text-[#1A73E8]">heading.</span>
             </motion.h2>
           </div>
           <motion.div className="grid md:grid-cols-3 gap-5"
@@ -628,27 +628,27 @@ export function AboutPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-4 border-t border-black/10">
+      <section className="py-24 px-4 border-t border-[#0B1F3A]/10">
         <div className="max-w-6xl mx-auto text-center space-y-6">
-          <motion.h2 className="text-4xl font-normal text-black tracking-tight"
+          <motion.h2 className="text-4xl font-normal text-[#0B1F3A] tracking-tight"
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Get to know the team.
+            Get to know <span className="text-[#1A73E8]">the team.</span>
           </motion.h2>
-          <motion.p className="text-base text-black/60 max-w-xl mx-auto leading-relaxed"
+          <motion.p className="text-base text-[#475569] max-w-xl mx-auto leading-relaxed"
             variants={fadeUpLarge} custom={.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Meet the senior specialists behind our work — and find out what it looks like to engage with us.
           </motion.p>
           <motion.div className="flex flex-wrap justify-center gap-3"
             variants={fadeUp} custom={.2} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             <motion.div whileHover={{y:-3}} transition={{duration:.18,ease:EASE}}>
-              <Link to="/company/leadership" className="block bg-black text-white px-6 py-2.5 text-sm rounded-lg hover:bg-black/90 transition-colors"
-                onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(0,0,0,0.18)";}}
+              <Link to="/company/leadership" className="block bg-[#1A73E8] text-white px-6 py-2.5 text-sm rounded-lg hover:bg-[#155CC0] transition-colors"
+                onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.boxShadow="0 8px 24px rgba(26,115,232,0.28)";}}
                 onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.boxShadow="none";}}>
                 Meet the leadership team
               </Link>
             </motion.div>
             <motion.div whileHover={{y:-3}} transition={{duration:.18,ease:EASE}}>
-              <Link to="/contact" className="block border border-black/20 text-black px-6 py-2.5 text-sm rounded-lg hover:bg-black/[0.03] transition-colors">
+              <Link to="/contact" className="block border border-[#1A73E8]/30 text-[#1A73E8] px-6 py-2.5 text-sm rounded-lg hover:bg-[#1A73E8]/[0.05] transition-colors">
                 Get in touch
               </Link>
             </motion.div>
