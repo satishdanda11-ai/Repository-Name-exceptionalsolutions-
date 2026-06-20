@@ -32,7 +32,7 @@ export function PlatformExpertise() {
           <motion.h2 className="text-4xl md:text-5xl font-normal text-[#0B1F3A] mb-4 tracking-tight"
             variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
             Platform-Agnostic.
-            <br/><span className="text-[#1A73E8]">Enterprise-Ready.”</span>
+            <br/><span className="text-[#1A73E8]">Enterprise-Ready.</span>
           </motion.h2>
           <motion.p className="text-base text-[#475569]"
             variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>

@@ -54,7 +54,7 @@ const navItems: NavItem[] = [
   {
     label: "Why Exceptional", category: "WHY EXCEPTIONAL",
     items: [
-      { icon: <Building2  className={ICON_CLS} style={iconStyle} />, label: "About Us",        desc: "Integration specialists, evolving with intent since 2019", path: "/company/about" },
+    
       { icon: <Map        className={ICON_CLS} style={iconStyle} />, label: "Our Journey",     desc: "How we've evolved with intent since 2019",              path: "/company/our-journey" },
       { icon: <Map        className={ICON_CLS} style={iconStyle} />, label: "Our Approach",    desc: "A delivery approach built for zero surprises",         path: "/why/our-approach" },
      

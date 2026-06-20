@@ -476,28 +476,7 @@ export function InsightsPage() {
       </section>
 
       {/* ── EDI Resources ── */}
-      <section className="py-24 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="max-w-2xl mb-12">
-            <motion.p className="text-xs text-[#1A73E8] uppercase tracking-wide mb-2"
-              variants={fadeUp} custom={0} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              EDI Resource Hub
-            </motion.p>
-            <motion.h2 className="text-3xl font-normal text-[#0B1F3A] tracking-tight"
-              variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              A focused library for <span className="text-[#1A73E8]">EDI buyers and practitioners</span>
-            </motion.h2>
-            <motion.p className="text-sm text-[#475569] mt-3"
-              variants={fadeUp} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-              Practical answers to the questions enterprises ask when researching, assessing, or modernising their EDI estate.
-            </motion.p>
-          </div>
-          <motion.div className="grid md:grid-cols-3 gap-6"
-            variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            {ediResources.map(res => <ResourceCard key={res.title} res={res} />)}
-          </motion.div>
-        </div>
-      </section>
+   
 
       {/* ── CTA ── */}
       <section className="py-24 px-4 border-t border-[#0B1F3A]/10">

@@ -173,7 +173,6 @@ export const insightsArticles: Article[] = [
         "Operate it for 90 days before declaring victory. A migration is complete when exception rates have stabilized and the operating model has shown it can run the estate without elevated incident volume — not on cutover-day-plus-one.",
       ] },
       { type: "quote", text: "The operational improvement we deliver in the 90 days before a migration is usually larger than the improvement from the migration itself. That sequencing is uncomfortable for vendors who want to start with the platform work. It is right for the enterprise." },
-      { type: "h2", text: "The PSA BDP proof point" },
       { type: "p", text: "Exceptional Solutions has run a continuous EDI engagement with PSA BDP for over five years, executing major migrations across live, mission-critical flows, with verified outcomes:" },
       { type: "ul", items: [
         "Zero critical outages during platform migrations",

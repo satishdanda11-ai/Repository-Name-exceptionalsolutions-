@@ -23,26 +23,31 @@ const footerLinks = {
     { label: "Case Studies", path: "/why/case-studies" },
     { label: "Partnerships", path: "/why/partnerships" },
     { label: "Our Journey", path: "/company/our-journey" },
-    { label: "About Us", path: "/company/about" },
     { label: "Careers", path: "/company/careers" },
-  ],
-  Company: [
     { label: "Insights", path: "/insights" },
     { label: "Contact", path: "/contact" },
   ],
 };
+
+const registration = [
+  { k: "CIN", v: "U4999TG2018PTC123090" },
+  { k: "TAN", v: "HYDR12729D" },
+  { k: "PAN", v: "AAICR8258C" },
+  { k: "GST", v: "36AAICR8258C1Z6" },
+];
 
 export function Footer() {
   return (
     <footer className="bg-[#1A73E8]/[0.02] border-t border-[#0B1F3A]/10 pt-16 pb-10 px-4">
       <div className="max-w-6xl mx-auto">
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12"
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 gap-y-10 mb-12"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
         >
+          {/* link columns */}
           {Object.entries(footerLinks).map(([category, links]) => (
             <motion.div key={category} variants={staggerItem}>
               <h3 className="text-xs font-semibold text-[#0B1F3A] mb-3">{category}</h3>
@@ -60,29 +65,38 @@ export function Footer() {
               </ul>
             </motion.div>
           ))}
+
+          {/* 4th column — company + HQ, fills the previously empty right side */}
+          <motion.div variants={staggerItem} className="col-span-2 md:col-span-1">
+            <h3 className="text-xs font-semibold text-[#0B1F3A] mb-3">Corporate Headquarters</h3>
+            <p className="text-xs text-[#475569] leading-relaxed mb-4">
+              PL.NO.: 164, BHEL-HIG-Phase-2, Ushodaya Enclave, Madinaguda,
+              Hyderabad, Telangana — 500049, India
+            </p>
+            <dl className="space-y-1.5">
+              {registration.map((item) => (
+                <div key={item.k} className="flex items-start gap-2 text-[11px]">
+                  <dt className="text-[#0B1F3A]/45 w-9 flex-shrink-0">{item.k}</dt>
+                  <dd className="text-[#475569] tabular-nums">{item.v}</dd>
+                </div>
+              ))}
+            </dl>
+          </motion.div>
         </motion.div>
 
+        {/* bottom bar */}
         <motion.div
-          className="pt-10 border-t border-[#0B1F3A]/10"
+          className="pt-8 border-t border-[#0B1F3A]/10 flex flex-col sm:flex-row items-center justify-between gap-4"
           variants={fadeUp}
           custom={0.1}
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
         >
-          {/* <div className="flex flex-wrap items-center justify-center gap-6 mb-6 text-xs text-[#475569]">
-            {["ISO 27001 / SOC 2-class Certified", "54 Specialists", "Operating Since 2019", "6 Enterprise Platforms"].map((item) => (
-              <span key={item}>{item}</span>
-            ))}
-          </div> */}
-
-          <div className="text-center space-y-3">
-            <div className="text-sm font-medium text-[#0B1F3A]">Exceptional Solutions</div>
-            <p className="text-xs text-[#475569] max-w-xl mx-auto">
-              Connecting the systems, data, and people that modern enterprises run on.
-            </p>
-           
-          </div>
+          <div className="text-sm font-medium text-[#0B1F3A]">Exceptional Solutions</div>
+          <p className="text-xs text-[#475569] text-center sm:text-right">
+           © 2026 Exceptional Solutions. All Rights Reserved
+          </p>
         </motion.div>
       </div>
     </footer>
