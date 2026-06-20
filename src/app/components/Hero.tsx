@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, animate } from "motion/react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { EASE } from "../lib/animations";
 
@@ -17,7 +17,7 @@ function IntegrationNetwork() {
     let W=0,H=0,nodes:Node[]=[],packets:Packet[]=[],id:number,frame=0,t=0;
     const build=()=>{W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;nodes=POS.map((p,i)=>({x:p[0]*W,y:p[1]*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,label:LABELS[i],r:17,phase:Math.random()*Math.PI*2,conns:[]}));CONNS.forEach(([a,b])=>nodes[a].conns.push(b));};
     const spawn=()=>{const s=nodes[Math.floor(Math.random()*nodes.length)];if(!s.conns.length)return;const d=nodes[s.conns[Math.floor(Math.random()*s.conns.length)]];packets.push({sx:s.x,sy:s.y,dx:d.x,dy:d.y,t:0,spd:.007+Math.random()*.008});};
-    const draw=()=>{ctx.clearRect(0,0,W,H);t+=.007;nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<n.r||n.x>W-n.r)n.vx*=-1;if(n.y<n.r||n.y>H-n.r)n.vy*=-1;});ctx.setLineDash([3,9]);nodes.forEach((n,i)=>n.conns.forEach(j=>{const m=nodes[j];ctx.globalAlpha=.05+Math.sin(t+i*.8)*.018;ctx.strokeStyle="#1A73E8";ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(m.x,m.y);ctx.stroke();}));ctx.setLineDash([]);ctx.globalAlpha=1;packets=packets.filter(p=>{p.t+=p.spd;if(p.t>1)return false;const x=p.sx+(p.dx-p.sx)*p.t,y=p.sy+(p.dy-p.sy)*p.t;const fade=p.t<.08?p.t/.08:p.t>.88?(1-p.t)/.12:1;for(let i=1;i<=5;i++){const tt=Math.max(0,p.t-i*.018);ctx.globalAlpha=((5-i)/10)*.4*fade;ctx.fillStyle="#1A73E8";ctx.beginPath();ctx.arc(p.sx+(p.dx-p.sx)*tt,p.sy+(p.dy-p.sy)*tt,Math.max(.4,2-i*.3),0,Math.PI*2);ctx.fill();}ctx.globalAlpha=fade*.85;ctx.fillStyle="#1A73E8";ctx.shadowColor="#1A73E8";ctx.shadowBlur=6;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.globalAlpha=1;return true;});nodes.forEach(n=>{const b=Math.sin(t*1.1+n.phase)*1.5;ctx.globalAlpha=.06+Math.sin(t+n.phase)*.018;ctx.strokeStyle="#1A73E8";ctx.lineWidth=1;ctx.beginPath();ctx.arc(n.x,n.y,n.r+7+b,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle="#fff";ctx.strokeStyle="rgba(11,31,58,.18)";ctx.lineWidth=1;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle="rgba(11,31,58,.7)";ctx.font="500 8.5px system-ui";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(n.label,n.x,n.y);});ctx.globalAlpha=1;frame++;if(frame%55===0)spawn();id=requestAnimationFrame(draw);};
+    const draw=()=>{ctx.clearRect(0,0,W,H);t+=.007;nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<n.r||n.x>W-n.r)n.vx*=-1;if(n.y<n.r||n.y>H-n.r)n.vy*=-1;});ctx.setLineDash([3,9]);nodes.forEach((n,i)=>n.conns.forEach(j=>{const m=nodes[j];ctx.globalAlpha=.05+Math.sin(t+i*.8)*.018;ctx.strokeStyle="#1A73E8";ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(m.x,m.y);ctx.stroke();}));ctx.setLineDash([]);ctx.globalAlpha=1;packets=packets.filter(p=>{p.t+=p.spd;if(p.t>1)return false;const x=p.sx+(p.dx-p.sx)*p.t,y=p.sy+(p.dy-p.sy)*p.t;const fade=p.t<.08?p.t/.08:p.t>.88?(1-p.t)/.12:1;for(let i=1;i<=5;i++){const tt=Math.max(0,p.t-i*.018);ctx.globalAlpha=((5-i)/10)*.4*fade;ctx.fillStyle="#1A73E8";ctx.beginPath();ctx.arc(p.sx+(p.dx-p.sx)*tt,p.sy+(p.dy-p.sy)*tt,Math.max(.4,2-i*.3),0,Math.PI*2);ctx.fill();}ctx.globalAlpha=fade*.85;ctx.fillStyle="#1A73E8";ctx.shadowColor="#1A73E8";ctx.shadowBlur=6;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.globalAlpha=1;return true;});nodes.forEach(n=>{const b=Math.sin(t*1.1+n.phase)*1.5;ctx.globalAlpha=.06+Math.sin(t+n.phase)*.018;ctx.strokeStyle="#1A73E8";ctx.lineWidth=1;ctx.beginPath();ctx.arc(n.x,n.y,n.r+7+b,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle="#fff";ctx.strokeStyle="rgba(11,31,58,.18)";ctx.lineWidth=1;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle="rgba(11,31,58,.7)";ctx.font="500 8.5px 'DM Sans', system-ui";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(n.label,n.x,n.y);});ctx.globalAlpha=1;frame++;if(frame%55===0)spawn();id=requestAnimationFrame(draw);};
     build();window.addEventListener("resize",build);for(let i=0;i<4;i++)setTimeout(spawn,i*400);draw();
     return()=>{cancelAnimationFrame(id);window.removeEventListener("resize",build);};
   },[]);
@@ -100,8 +100,8 @@ function CyclingMetrics() {
   const current = metricSets[setIdx];
 
   return (
-    <motion.div className="max-w-4xl mx-auto rounded-xl overflow-hidden border border-[#0B1F3A]/[0.08] mb-6"
-      style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"1px", background:"rgba(11,31,58,0.08)" }}
+    <motion.div className="max-w-4xl mx-auto rounded-xl overflow-hidden border border-[#0B1F3A]/[0.08] mb-6 grid grid-cols-2 md:grid-cols-4"
+      style={{ gap:"1px", background:"rgba(11,31,58,0.08)" }}
       initial={{ opacity:0, y:18 }} animate={{ opacity:1, y:0 }}
       transition={{ duration:.7, ease:EASE, delay:1.2 }}>
       {current.map((m, i) => (
@@ -112,7 +112,7 @@ function CyclingMetrics() {
             animate={{ opacity:1, y:0 }}
             exit={{ opacity:0, y:-5 }}
             transition={{ duration:.4, ease:[.16,1,.3,1], delay: i * 0.05 }}>
-            <div className="text-2xl font-medium text-[#0B1F3A] tracking-tight tabular-nums leading-none flex items-center gap-1.5">
+            <div className="text-2xl font-light text-[#0B1F3A] tracking-tight tabular-nums leading-none flex items-center gap-1.5">
               {m.val}
               {m.live && (
                 <motion.span className="w-[5px] h-[5px] rounded-full bg-[#10B981] flex-shrink-0"
@@ -120,8 +120,8 @@ function CyclingMetrics() {
                   transition={{duration:1.8,repeat:Infinity}} />
               )}
             </div>
-            <div className="text-[9.5px] text-[#0B1F3A]/80 uppercase tracking-wide mt-1">{m.label}</div>
-            {m.sub && <div className="text-[9px] text-[#0B1F3A]/60 mt-1">{m.sub}</div>}
+            <div className="text-[9.5px] text-[#0B1F3A]/38 uppercase tracking-wide mt-1">{m.label}</div>
+            {m.sub && <div className="text-[9px] text-[#0B1F3A]/30 mt-1">{m.sub}</div>}
           </motion.div>
         </div>
       ))}
@@ -130,11 +130,13 @@ function CyclingMetrics() {
 }
 
 // ─── Pure display tag ─────────────────────────────────────────────────────────
-function DisplayTag({ item, delay=0 }: { item:string; delay?:number }) {
+function DisplayTag({ item, delay=0, onClick }: { item:string; delay?:number; onClick?:()=>void }) {
   const [hov, setHov] = useState(false);
   return (
     <motion.div
-      className="relative overflow-hidden rounded-full cursor-default select-none"
+      role="button" tabIndex={0} onClick={onClick}
+      onKeyDown={(e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); onClick?.(); } }}
+      className="relative overflow-hidden rounded-full cursor-pointer select-none"
       style={{ padding:"8px 16px", border:"1px solid #E2E8F0", background:"#F8FAFC" }}
       initial={{ opacity:0, y:10, scale:0.9 }}
       animate={{ opacity:1, y:0, scale:1 }}
@@ -156,11 +158,13 @@ function DisplayTag({ item, delay=0 }: { item:string; delay?:number }) {
   );
 }
 
-function PillTag({ item, delay=0 }: { item:string; delay?:number }) {
+function PillTag({ item, delay=0, onClick }: { item:string; delay?:number; onClick?:()=>void }) {
   const [hov, setHov] = useState(false);
   return (
     <motion.div
-      className="relative overflow-hidden rounded-full cursor-default select-none"
+      role="button" tabIndex={0} onClick={onClick}
+      onKeyDown={(e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); onClick?.(); } }}
+      className="relative overflow-hidden rounded-full cursor-pointer select-none"
       style={{ padding:"6px 14px", border:"1px solid #E2E8F0", background:"#F8FAFC" }}
       initial={{ opacity:0, scale:0.85 }}
       animate={{ opacity:1, scale:1 }}
@@ -180,6 +184,10 @@ function PillTag({ item, delay=0 }: { item:string; delay?:number }) {
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 export function Hero() {
+  const navigate = useNavigate();
+  const goContact = (field:"brings"|"responsible"|"industry", value:string) => {
+    navigate(`/contact?${field}=${encodeURIComponent(value)}`);
+  };
   const whatBrings  = ["Modernize EDI","Improve supply chain","Faster Onboarding","Reduce Errors","Automate Processes","Managed Services","Lower Costs","Enable AI"];
   const responsible = ["Enterprise Integration","Supply Chain Operations","Procurement","Data & Analytics","Digital Transformation","CIO / CTO"];
   const industries  = ["Logistics & Transportation","Retail & Consumer Goods","Manufacturing","Distribution & Wholesale","Healthcare","Others"];
@@ -195,10 +203,11 @@ export function Hero() {
   const shimmerX=useShimmer(2400,2800);
 
   return (
-    <section className="pt-28 pb-28 px-4 relative overflow-hidden bg-white">
+    <section className="font-sans w-full max-w-full overflow-x-hidden pt-28 pb-28 px-4 relative overflow-hidden bg-white"
+      style={{ fontFamily: "'Outfit', system-ui, sans-serif" }}>
       <IntegrationNetwork />
 
-      <div className="max-w-6xl mx-auto relative" style={{zIndex:1}}>
+      <div className="w-full max-w-6xl mx-auto relative" style={{zIndex:1}}>
 
         {/* ── Copy ── */}
         <div className="max-w-4xl mx-auto text-center mb-10">
@@ -208,8 +217,8 @@ export function Hero() {
             EDI & B2B Integration Specialists
             <span style={{width:24,height:1,background:"rgba(26,115,232,.3)",display:"inline-block",flexShrink:0}} />
           </motion.p>
-          <h1 className="text-5xl md:text-[64px] font-light text-[#0B1F3A] leading-[1.06] tracking-[-0.03em] mb-5">
-            <WordReveal text="The connected enterprise, engineered to run without friction." baseDelay={0.14} />
+          <h1 className="text-4xl sm:text-5xl md:text-[64px] font-light text-[#0B1F3A] leading-[1.08] md:leading-[1.06] tracking-[-0.03em] mb-5 break-words">
+            <WordReveal text="The connected enterprise, " baseDelay={0.14} /><span className="text-[#1A73E8]"><WordReveal text="engineered to run without friction." baseDelay={0.34} /></span>
           </h1>
           <motion.div style={{height:2,background:"#1A73E8",originX:0,maxWidth:180,margin:"-8px auto 20px"}}
             initial={{scaleX:0}} animate={{scaleX:1}} transition={{duration:.6,ease:[.16,1,.3,1],delay:1.4}} />
@@ -233,7 +242,7 @@ export function Hero() {
               </Link>
             </motion.div>
           </motion.div>
-          <motion.p className="text-[11px] text-[#0B1F3A]/80"
+          <motion.p className="text-[11px] text-[#0B1F3A]/30"
             initial={{opacity:0}} animate={{opacity:1}} transition={{duration:.4,delay:1.15}}>
             No obligation — a senior architect reviews your estate and shares what they find.
           </motion.p>
@@ -257,7 +266,7 @@ export function Hero() {
               <div>
                 <p className="text-[9px] uppercase tracking-[.16em] text-[#0B1F3A]/35 mb-4">What brings you here-I want to...</p>
                 <div className="flex flex-wrap gap-2.5">
-                  {whatBrings.map((item,i)=><DisplayTag key={item} item={item} delay={1.45+i*0.07} />)}
+                  {whatBrings.map((item,i)=><DisplayTag key={item} item={item} delay={1.45+i*0.07} onClick={()=>goContact("brings",item)} />)}
                 </div>
               </div>
               <div className="h-px bg-[#0B1F3A]/[0.05]" />
@@ -265,13 +274,13 @@ export function Hero() {
                 <div>
                   <p className="text-[9px] uppercase tracking-[.16em] text-[#0B1F3A]/35 mb-4">I'm responsible for</p>
                   <div className="flex flex-wrap gap-2">
-                    {responsible.map((item,i)=><PillTag key={item} item={item} delay={1.6+i*0.06} />)}
+                    {responsible.map((item,i)=><PillTag key={item} item={item} delay={1.6+i*0.06} onClick={()=>goContact("responsible",item)} />)}
                   </div>
                 </div>
                 <div>
                   <p className="text-[9px] uppercase tracking-[.16em] text-[#0B1F3A]/35 mb-4">Industry</p>
                   <div className="flex flex-wrap gap-2">
-                    {industries.map((item,i)=><PillTag key={item} item={item} delay={1.65+i*0.06} />)}
+                    {industries.map((item,i)=><PillTag key={item} item={item} delay={1.65+i*0.06} onClick={()=>goContact("industry",item)} />)}
                   </div>
                 </div>
               </div>

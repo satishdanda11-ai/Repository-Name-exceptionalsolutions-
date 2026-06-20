@@ -30,10 +30,10 @@ const footerLinks = {
 };
 
 const registration = [
-  { k: "CIN", v: "U4999TG2018PTC123090" },
-  { k: "TAN", v: "HYDR12729D" },
-  { k: "PAN", v: "AAICR8258C" },
-  { k: "GST", v: "36AAICR8258C1Z6" },
+  { k: "CIN", v: "26060600740810HDFC" },
+  { k: "TAN", v: "HYDE06177D" },
+  { k: "PAN", v: "AAHFE8397F" },
+  { k: "GST", v: "37AAHFE8397F1ZY" },
 ];
 
 export function Footer() {
@@ -70,8 +70,8 @@ export function Footer() {
           <motion.div variants={staggerItem} className="col-span-2 md:col-span-1">
             <h3 className="text-xs font-semibold text-[#0B1F3A] mb-3">Corporate Headquarters</h3>
             <p className="text-xs text-[#475569] leading-relaxed mb-4">
-              PL.NO.: 164, BHEL-HIG-Phase-2, Ushodaya Enclave, Madinaguda,
-              Hyderabad, Telangana — 500049, India
+             5th floor,
+Capital Pk Rd, Ayyappa Society, VIP Hills, Silicon Valley, Madhapur, Hyderabad, Telangana 500081
             </p>
             <dl className="space-y-1.5">
               {registration.map((item) => (

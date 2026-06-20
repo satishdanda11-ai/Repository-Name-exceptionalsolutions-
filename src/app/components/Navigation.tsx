@@ -54,7 +54,7 @@ const navItems: NavItem[] = [
   {
     label: "Why Exceptional", category: "WHY EXCEPTIONAL",
     items: [
-    
+      { icon: <Building2  className={ICON_CLS} style={iconStyle} />, label: "About Us",        desc: "Integration specialists, evolving with intent since 2019", path: "/company/about" },
       { icon: <Map        className={ICON_CLS} style={iconStyle} />, label: "Our Journey",     desc: "How we've evolved with intent since 2019",              path: "/company/our-journey" },
       { icon: <Map        className={ICON_CLS} style={iconStyle} />, label: "Our Approach",    desc: "A delivery approach built for zero surprises",         path: "/why/our-approach" },
      
@@ -170,7 +170,7 @@ export function Navigation() {
       ].join(" ")}
       style={{ borderBottom: `1px solid ${B.primary100}` }}>
 
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-2 min-w-0">
 
         {/* Logo */}
         <Link to="/" className="flex items-center flex-shrink-0" onClick={() => setOpenMenu(null)}>
@@ -234,7 +234,7 @@ export function Navigation() {
         </div>
 
         {/* Right actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-shrink-0">
           <Link to="/contact" onClick={() => setOpenMenu(null)}
             className="hidden md:block text-sm rounded-lg px-4 py-2 transition-colors"
             style={{ color: "#fff", background: B.primary500 }}
@@ -248,11 +248,11 @@ export function Navigation() {
               t.style.background = B.primary500;
               t.style.boxShadow = "none";
             }}>
-            Contact Us
+            Contact
           </Link>
 
           {/* Mobile toggle */}
-          <button className="md:hidden p-1 transition-colors"
+          <button type="button" className="md:hidden p-2 -mr-1 transition-colors"
             style={{ color: "rgba(11,31,58,0.6)" }}
             onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
             {mobileOpen ? (
@@ -318,7 +318,7 @@ export function Navigation() {
                 style={{ color: "#fff", background: B.primary500 }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = B.primary600}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = B.primary500}>
-                Contact Us
+                Contact
               </Link>
             </div>
           </motion.div>

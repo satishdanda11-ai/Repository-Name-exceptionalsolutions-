@@ -3,6 +3,24 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ============================================================
+   HORIZONTAL OVERFLOW FIX
+   The CredibilityStrip marquee row is double-width by design
+   (scrolls via translateX(-50%)). Without clipping, it stretched
+   the whole page wider than the viewport, pinching every section
+   on mobile. These rules clip it and prevent page-wide overflow.
+   ============================================================ */
+html, body {
+  overflow-x: clip;     /* clip horizontal overflow without creating a scroll container */
+  max-width: 100%;
+}
+
+/* Clip the marquee's parent so the wide scrolling row stays inside its box */
+:has(> .animate-marquee) {
+  overflow: hidden;
+  max-width: 100%;
+}
+
 /* Marquee keyframe — CredibilityStrip infinite scroll */
 @keyframes marquee {
   from { transform: translateX(0); }
@@ -10,6 +28,8 @@ html {
 }
 .animate-marquee {
   animation: marquee 32s linear infinite;
+  max-width: 100%;
+  will-change: transform;
 }
 .animate-marquee:hover {
   animation-play-state: paused;

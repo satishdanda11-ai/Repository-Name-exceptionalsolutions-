@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router";
 import { motion, useMotionValue, useTransform, animate } from "motion/react";
 import { EASE, VIEWPORT, fadeUp, staggerContainer, staggerItem } from "../lib/animations";
-
-type EnquiryType = "" | "edi" | "ai-data-cloud" | "talent" | "other";
 
 // ─── Live social-proof ticker ─────────────────────────────────────────────────
 function SocialProofTicker() {
@@ -192,10 +191,27 @@ function SuccessState({ onReset }: { onReset: () => void }) {
   );
 }
 
+// ─── Pill selection groups ────────────────────────────────────────────────────
+const BRINGS_YOU = ["Modernize EDI", "Improve supply chain", "Faster Onboarding", "Reduce Errors", "Automate Processes", "Managed Services", "Lower Costs", "Enable AI"];
+const RESPONSIBLE_FOR = ["Enterprise Integration", "Supply Chain Operations", "Procurement", "Data & Analytics", "Digital Transformation", "CIO / CTO"];
+const INDUSTRIES = ["Logistics & Transportation", "Retail & Consumer Goods", "Manufacturing", "Distribution & Wholesale", "Healthcare", "Others"];
+
 // ─── Contact form ─────────────────────────────────────────────────────────────
 function ContactForm({ onSubmit }: { onSubmit: () => void }) {
-  const [form, setForm] = useState({ name: "", email: "", company: "", enquiry: "" as EnquiryType, message: "" });
+  const [searchParams] = useSearchParams();
+  const initFor = (key: string, options: string[]) => {
+    const v = searchParams.get(key) ?? "";
+    return options.includes(v) ? v : "";
+  };
+
+  const [form, setForm] = useState({ name: "", email: "", company: "", message: "" });
+  const [brings, setBrings] = useState(() => initFor("brings", BRINGS_YOU));
+  const [responsible, setResponsible] = useState(() => initFor("responsible", RESPONSIBLE_FOR));
+  const [industry, setIndustry] = useState(() => initFor("industry", INDUSTRIES));
   const [focused, setFocused] = useState<string | null>(null);
+  const [attempted, setAttempted] = useState(false);
+
+  const selectionsComplete = brings !== "" && responsible !== "" && industry !== "";
 
   const inputCls = (field: string) =>
     `w-full border rounded-md px-3 py-2.5 text-sm text-[#0B1F3A] placeholder:text-[#0B1F3A]/25 focus:outline-none transition-all bg-white ${
@@ -203,7 +219,9 @@ function ContactForm({ onSubmit }: { onSubmit: () => void }) {
     }`;
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault(); onSubmit();
+    e.preventDefault();
+    if (!selectionsComplete) { setAttempted(true); return; }
+    onSubmit();
   }
 
   return (
@@ -228,18 +246,57 @@ function ContactForm({ onSubmit }: { onSubmit: () => void }) {
           onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
           className={inputCls("email")} placeholder="you@company.com" />
       </Field>
-      <Field label="What do you need?">
-        <select required value={form.enquiry}
-          onChange={e => setForm({ ...form, enquiry: e.target.value as EnquiryType })}
-          onFocus={() => setFocused("enquiry")} onBlur={() => setFocused(null)}
-          className={inputCls("enquiry") + " appearance-none cursor-pointer"}>
-          <option value="" disabled>Select an option</option>
-          <option value="edi">EDI / B2B Integration</option>
-          <option value="ai-data-cloud">AI, data, or cloud</option>
-          <option value="talent">Talent & resourcing</option>
-          <option value="other">Something else</option>
-        </select>
+      {/* selection dropdowns — required before submit */}
+      <Field label="What brings you here — I want to…">
+        <div className="relative">
+          <select required value={brings}
+            onChange={e => setBrings(e.target.value)}
+            onFocus={() => setFocused("brings")} onBlur={() => setFocused(null)}
+            className={inputCls("brings") + " appearance-none cursor-pointer pr-9"}>
+            <option value="" disabled>Select an option</option>
+            {BRINGS_YOU.map(o => <option key={o} value={o}>{o}</option>)}
+          </select>
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#0B1F3A]/35">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </div>
       </Field>
+      <div className="grid grid-cols-2 gap-4">
+        <Field label="I'm responsible for">
+          <div className="relative">
+            <select required value={responsible}
+              onChange={e => setResponsible(e.target.value)}
+              onFocus={() => setFocused("responsible")} onBlur={() => setFocused(null)}
+              className={inputCls("responsible") + " appearance-none cursor-pointer pr-9"}>
+              <option value="" disabled>Select an option</option>
+              {RESPONSIBLE_FOR.map(o => <option key={o} value={o}>{o}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#0B1F3A]/35">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+          </div>
+        </Field>
+        <Field label="Industry">
+          <div className="relative">
+            <select required value={industry}
+              onChange={e => setIndustry(e.target.value)}
+              onFocus={() => setFocused("industry")} onBlur={() => setFocused(null)}
+              className={inputCls("industry") + " appearance-none cursor-pointer pr-9"}>
+              <option value="" disabled>Select an option</option>
+              {INDUSTRIES.map(o => <option key={o} value={o}>{o}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#0B1F3A]/35">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+          </div>
+        </Field>
+      </div>
+      {attempted && !selectionsComplete && (
+        <motion.p className="text-xs text-[#EF4444]"
+          initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
+          Please make a selection in all three dropdowns above.
+        </motion.p>
+      )}
       <Field label="How can we help?">
         <textarea rows={5} value={form.message}
           onChange={e => setForm({ ...form, message: e.target.value })}
@@ -249,12 +306,13 @@ function ContactForm({ onSubmit }: { onSubmit: () => void }) {
       </Field>
       <div className="space-y-3 pt-1">
         <motion.button type="submit"
-          className="w-full bg-[#1A73E8] text-white py-3 text-sm rounded-md font-medium relative overflow-hidden"
-          whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(26,115,232,0.28)" }}
-          whileTap={{ scale: 0.99 }}
+          className="w-full text-white py-3 text-sm rounded-md font-medium relative overflow-hidden"
+          style={{ background: "#1A73E8", opacity: selectionsComplete ? 1 : 0.55, cursor: selectionsComplete ? "pointer" : "not-allowed" }}
+          whileHover={selectionsComplete ? { y: -2, boxShadow: "0 8px 24px rgba(26,115,232,0.28)" } : {}}
+          whileTap={selectionsComplete ? { scale: 0.99 } : {}}
           transition={{ duration: 0.15, ease: EASE }}>
           <motion.span className="absolute inset-0 bg-white/[0.08]" style={{ opacity: 0 }}
-            whileHover={{ opacity: 1 }} transition={{ duration: 0.2 }} />
+            whileHover={selectionsComplete ? { opacity: 1 } : {}} transition={{ duration: 0.2 }} />
           Send enquiry
         </motion.button>
         <p className="text-xs text-[#0B1F3A]/35 text-center">
@@ -270,7 +328,7 @@ export function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <>
+    <div style={{ fontFamily: "'Outfit', system-ui, sans-serif" }}>
       {/* ── Hero ── */}
       <section className="pt-40 pb-24 px-4">
         <div className="max-w-6xl mx-auto">
@@ -346,6 +404,6 @@ export function ContactPage() {
           </motion.div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
