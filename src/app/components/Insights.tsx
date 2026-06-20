@@ -17,11 +17,11 @@ export function Insights() {
           </motion.p>
           <motion.h2 className="text-4xl md:text-5xl font-normal text-[#0B1F3A] mb-4 tracking-tight"
             variants={fadeUp} custom={0.05} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Field notes from the <span className="text-[#1A73E8]">integration practice.</span>
+            Insights From  <span className="text-[#1A73E8]">The Integration Frontline</span>
           </motion.h2>
           <motion.p className="text-base text-[#475569]"
             variants={fadeUpLarge} custom={0.1} initial="hidden" whileInView="visible" viewport={VIEWPORT}>
-            Honest, practitioner-written perspectives on EDI, B2B integration, and what actually works.
+            What works. What doesn't. What matters.
           </motion.p>
         </div>
 
