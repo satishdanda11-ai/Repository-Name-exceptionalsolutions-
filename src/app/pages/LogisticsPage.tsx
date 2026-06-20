@@ -35,14 +35,14 @@ function LogisticsNetworkCanvas() {
     // Strict left → right: Warehouse → TMS Hub → 3 Carriers → 3 Customers
     const LABELS = ["Warehouse", "TMS\nHub", "Carrier A", "3PL", "Carrier B", "Customer\nA", "Customer\nB", "Customer\nC"];
     const REL: [number, number][] = [
-      [0.10, 0.50], // Warehouse — origin LEFT (navy rect)
-      [0.38, 0.50], // TMS Hub  — center (large circle, double rings)
-      [0.66, 0.20], // Carrier A — upper mid-right (diamond)
-      [0.66, 0.50], // 3PL       — mid-right (diamond)
-      [0.66, 0.80], // Carrier B — lower mid-right (diamond)
-      [0.90, 0.18], // Customer A — far right top (circle + green dot)
-      [0.90, 0.50], // Customer B — far right mid
-      [0.90, 0.82], // Customer C — far right bottom
+      [0.11, 0.50], // Warehouse — origin LEFT (navy rect)
+      [0.40, 0.50], // TMS Hub  — center (large circle, double rings)
+      [0.67, 0.24], // Carrier A — upper mid-right (diamond)
+      [0.67, 0.52], // 3PL       — mid-right (diamond)
+      [0.67, 0.80], // Carrier B — lower mid-right (diamond)
+      [0.91, 0.22], // Customer A — far right top (circle + green dot)
+      [0.91, 0.52], // Customer B — far right mid
+      [0.91, 0.80], // Customer C — far right bottom
     ];
     const TYPES: NodeType[] = ["origin","hub","carrier","carrier","carrier","destination","destination","destination"];
     // Strictly left→right, no reverse edges — reinforces journey direction
@@ -96,61 +96,72 @@ function LogisticsNetworkCanvas() {
         return true;
       });
 
-      // nodes — each shape tells its role in the journey
+      // nodes — shapes first, then a clean label pass so text never overlaps art
       nodes.forEach(n => {
         const breathe = Math.sin(t * 0.03 + n.phase) * 1.5;
-        const lines = n.label.split("\n");
 
         if (n.type === "origin") {
-          // Warehouse — solid NAVY rounded rect (heavy, grounded, starting point)
+          // Warehouse — solid NAVY rounded rect; label sits INSIDE (rect is large enough)
           ctx.globalAlpha = 0.07; ctx.strokeStyle = "#1A73E8"; ctx.lineWidth = 1;
-          ctx.beginPath(); (ctx as any).roundRect(n.x-28, n.y-17, 56, 34, 3); ctx.stroke();
-          ctx.globalAlpha = 1; ctx.fillStyle = "#0B1F3A"; ctx.lineWidth = 1.5;
-          ctx.beginPath(); (ctx as any).roundRect(n.x-25, n.y-15, 50, 30, 3); ctx.fill();
-          ctx.fillStyle = "#fff"; ctx.font = "500 8px system-ui";
-          ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          lines.forEach((l,j)=>ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*10));
+          ctx.beginPath(); (ctx as any).roundRect(n.x-34, n.y-20, 68, 40, 5); ctx.stroke();
+          ctx.globalAlpha = 1; ctx.fillStyle = "#0B1F3A";
+          ctx.beginPath(); (ctx as any).roundRect(n.x-31, n.y-18, 62, 36, 5); ctx.fill();
 
         } else if (n.type === "hub") {
-          // TMS Hub — large brand-blue circle, triple breathing rings
+          // TMS Hub — large brand-blue circle, triple breathing rings; label INSIDE
           ctx.globalAlpha = 0.12 + Math.sin(t*0.03+n.phase)*0.04; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
-          ctx.beginPath(); ctx.arc(n.x,n.y,30+breathe,0,Math.PI*2); ctx.stroke();
+          ctx.beginPath(); ctx.arc(n.x,n.y,34+breathe,0,Math.PI*2); ctx.stroke();
           ctx.globalAlpha = 0.06;
-          ctx.beginPath(); ctx.arc(n.x,n.y,40+breathe,0,Math.PI*2); ctx.stroke();
+          ctx.beginPath(); ctx.arc(n.x,n.y,45+breathe,0,Math.PI*2); ctx.stroke();
           ctx.globalAlpha = 0.03;
-          ctx.beginPath(); ctx.arc(n.x,n.y,52+breathe,0,Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1; ctx.fillStyle = "#1A73E8"; ctx.lineWidth = 1.5;
-          ctx.beginPath(); ctx.arc(n.x,n.y,24,0,Math.PI*2); ctx.fill();
-          ctx.fillStyle = "#fff"; ctx.font = "bold 8px system-ui";
-          ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          lines.forEach((l,j)=>ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*10));
+          ctx.beginPath(); ctx.arc(n.x,n.y,58+breathe,0,Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1; ctx.fillStyle = "#1A73E8";
+          ctx.beginPath(); ctx.arc(n.x,n.y,28,0,Math.PI*2); ctx.fill();
 
         } else if (n.type === "carrier") {
-          // Carriers — rotated DIAMOND (in motion, transit feel)
-          ctx.globalAlpha = 0.06; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
-          ctx.beginPath(); ctx.arc(n.x,n.y,22+breathe,0,Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1;
-          ctx.save(); ctx.translate(n.x,n.y); ctx.rotate(Math.PI/4);
-          ctx.fillStyle = "#F4F8FF"; ctx.strokeStyle = "rgba(26,115,232,0.3)"; ctx.lineWidth = 1.2;
-          ctx.beginPath(); (ctx as any).roundRect(-13,-13,26,26,2); ctx.fill(); ctx.stroke();
-          ctx.restore();
-          ctx.fillStyle = "rgba(11,31,58,0.68)"; ctx.font = "500 7.5px system-ui";
-          ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          lines.forEach((l,j)=>ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*9));
-
-        } else {
-          // Customers/Destinations — circle with green DELIVERED dot
+          // Carriers — rotated DIAMOND; label drawn BELOW the shape
           ctx.globalAlpha = 0.06; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
           ctx.beginPath(); ctx.arc(n.x,n.y,20+breathe,0,Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1; ctx.fillStyle="#fff"; ctx.strokeStyle="rgba(26,115,232,0.2)"; ctx.lineWidth=1.2;
-          ctx.beginPath(); ctx.arc(n.x,n.y,15,0,Math.PI*2); ctx.fill(); ctx.stroke();
-          // green delivered indicator
+          ctx.globalAlpha = 1;
+          ctx.save(); ctx.translate(n.x,n.y); ctx.rotate(Math.PI/4);
+          ctx.fillStyle = "#F4F8FF"; ctx.strokeStyle = "rgba(26,115,232,0.35)"; ctx.lineWidth = 1.4;
+          ctx.beginPath(); (ctx as any).roundRect(-12,-12,24,24,3); ctx.fill(); ctx.stroke();
+          ctx.restore();
+
+        } else {
+          // Customers — circle with green DELIVERED dot; label drawn BELOW the shape
+          ctx.globalAlpha = 0.06; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
+          ctx.beginPath(); ctx.arc(n.x,n.y,18+breathe,0,Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1; ctx.fillStyle="#fff"; ctx.strokeStyle="rgba(26,115,232,0.25)"; ctx.lineWidth=1.4;
+          ctx.beginPath(); ctx.arc(n.x,n.y,13,0,Math.PI*2); ctx.fill(); ctx.stroke();
           ctx.fillStyle = "#10B981";
-          ctx.beginPath(); ctx.arc(n.x+10, n.y-10, 3.5, 0, Math.PI*2); ctx.fill();
-          ctx.fillStyle = "rgba(11,31,58,0.65)"; ctx.font = "500 7.5px system-ui";
-          ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          lines.forEach((l,j)=>ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*9));
+          ctx.beginPath(); ctx.arc(n.x+9, n.y-9, 3, 0, Math.PI*2); ctx.fill();
         }
+      });
+
+      // label pass — consistent sizing, crisp, drawn over a soft halo for contrast
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      nodes.forEach(n => {
+        const lines = n.label.split("\n");
+        const inside = n.type === "origin" || n.type === "hub";
+        const color = inside ? "#fff" : "rgba(71,85,105,0.92)";
+        const size = inside ? 10 : 10;
+        const weight = n.type === "hub" ? "600" : "500";
+        ctx.font = `${weight} ${size}px system-ui, -apple-system, sans-serif`;
+        const lineH = 12;
+        // baseline Y: inside nodes center the text; below-nodes start under the shape
+        const offset = n.type === "carrier" ? 30 : n.type === "destination" ? 26 : 0;
+        const startY = n.y + offset - ((lines.length - 1) * lineH) / 2;
+        lines.forEach((l, j) => {
+          const ly = startY + j * lineH;
+          if (!inside) {
+            // soft white halo so outside labels stay readable over edges/packets
+            ctx.lineWidth = 3; ctx.strokeStyle = "rgba(255,255,255,0.9)";
+            ctx.strokeText(l, n.x, ly);
+          }
+          ctx.fillStyle = color;
+          ctx.fillText(l, n.x, ly);
+        });
       });
       ctx.globalAlpha = 1;
       frame++; if (frame % 50 === 0) spawn();

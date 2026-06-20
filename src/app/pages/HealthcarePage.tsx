@@ -54,9 +54,9 @@ function HealthcareCanvas() {
 
     const LABELS = ["Payer A", "Payer B", "Payer C", "Clearinghouse\nHub", "Provider A", "Provider B", "Provider C"];
     const REL: [number, number][] = [
-      [0.10, 0.22], [0.10, 0.50], [0.10, 0.78],
+      [0.12, 0.24], [0.12, 0.50], [0.12, 0.76],
       [0.50, 0.50],
-      [0.90, 0.22], [0.90, 0.50], [0.90, 0.78],
+      [0.88, 0.24], [0.88, 0.50], [0.88, 0.76],
     ];
     const TYPES: NodeType[] = ["payer","payer","payer","hub","provider","provider","provider"];
     const EDGE_DEF: [number, number][] = [[0,3],[1,3],[2,3],[3,4],[3,5],[3,6]];
@@ -118,65 +118,99 @@ function HealthcareCanvas() {
         return true;
       });
 
-      // Nodes
+      // Nodes — shapes first
       nodes.forEach(n => {
         const breathe = Math.sin(t*0.03+n.phase)*1.5;
-        const lines = n.label.split("\n");
 
         if (n.type === "hub") {
-          // Hub — navy circle with lock icon, blue pulse ring
+          // Hub — navy circle with lock icon, blue pulse rings
           ctx.globalAlpha = 0.12+Math.sin(t*0.03+n.phase)*0.04;
           ctx.strokeStyle = BLUE; ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.arc(n.x, n.y, 30+breathe, 0, Math.PI*2); ctx.stroke();
+          ctx.beginPath(); ctx.arc(n.x, n.y, 34+breathe, 0, Math.PI*2); ctx.stroke();
           ctx.globalAlpha = 0.05;
-          ctx.beginPath(); ctx.arc(n.x, n.y, 42+breathe, 0, Math.PI*2); ctx.stroke();
+          ctx.beginPath(); ctx.arc(n.x, n.y, 46+breathe, 0, Math.PI*2); ctx.stroke();
           // Navy fill
           ctx.globalAlpha = 1; ctx.fillStyle = NAVY;
-          ctx.beginPath(); ctx.arc(n.x, n.y, 24, 0, Math.PI*2); ctx.fill();
+          ctx.beginPath(); ctx.arc(n.x, n.y, 27, 0, Math.PI*2); ctx.fill();
           // Lock body — white
           ctx.fillStyle = "#fff"; ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.5;
           ctx.beginPath(); (ctx as any).roundRect
-            ? (ctx as any).roundRect(n.x-7, n.y-1, 14, 10, 2)
-            : ctx.rect(n.x-7, n.y-1, 14, 10);
+            ? (ctx as any).roundRect(n.x-7, n.y-2, 14, 10, 2)
+            : ctx.rect(n.x-7, n.y-2, 14, 10);
           ctx.fill();
           // Lock shackle
           ctx.fillStyle = "transparent"; ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.8;
-          ctx.beginPath(); ctx.arc(n.x, n.y-2, 5, Math.PI, 0, false); ctx.stroke();
+          ctx.beginPath(); ctx.arc(n.x, n.y-3, 5, Math.PI, 0, false); ctx.stroke();
           // Keyhole
           ctx.fillStyle = NAVY;
-          ctx.beginPath(); ctx.arc(n.x, n.y+3, 1.5, 0, Math.PI*2); ctx.fill();
-          // Label
-          ctx.fillStyle = BLUE_LIGHT; ctx.font = "500 7px system-ui";
-          ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          ctx.fillText("Clearinghouse", n.x, n.y+14);
+          ctx.beginPath(); ctx.arc(n.x, n.y+2, 1.5, 0, Math.PI*2); ctx.fill();
 
         } else if (n.type === "payer") {
-          // Payers — light blue shield shape
+          // Payers — light blue rounded card
           ctx.globalAlpha = 0.08; ctx.strokeStyle = BLUE; ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.arc(n.x, n.y, 22+breathe, 0, Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1; ctx.fillStyle = BLUE_TINT; ctx.strokeStyle = BLUE_BORDER; ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.arc(n.x, n.y, 20+breathe, 0, Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1; ctx.fillStyle = BLUE_TINT; ctx.strokeStyle = BLUE_BORDER; ctx.lineWidth = 1.3;
           ctx.beginPath();
           (ctx as any).roundRect
-            ? (ctx as any).roundRect(n.x-18, n.y-16, 36, 32, [4,4,8,8])
-            : ctx.rect(n.x-18, n.y-16, 36, 32);
+            ? (ctx as any).roundRect(n.x-15, n.y-13, 30, 26, 5)
+            : ctx.rect(n.x-15, n.y-13, 30, 26);
           ctx.fill(); ctx.stroke();
-          ctx.fillStyle = NAVY; ctx.font = "500 7.5px system-ui";
-          ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          lines.forEach((l,j) => ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*9));
+          // payer icon — building / institution (roof + columns)
+          ctx.strokeStyle = BLUE; ctx.fillStyle = BLUE; ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.moveTo(n.x-7, n.y-3); ctx.lineTo(n.x, n.y-8); ctx.lineTo(n.x+7, n.y-3); ctx.closePath(); ctx.fill(); // roof
+          ctx.beginPath();
+          ctx.moveTo(n.x-6, n.y-1); ctx.lineTo(n.x-6, n.y+6);
+          ctx.moveTo(n.x-2, n.y-1); ctx.lineTo(n.x-2, n.y+6);
+          ctx.moveTo(n.x+2, n.y-1); ctx.lineTo(n.x+2, n.y+6);
+          ctx.moveTo(n.x+6, n.y-1); ctx.lineTo(n.x+6, n.y+6);
+          ctx.stroke(); // columns
+          ctx.beginPath(); ctx.moveTo(n.x-8, n.y+7); ctx.lineTo(n.x+8, n.y+7); ctx.lineWidth = 1.4; ctx.stroke(); // base
 
         } else {
           // Providers — white circle with blue stroke, green online dot
           ctx.globalAlpha = 0.08; ctx.strokeStyle = BLUE; ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.arc(n.x, n.y, 21+breathe, 0, Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1; ctx.fillStyle = "#fff"; ctx.strokeStyle = BLUE_BORDER; ctx.lineWidth = 1.2;
-          ctx.beginPath(); ctx.arc(n.x, n.y, 16, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+          ctx.beginPath(); ctx.arc(n.x, n.y, 18+breathe, 0, Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1; ctx.fillStyle = "#fff"; ctx.strokeStyle = BLUE_BORDER; ctx.lineWidth = 1.3;
+          ctx.beginPath(); ctx.arc(n.x, n.y, 14, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+          // provider icon — medical cross (plus)
+          ctx.fillStyle = BLUE;
+          const cw = 2.4, ca = 7; // half-width, arm length
+          ctx.beginPath();
+          (ctx as any).roundRect
+            ? (ctx as any).roundRect(n.x-cw, n.y-ca, cw*2, ca*2, 1)
+            : ctx.rect(n.x-cw, n.y-ca, cw*2, ca*2);
+          ctx.fill();
+          ctx.beginPath();
+          (ctx as any).roundRect
+            ? (ctx as any).roundRect(n.x-ca, n.y-cw, ca*2, cw*2, 1)
+            : ctx.rect(n.x-ca, n.y-cw, ca*2, cw*2);
+          ctx.fill();
           // Online dot
           ctx.fillStyle = "#10B981";
-          ctx.beginPath(); ctx.arc(n.x+10, n.y-10, 3.5, 0, Math.PI*2); ctx.fill();
-          ctx.fillStyle = NAVY; ctx.font = "500 7.5px system-ui";
-          ctx.textAlign = "center"; ctx.textBaseline = "middle";
-          lines.forEach((l,j) => ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*9));
+          ctx.beginPath(); ctx.arc(n.x+9, n.y-9, 3, 0, Math.PI*2); ctx.fill();
         }
+      });
+
+      // Label pass — consistent sizing; payer/provider labels sit BELOW the shape
+      // with a soft white halo so they never clash with edges or packets.
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      nodes.forEach(n => {
+        const lines = (n.type === "hub" ? "Clearinghouse" : n.label).split("\n");
+        const below = n.type === "payer" || n.type === "provider";
+        const color = n.type === "hub" ? BLUE_LIGHT : "rgba(71,85,105,0.92)";
+        ctx.font = `500 10px system-ui, -apple-system, sans-serif`;
+        const lineH = 12;
+        const offset = n.type === "hub" ? 42 : below ? 28 : 0;
+        const startY = n.y + offset - ((lines.length - 1) * lineH) / 2;
+        lines.forEach((l, j) => {
+          const ly = startY + j * lineH;
+          if (below) {
+            ctx.lineWidth = 3; ctx.strokeStyle = "rgba(255,255,255,0.9)";
+            ctx.strokeText(l, n.x, ly);
+          }
+          ctx.fillStyle = color;
+          ctx.fillText(l, n.x, ly);
+        });
       });
       ctx.globalAlpha = 1;
       frame++; if (frame%52===0) spawn();

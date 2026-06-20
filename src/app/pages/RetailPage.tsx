@@ -28,7 +28,7 @@ function RetailNetworkCanvas() {
 
     let nodes: Node[] = [], edges: Edge[] = [], packets: Packet[] = [];
 
-    const LABELS = ["Walmart","Amazon","Target","Costco","Brand\nHub","Supplier A","Supplier B","Supplier C"];
+    const LABELS = ["Walmart","Amazon","Target","Costco","Brand\nHub","Supply A","Supply B","Supply C"];
     const REL: [number,number][] = [
       [0.86,0.14],[0.86,0.38],[0.86,0.62],[0.86,0.86], // retailers right
       [0.50,0.50],                                       // Brand Hub center

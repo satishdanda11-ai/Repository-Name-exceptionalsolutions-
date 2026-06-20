@@ -37,10 +37,10 @@ function ManufacturingCanvas() {
     // Topology: 3 suppliers LEFT → ERP Hub → Production Line → 3 distributors RIGHT
     const LABELS = ["Supplier A", "Supplier B", "Supplier C", "ERP\nHub", "Production\nLine", "Distributor A", "Distributor B", "Distributor C"];
     const REL: [number, number][] = [
-      [0.10, 0.22], [0.10, 0.50], [0.10, 0.78], // suppliers left
+      [0.11, 0.24], [0.11, 0.50], [0.11, 0.76], // suppliers left
       [0.38, 0.50],                               // ERP Hub
       [0.62, 0.50],                               // Production Line
-      [0.90, 0.22], [0.90, 0.50], [0.90, 0.78], // distributors right
+      [0.89, 0.24], [0.89, 0.50], [0.89, 0.76], // distributors right
     ];
     const TYPES: NodeType[] = ["supplier","supplier","supplier","erp","line","distributor","distributor","distributor"];
     const EDGE_DEF: [number,number][] = [[0,3],[1,3],[2,3],[3,4],[4,5],[4,6],[4,7]];
@@ -92,73 +92,127 @@ function ManufacturingCanvas() {
         return true;
       });
 
-      // nodes
+      // nodes — shapes + icons first
       nodes.forEach(n => {
         const breathe = Math.sin(t * 0.03 + n.phase) * 1.5;
-        const lines = n.label.split("\n");
 
         if (n.type === "supplier") {
-          // Suppliers — small circles, raw input feel
+          // Suppliers — circle; icon = factory/warehouse
           ctx.globalAlpha = 0.06; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
-          ctx.beginPath(); ctx.arc(n.x, n.y, 22+breathe, 0, Math.PI*2); ctx.stroke();
-          ctx.globalAlpha = 1; ctx.fillStyle="#fff"; ctx.strokeStyle="rgba(26,115,232,0.2)"; ctx.lineWidth=1.2;
-          ctx.beginPath(); ctx.arc(n.x, n.y, 17, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-          ctx.fillStyle="rgba(11,31,58,0.65)"; ctx.font="500 7.5px system-ui";
-          ctx.textAlign="center"; ctx.textBaseline="middle";
-          lines.forEach((l,j)=>ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*9));
+          ctx.beginPath(); ctx.arc(n.x, n.y, 19+breathe, 0, Math.PI*2); ctx.stroke();
+          ctx.globalAlpha = 1; ctx.fillStyle="#fff"; ctx.strokeStyle="rgba(26,115,232,0.22)"; ctx.lineWidth=1.3;
+          ctx.beginPath(); ctx.arc(n.x, n.y, 15, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+          // factory icon: base + two roof peaks + chimney
+          ctx.fillStyle = "#1A73E8"; ctx.strokeStyle = "#1A73E8"; ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(n.x-7, n.y+5);
+          ctx.lineTo(n.x-7, n.y-1);
+          ctx.lineTo(n.x-2, n.y+2);
+          ctx.lineTo(n.x-2, n.y-1);
+          ctx.lineTo(n.x+3, n.y+2);
+          ctx.lineTo(n.x+3, n.y-2);
+          ctx.lineTo(n.x+7, n.y-2);
+          ctx.lineTo(n.x+7, n.y+5);
+          ctx.closePath(); ctx.fill();
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(n.x-5, n.y+2, 1.6, 2.4);
+          ctx.fillRect(n.x, n.y+2, 1.6, 2.4);
 
         } else if (n.type === "erp") {
-          // ERP Hub — solid navy rounded rect, pulsing ring
+          // ERP Hub — navy rounded rect; icon = database cylinder
           ctx.globalAlpha=0.12+Math.sin(t*0.03+n.phase)*0.04; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
-          (ctx as any).roundRect ? (() => {
-            ctx.beginPath(); (ctx as any).roundRect(n.x-34, n.y-20, 68, 40, 5); ctx.stroke();
-          })() : (() => {
-            ctx.beginPath(); ctx.rect(n.x-34, n.y-20, 68, 40); ctx.stroke();
-          })();
-          ctx.globalAlpha=1; ctx.fillStyle="#0B1F3A"; ctx.lineWidth=1.5;
+          ctx.beginPath(); (ctx as any).roundRect(n.x-36, n.y-22, 72, 44, 6); ctx.stroke();
+          ctx.globalAlpha=1; ctx.fillStyle="#0B1F3A";
+          ctx.beginPath(); (ctx as any).roundRect(n.x-32, n.y-19, 64, 38, 5); ctx.fill();
+          // database icon (left) + label drawn in label pass
+          const dbx = n.x-18, dby = n.y;
+          ctx.strokeStyle = "#fff"; ctx.fillStyle = "#fff"; ctx.lineWidth = 1.3;
+          ctx.beginPath(); ctx.ellipse(dbx, dby-6, 6, 2.4, 0, 0, Math.PI*2); ctx.stroke();
           ctx.beginPath();
-          (ctx as any).roundRect ? (ctx as any).roundRect(n.x-30, n.y-17, 60, 34, 4) : ctx.rect(n.x-30, n.y-17, 60, 34);
-          ctx.fill();
-          ctx.fillStyle="#fff"; ctx.font="bold 8px system-ui";
-          ctx.textAlign="center"; ctx.textBaseline="middle";
-          lines.forEach((l,j)=>ctx.fillText(l, n.x, n.y+(j-(lines.length-1)/2)*10));
+          ctx.moveTo(dbx-6, dby-6); ctx.lineTo(dbx-6, dby+6);
+          ctx.moveTo(dbx+6, dby-6); ctx.lineTo(dbx+6, dby+6);
+          ctx.stroke();
+          ctx.beginPath(); ctx.ellipse(dbx, dby, 6, 2.4, 0, 0, Math.PI); ctx.stroke();
+          ctx.beginPath(); ctx.ellipse(dbx, dby+6, 6, 2.4, 0, 0, Math.PI); ctx.stroke();
 
         } else if (n.type === "line") {
-          // Production Line — animated rect with internal "conveyor" pulse
-          const pulse = 0.5 + Math.sin(t * 0.06 + n.phase) * 0.5; // faster pulse
+          // Production Line — animated rect with conveyor; icon = gear (right)
+          const pulse = 0.5 + Math.sin(t * 0.06 + n.phase) * 0.5;
           ctx.globalAlpha=0.1+pulse*0.06; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
-          ctx.beginPath();
-          (ctx as any).roundRect ? (ctx as any).roundRect(n.x-36, n.y-22, 72, 44, 5) : ctx.rect(n.x-36, n.y-22, 72, 44);
-          ctx.stroke();
+          ctx.beginPath(); (ctx as any).roundRect(n.x-38, n.y-24, 76, 48, 6); ctx.stroke();
           ctx.globalAlpha=1; ctx.fillStyle="#F4F8FF"; ctx.strokeStyle="rgba(26,115,232,0.3)"; ctx.lineWidth=1.5;
+          ctx.beginPath(); (ctx as any).roundRect(n.x-34, n.y-21, 68, 42, 5); ctx.fill(); ctx.stroke();
+          // rotating gear — top-LEFT, small (label fills the rest of the top row)
+          const gx = n.x-22, gy = n.y-11, gr = 5, teeth = 8, rot = t*0.04;
+          ctx.fillStyle = "rgba(26,115,232,0.85)";
           ctx.beginPath();
-          (ctx as any).roundRect ? (ctx as any).roundRect(n.x-32, n.y-19, 64, 38, 4) : ctx.rect(n.x-32, n.y-19, 64, 38);
-          ctx.fill(); ctx.stroke();
-          // conveyor dots inside the production box
-          for (let i = 0; i < 3; i++) {
-            const dx = -14 + i * 14 + ((t * 0.8) % 14) - 7;
-            ctx.fillStyle = "rgba(26,115,232,0.3)";
-            ctx.beginPath(); ctx.arc(n.x + dx, n.y + 7, 2.5, 0, Math.PI*2); ctx.fill();
+          for (let i=0;i<teeth*2;i++){
+            const ang = rot + (Math.PI/teeth)*i;
+            const rr = i%2===0 ? gr : gr*0.7;
+            const px = gx+Math.cos(ang)*rr, py = gy+Math.sin(ang)*rr;
+            i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
           }
-          ctx.fillStyle="rgba(11,31,58,0.7)"; ctx.font="500 8px system-ui";
-          ctx.textAlign="center"; ctx.textBaseline="middle";
-          lines.forEach((l,j)=>ctx.fillText(l, n.x, n.y-4+(j-(lines.length-1)/2)*9));
+          ctx.closePath(); ctx.fill();
+          ctx.fillStyle = "#F4F8FF";
+          ctx.beginPath(); ctx.arc(gx, gy, 2, 0, Math.PI*2); ctx.fill();
+          // conveyor dots — thin strip along the very TOP of the box
+          for (let i = 0; i < 3; i++) {
+            const dx = -8 + i * 12 + ((t * 0.8) % 12) - 6;
+            ctx.fillStyle = "rgba(26,115,232,0.32)";
+            ctx.beginPath(); ctx.arc(n.x + 6 + dx, n.y - 11, 2, 0, Math.PI*2); ctx.fill();
+          }
 
         } else {
-          // Distributors — rounded rects (delivery/outbound feel)
+          // Distributors — rounded rect; icon = truck
           ctx.globalAlpha=0.06; ctx.strokeStyle="#1A73E8"; ctx.lineWidth=1;
+          ctx.beginPath(); (ctx as any).roundRect(n.x-24, n.y-15, 48, 30, 5); ctx.stroke();
+          ctx.globalAlpha=1; ctx.fillStyle="#F4F8FF"; ctx.strokeStyle="rgba(26,115,232,0.28)"; ctx.lineWidth=1.3;
+          ctx.beginPath(); (ctx as any).roundRect(n.x-22, n.y-13, 44, 26, 4); ctx.fill(); ctx.stroke();
+          // truck icon
+          ctx.fillStyle = "#1A73E8"; ctx.strokeStyle = "#1A73E8"; ctx.lineWidth = 1.2;
+          ctx.beginPath(); (ctx as any).roundRect(n.x-12, n.y-5, 13, 9, 1.5); ctx.fill();   // cargo box
           ctx.beginPath();
-          (ctx as any).roundRect ? (ctx as any).roundRect(n.x-24, n.y-14, 48, 28, 4) : ctx.rect(n.x-24, n.y-14, 48, 28);
-          ctx.stroke();
-          ctx.globalAlpha=1; ctx.fillStyle="#F4F8FF"; ctx.strokeStyle="rgba(26,115,232,0.28)"; ctx.lineWidth=1.2;
-          ctx.beginPath();
-          (ctx as any).roundRect ? (ctx as any).roundRect(n.x-22, n.y-13, 44, 26, 4) : ctx.rect(n.x-22, n.y-13, 44, 26);
-          ctx.fill(); ctx.stroke();
-          ctx.fillStyle="rgba(11,31,58,0.7)"; ctx.font="500 8px system-ui";
-          ctx.textAlign="center"; ctx.textBaseline="middle";
-          ctx.fillText(n.label, n.x, n.y);
+          ctx.moveTo(n.x+1, n.y-1); ctx.lineTo(n.x+8, n.y-1); ctx.lineTo(n.x+11, n.y+2);
+          ctx.lineTo(n.x+11, n.y+4); ctx.lineTo(n.x+1, n.y+4); ctx.closePath(); ctx.fill(); // cab
+          ctx.fillStyle = "#0B1F3A";
+          ctx.beginPath(); ctx.arc(n.x-7, n.y+5, 2.2, 0, Math.PI*2); ctx.fill();
+          ctx.beginPath(); ctx.arc(n.x+7, n.y+5, 2.2, 0, Math.PI*2); ctx.fill();
         }
       });
+
+      // label pass — suppliers/distributors labels BELOW shape (halo);
+      // ERP label = white on its navy box; Production label = navy on its light box.
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      nodes.forEach(n => {
+        const lines = n.label.split("\n");
+        const below = n.type === "supplier" || n.type === "distributor";
+        const onNavy = n.type === "erp"; // only the ERP box is dark → white text
+        const color = onNavy ? "#fff" : "rgba(11,31,58,0.82)";
+        const weight = (n.type === "erp" || n.type === "line") ? "600" : "500";
+        // production label sits in the lower box, slightly smaller so both words fit
+        ctx.font = `${weight} ${n.type === "line" ? 9 : 10}px system-ui, -apple-system, sans-serif`;
+        const lineH = n.type === "line" ? 11 : 12;
+        // anchor per node so labels never sit under their icons:
+        //  - supplier/distributor: centered BELOW the shape (with halo)
+        //  - erp: to the RIGHT of the db cylinder (icon is on the left)
+        //  - line: INSIDE the box, lower-center (gear + conveyor are along the top)
+        const ax = n.type === "erp" ? n.x + 12 : n.x;
+        const offsetY = n.type === "supplier" ? 28
+          : n.type === "distributor" ? 26
+          : n.type === "line" ? 6
+          : 0;
+        const startY = n.y + offsetY - ((lines.length - 1) * lineH) / 2;
+        lines.forEach((l, j) => {
+          const ly = startY + j * lineH;
+          if (below) {
+            ctx.lineWidth = 3; ctx.strokeStyle = "rgba(255,255,255,0.92)";
+            ctx.strokeText(l, n.x, ly);
+          }
+          ctx.fillStyle = color;
+          ctx.fillText(l, ax, ly);
+        });
+      });
+      ctx.globalAlpha = 1;
       ctx.globalAlpha = 1;
       frame++; if (frame % 50 === 0) spawn();
       id = requestAnimationFrame(draw);
