@@ -20,6 +20,7 @@ import { OurJourneyPage } from "./pages/OurJourney";
 // import { LeadershipPage } from "./pages/LeadershipPage";
 import { CareersPage } from "./pages/CareersPage";
 import { InsightsPage } from "./pages/InsightsPage";
+import { ArticlePage } from "./pages/ArticlePage";
 import { ContactPage } from "./pages/ContactPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
@@ -56,6 +57,7 @@ export const router = createBrowserRouter([
       // { path: "company/leadership", Component: LeadershipPage },
       { path: "company/careers", Component: CareersPage },
       { path: "insights", Component: InsightsPage },
+      { path: "insights/:slug", Component: ArticlePage },
       { path: "contact", Component: ContactPage },
       { path: "*", Component: NotFoundPage },
     ],

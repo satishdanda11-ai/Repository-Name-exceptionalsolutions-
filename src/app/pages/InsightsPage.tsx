@@ -4,12 +4,11 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { EASE, VIEWPORT, fadeUp, fadeUpLarge, staggerContainer, staggerItem } from "../lib/animations";
 
 const articles = [
-  { category: "EDI Modernisation",  title: "Why your EDI migration is harder than you think — and how to make it easier",        excerpt: "Most EDI migrations fail not because of the technology, but because of what happens when you try to move a live trading network without losing a transaction.",                                    readTime: "8 min read" },
-  { category: "B2B Integration",    title: "The hidden cost of slow trading-partner onboarding",                                    excerpt: "Six weeks to onboard a new partner is not a project estimate — it is six weeks of delayed revenue. We quantify what most integration teams never put on a spreadsheet.",                    readTime: "6 min read" },
-  { category: "Applied AI",         title: "AI for integration operations: what actually works today",                              excerpt: "Predictive failure detection and intelligent exception routing are real, deployed, and saving operational cost. The vendor demos are more modest than they look.",                         readTime: "7 min read" },
-  { category: "EDI Strategy",       title: "EDI is not a legacy problem — it is a competitive advantage",                          excerpt: "Enterprises that treat EDI as technical debt are running a machine they don't understand. The ones that invest in it properly are onboarding partners in days and protecting revenue at scale.", readTime: "5 min read" },
-  { category: "Platform Selection", title: "IBM Sterling vs Boomi vs Cleo: choosing the right platform for your EDI estate",      excerpt: "There is no universally right answer — but there are wrong answers for your specific situation. Here is how to think through the decision without being sold to.",                              readTime: "10 min read" },
-  { category: "Supply Chain",       title: "What a single failed EDI transaction actually costs a retailer",                       excerpt: "Chargebacks, delayed orders, manual re-work, and relationship damage. The visible cost is never the total cost.",                                                                            readTime: "5 min read" },
+  { slug: "why-edi-migration-is-harder-than-you-think", category: "EDI Modernisation",  title: "Why your EDI migration is harder than you think — and how to make it easier",        excerpt: "Most EDI migrations fail not because of the technology, but because of what happens when you try to move a live trading network without losing a transaction.",                                    readTime: "9 min read" },
+  { slug: "hidden-cost-of-slow-edi-partner-onboarding", category: "B2B Integration",    title: "The hidden cost of slow trading-partner onboarding",                                    excerpt: "Twelve weeks to onboard a new partner is not a project estimate — it is twelve weeks of delayed revenue. We quantify what most integration teams never put on a spreadsheet.",                    readTime: "7 min read" },
+  { slug: "edi-is-not-a-legacy-problem",                category: "EDI Strategy",       title: "EDI is not a legacy problem — it is a competitive advantage",                          excerpt: "Enterprises that treat EDI as technical debt are running a machine they don't understand. The ones that invest in it properly are onboarding partners in days and protecting revenue at scale.", readTime: "8 min read" },
+  { slug: "how-to-choose-the-right-edi-platform",       category: "Platform Selection", title: "How to choose the right EDI platform for your estate",                                  excerpt: "IBM Sterling, Boomi, Cleo, MuleSoft, Axway — each is right for a different estate. A vendor-neutral framework for choosing, without being sold to.",                              readTime: "10 min read" },
+  { slug: "cost-of-a-failed-edi-transaction",           category: "Supply Chain",       title: "What a single failed EDI transaction actually costs a retailer",                       excerpt: "Chargebacks, delayed orders, manual re-work, and relationship damage. The visible cost is never the total cost — calculated retailer by retailer.",                                            readTime: "7 min read" },
 ];
 
 const guides = [
@@ -37,13 +36,13 @@ function useCardInteraction() {
     const r = e.currentTarget.getBoundingClientRect();
     glowX.set(((e.clientX - r.left) / r.width) * 100);
     glowY.set(((e.clientY - r.top)  / r.height) * 100);
-    animate(glowOp, 1, { duration: 0.25 });
   };
   const onEnter = useCallback(() => {
     setHovered(true);
-    shimX.set(-100); animate(shimX, 200, { duration: 0.5, ease: "easeInOut" });
-  }, [shimX]);
-  const onLeave = () => { setHovered(false); animate(glowOp, 0, { duration: 0.3 }); };
+    animate(glowOp, 1, { duration: 0.35, ease: "easeOut" });
+    shimX.set(-100); animate(shimX, 200, { duration: 0.6, ease: "easeInOut" });
+  }, [shimX, glowOp]);
+  const onLeave = () => { setHovered(false); animate(glowOp, 0, { duration: 0.4, ease: "easeOut" }); };
 
   return { hovered, glowBg, glowOp, shimT, onMove, onEnter, onLeave };
 }
@@ -64,20 +63,29 @@ function ArticleCard({ article }: { article: typeof articles[0] }) {
   }, [barWidth]);
 
   return (
-    <motion.div ref={ref} variants={staggerItem}
-      className="border border-[#0B1F3A]/10 rounded-lg p-6 bg-white space-y-3 relative overflow-hidden cursor-pointer group"
-      whileHover={{ y: -4, borderColor: "rgba(26,115,232,0.3)", boxShadow: "0 10px 36px rgba(26,115,232,0.1)", transition: { duration: 0.2, ease: EASE } }}
+    <motion.div ref={ref} variants={staggerItem} className="rounded-xl">
+    <motion.div
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}>
+    <Link to={`/insights/${article.slug}`}
+      className="block border rounded-xl p-6 bg-white space-y-3 relative overflow-hidden cursor-pointer group h-full"
+      style={{
+        borderColor: hovered ? "rgba(26,115,232,0.35)" : "rgba(11,31,58,0.10)",
+        boxShadow: hovered ? "0 18px 40px -12px rgba(26,115,232,0.22)" : "0 1px 2px rgba(11,31,58,0.04)",
+        transition: "border-color 0.3s ease, box-shadow 0.35s ease",
+      }}
       onMouseEnter={onEnter} onMouseMove={onMove} onMouseLeave={onLeave}>
 
       {/* cursor glow */}
-      <motion.div className="absolute inset-0 pointer-events-none rounded-lg" style={{ opacity: glowOp, background: glowBg }} />
+      <motion.div className="absolute inset-0 pointer-events-none rounded-xl" style={{ opacity: glowOp, background: glowBg }} />
       {/* shimmer */}
       <motion.div className="absolute top-0 pointer-events-none"
         style={{ left: 0, width: "55%", height: 1, background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.4),transparent)", x: shimT }} />
-      {/* top border on hover */}
-      <motion.div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(26,115,232,0.35),transparent)" }}
-        animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.2 }} />
+      {/* top accent line — grows from center on hover */}
+      <motion.div className="absolute top-0 left-1/2 h-[2px] -translate-x-1/2 rounded-full"
+        style={{ background: "linear-gradient(90deg,#1A73E8,#439FF7)" }}
+        animate={{ width: hovered ? "40%" : "0%", opacity: hovered ? 1 : 0 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} />
 
       <div className="relative">
         {/* category */}
@@ -85,7 +93,7 @@ function ArticleCard({ article }: { article: typeof articles[0] }) {
 
         {/* title */}
         <motion.h3 className="text-sm font-medium leading-snug mb-2"
-          animate={{ color: hovered ? "#1A73E8" : "#0B1F3A" }} transition={{ duration: 0.2 }}>
+          animate={{ color: hovered ? "#1A73E8" : "#0B1F3A" }} transition={{ duration: 0.25, ease: EASE }}>
           {article.title}
         </motion.h3>
 
@@ -100,14 +108,16 @@ function ArticleCard({ article }: { article: typeof articles[0] }) {
           </div>
         </div>
 
-        {/* read arrow that slides in on hover */}
-        <motion.div className="flex items-center gap-1 mt-3 text-[11px] text-[#1A73E8]"
-          animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 4 }}
-          transition={{ duration: 0.2 }}>
-          Read article
-          <motion.span animate={{ x: hovered ? 3 : 0 }} transition={{ duration: 0.2 }}>→</motion.span>
-        </motion.div>
+        {/* read arrow — always present, brightens + slides on hover (no layout shift) */}
+        <div className="flex items-center gap-1 mt-3 text-[11px]">
+          <motion.span animate={{ color: hovered ? "#1A73E8" : "rgba(26,115,232,0.55)" }} transition={{ duration: 0.25, ease: EASE }}>
+            Read article
+          </motion.span>
+          <motion.span className="text-[#1A73E8]" animate={{ x: hovered ? 4 : 0, opacity: hovered ? 1 : 0.55 }} transition={{ duration: 0.25, ease: EASE }}>→</motion.span>
+        </div>
       </div>
+    </Link>
+    </motion.div>
     </motion.div>
   );
 }
